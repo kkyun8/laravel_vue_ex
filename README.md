@@ -29,3 +29,13 @@ npm install -D vuex
 ~~~
 npm install -D vue-router
 ~~~
+
+~~~
+route/web.phpにindex追加、既存の物は削除
+Route::get('/{any?}', fn() => view('index'))->where('any', '.+');
+~~~
+
+~~~
+resources/views/index.blade.php作成
+app.jsにvue設定
+~~~
