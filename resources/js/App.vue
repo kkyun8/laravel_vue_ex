@@ -1,9 +1,9 @@
 <template>
   <div>
     <main>
-      <div class="container">
+      <b-container fluid="md" class="p-4">
         <RouterView />
-      </div>
+      </b-container>
     </main>
   </div>
 </template>
