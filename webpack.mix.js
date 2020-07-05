@@ -21,5 +21,5 @@ mix.browserSync({
     open: false // ブラウザを自動で開かない
 })
     .js("resources/js/app.js", "public/js")
-    .js("resources/sass/app.scss", "public/css")
+    .sass("resources/sass/app.scss", "public/css")
     .version();
