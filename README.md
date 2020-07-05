@@ -1,5 +1,7 @@
 # Seating Chart 
 
+## Laravel + Vue * Typescript + postgressql
+
 TODO:
 
 席セット、席管理例
