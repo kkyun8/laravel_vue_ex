@@ -1,4 +1,5 @@
-import "./bootstrap";
+import bootstrap from "./bootstrap";
+
 import Vue from "vue";
 import router from "./router";
 //import store from './store'
@@ -8,7 +9,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
-require("bootstrap");
+bootstrap();
 
 //アプリ起動時、Vue インスタンス生成前に currentUser アクション呼び出します。
 //ユーザー情報が存在する場合、読み込む
