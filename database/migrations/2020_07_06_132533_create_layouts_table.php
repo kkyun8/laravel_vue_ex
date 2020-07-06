@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateLayoutsTable extends Migration
+{
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::create('layouts', function (Blueprint $table) {
+      $table->bigIncrements('id');
+      $table->integer('hall_id');
+      $table->string('layout_code')->unique();
+      $table->string('layout_name')->unique();
+      $table->integer('number');
+      $table->boolean('delflg')->default(false);
+      $table->timestamps();
+    });
+  }
+
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('layouts');
+  }
+}
