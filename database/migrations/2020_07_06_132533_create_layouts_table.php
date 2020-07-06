@@ -18,7 +18,6 @@ class CreateLayoutsTable extends Migration
       $table->integer('hall_id');
       $table->string('layout_code')->unique();
       $table->string('layout_name')->unique();
-      $table->integer('number');
       $table->boolean('delflg')->default(false);
       $table->timestamps();
     });
