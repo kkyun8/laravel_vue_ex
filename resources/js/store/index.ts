@@ -1,15 +1,14 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import layout from "./layout";
-import error from "./error";
+import Vuex, { StoreOptions } from "vuex";
+import { RootState } from "./types";
+import { layout } from "./layout";
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store: StoreOptions<RootState> = {
+    state: {
+        version: "1.0.0"
+    },
     modules: {
-        layout,
-        error
+        layout
     }
-});
+};
 
-export default store;
+export default new Vuex.Store<RootState>(store);

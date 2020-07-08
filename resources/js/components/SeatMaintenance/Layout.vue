@@ -1,6 +1,7 @@
 <template>
     <div>
         <h2>Layout</h2>
+        <b-button @click.prevent=""></b-button>
         <SeatContainer
             :layout.sync="layoutSeats"
             :cellSize="cellSize"
@@ -18,10 +19,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { State, Action, Getter } from "vuex-class";
+import { LayoutState } from "../../store/types";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 @Component({
     components: {
@@ -30,6 +32,19 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
     }
 })
 export default class Index extends Vue {
+    //TODO:
+    // @State("layout") layouts: LayoutState;
+
+    // @Mo
+    //   @LayoutModule.State("layout")
+    //   private layout!: Layout[];
+
+    // @TodoModule.Getter('size')
+    // private size!: number;
+
+    // @TodoModule.Action('add')
+    // private add!: (todo: Todo) => Promise<boolean>;
+
     //data
     cellSize = {
         w: 100,
@@ -66,7 +81,7 @@ export default class Index extends Vue {
     ];
 
     mounted(): void {
-        console.log("hello");
+        console.log("test");
     }
 }
 </script>
