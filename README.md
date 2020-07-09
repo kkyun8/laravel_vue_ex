@@ -26,7 +26,8 @@ php artisan migrate --seed
 ~~~
 
 #### 参考したURL
-Vue+Typescript
+Vue+Typescript<br>
+https://megu-tech.hatenablog.com/entry/2019/08/02/154710<br>
 https://qiita.com/yam0918/items/68d4d6c74b06d589a195<br>
 https://codeburst.io/vuex-and-typescript-3427ba78cfa8<br>
 http://one-way.tech/programing/basic-typescript/<br>
