@@ -1,14 +1,14 @@
 # Seating Chart 
 
-席予約、席配置、配席システム
+席予約、席配置、配席システム例
 
-### Laravel + Vue * Typescript + postgressql
+## Laravel + Vue * Typescript + postgressql
 
 #### このgitは自分が想定したロジックのみです。わからないものはgoogle検索しながら作り、どこからコピペした物ではありません。
 
-＊現場で担当したロジックをアレンジ、現場ではVueのみだったが、Typescrip追加
-＊モックアップ(Bootstrap)をVueファイルに適用したのでコンポーネントのTempleteがちょっと見にくかったのでBootstrap-Vueを追加
-＊スケジュールがキツく、フログラム内にいろいろ残念なところがあったまま、リリースされたのでここでは残念なところをカッコよくする
+＊現場で担当したロジックをアレンジ、現場ではVueのみだったが、Typescrip追加<br>
+＊モックアップ(Bootstrap)をVueファイルに適用したのでコンポーネントのTempleteがちょっと見にくかったのでBootstrap-Vueを追加<br>
+＊スケジュールがキツく、フログラム内にいろいろ残念なところがあったまま、リリースされたのでここでは残念なところをカッコよくする<br>
 　など
 
 ＊以下のdocker setup おすすめ
