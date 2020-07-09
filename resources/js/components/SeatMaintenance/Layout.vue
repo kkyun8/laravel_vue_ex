@@ -18,9 +18,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
 import { State, Action, Getter } from "vuex-class";
-import { LayoutState } from "../../store/types";
+import Component from "vue-class-component";
+import { LayoutState, Layout } from "../../store/types";
+const namespace: string = "layout";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
@@ -32,18 +33,11 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
     }
 })
 export default class Index extends Vue {
-    //TODO:
-    // @State("layout") layouts: LayoutState;
+    @State("layout") layout!: LayoutState;
+    // @Action('fetchData', { namespace }) fetchData: any;
+    // @Getter('fullName', { namespace }) fullName: string;
 
-    // @Mo
-    //   @LayoutModule.State("layout")
     //   private layout!: Layout[];
-
-    // @TodoModule.Getter('size')
-    // private size!: number;
-
-    // @TodoModule.Action('add')
-    // private add!: (todo: Todo) => Promise<boolean>;
 
     //data
     cellSize = {
@@ -82,6 +76,7 @@ export default class Index extends Vue {
 
     mounted(): void {
         console.log("test");
+        console.log(this.layout);
     }
 }
 </script>
