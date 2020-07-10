@@ -23,16 +23,18 @@ class SeatMaintenanceController extends Controller
    *
    * @return \Illuminate\Contracts\Support\Renderable
    */
-  public function index()
+  public function getHalls()
   {
-    $halls = Hall::with('layouts')
-      ->where('delflg', false)
-      ->orderBy('id');
-
-    return $halls;
+    // $halls = Hall::with('layouts')
+    //   ->where('delflg', false)
+    //   ->orderBy('id');
+    // return response()->json(['halls' => $halls]);
+    return Hall::all();
   }
 
-
+  /**
+   * 
+   */
   public function getLayout(Request $request)
   {
     $id = $request->layoutId;
