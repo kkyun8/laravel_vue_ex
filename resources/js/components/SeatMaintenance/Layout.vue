@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Layout</h2>
-        <b-button @click.prevent=""></b-button>
+        <b-button @click.prevent="getLayout">API TEST</b-button>
         <SeatContainer
             :layout.sync="layoutSeats"
             :cellSize="cellSize"
@@ -34,7 +34,8 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
 })
 export default class Index extends Vue {
     @State("layout") layout!: LayoutState;
-    // @Action('fetchData', { namespace }) fetchData: any;
+    @Action("getLayout", { namespace }) getLayout: any;
+
     // @Getter('fullName', { namespace }) fullName: string;
 
     //   private layout!: Layout[];
@@ -74,10 +75,7 @@ export default class Index extends Vue {
         }
     ];
 
-    mounted(): void {
-        console.log("test");
-        console.log(this.layout);
-    }
+    mounted(): void {}
 }
 </script>
 
