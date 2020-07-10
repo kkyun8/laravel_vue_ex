@@ -1,11 +1,11 @@
 import { ActionTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState, Layout } from "@/store/types";
-import Axios from "axios";
 
 const actions: ActionTree<LayoutState, RootState> = {
-    add: async ({ commit }, layout: Layout) => {
-        commit("add", layout);
+    getLayout: async ({ commit }, layout: Layout) => {
+        const response = await window.axios.get("/api/halls");
+        commit("setHalls", response.data);
         return true;
     }
     // remove: async ({ commit }, id: string) => {

@@ -3,11 +3,13 @@ export interface RootState {
 }
 
 export interface LayoutState {
-    layout: Layout[];
+    code: Layout["code"];
+    halls: Layout["halls"];
+    hallLayout: Layout["hallLayout"];
 }
 
 export interface Layout {
     code: string;
-    halls: any;
-    hallLayout: any;
+    halls: any[];
+    hallLayout: any[];
 }

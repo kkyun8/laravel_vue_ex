@@ -3,12 +3,9 @@ import { MutationTree } from "vuex";
 import { LayoutState, Layout } from "@/store/types";
 
 const mutations: MutationTree<LayoutState> = {
-    add: (state, layout: Layout) => {
-        state.layout.push(layout);
+    setHalls: (state, halls: Layout["halls"]) => {
+        state.halls.push(halls);
     }
-    // remove: (state, id: string) => {
-    //   state.todos = state.todos.filter((e: Todo) => e.id !== id);
-    // },
 };
 
 export default mutations;

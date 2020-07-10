@@ -5,8 +5,10 @@ import getters from "./getters";
 import actions from "./actions";
 import mutations from "./mutations";
 
-const state: LayoutState = {
-    layout: []
+export const state: LayoutState = {
+    code: "",
+    halls: [],
+    hallLayout: []
 };
 
 export const layout: Module<LayoutState, RootState> = {
