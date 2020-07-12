@@ -6,12 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Layout extends Model
 {
-  public function author()
+  /**
+   * 
+   */
+  public function halls()
   {
-    return $this->belongsTo(Hall::class);
+    return $this->belongsTo('App\Hall');
   }
+
+  /**
+   * 
+   */
   public function seats()
   {
-    return $this->hasMany(Seat::class);
+    return $this->hasMany('App\Seat');
   }
 }

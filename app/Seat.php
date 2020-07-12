@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seat extends Model
 {
-  public function author()
+  public function layouts()
   {
-    return $this->belongsTo(Layout::class);
+    return $this->belongsTo('App\Layout');
   }
 }

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Hall;
 use App\Layout;
+use App\Seat;
 use Illuminate\Http\Request;
 
-class SeatMaintenanceController extends Controller
+class HallLayoutController extends Controller
 {
   /**
    * Create a new controller instance.
@@ -25,11 +26,14 @@ class SeatMaintenanceController extends Controller
    */
   public function getHalls()
   {
-    // $halls = Hall::with('layouts')
-    //   ->where('delflg', false)
-    //   ->orderBy('id');
-    // return response()->json(['halls' => $halls]);
-    return Hall::all();
+    $halls = Hall::with(['layouts' => function ($query) {
+      $query->with(['seats']);
+    }])->where('delflg', false)
+      ->orderBy('id')->get();
+
+    // $halls = $this->hasManyThrough('App\Seat', 'App\Layout');
+
+    return $halls;
   }
 
   /**
@@ -41,7 +45,7 @@ class SeatMaintenanceController extends Controller
 
     $layout = Layout::with('seats')
       ->where('id', $id)
-      ->where('delflg', false);
+      ->where('delflg', false)->get();
 
     return $layout;
   }
