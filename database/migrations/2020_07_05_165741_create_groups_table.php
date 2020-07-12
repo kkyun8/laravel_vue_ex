@@ -19,6 +19,7 @@ class CreateGroupsTable extends Migration
       $table->string('group_name');
       $table->timestamp('start_time');
       $table->timestamp('end_time');
+      $table->integer('lock')->nullable();
       $table->jsonb('seat')->nullable();
       $table->boolean('delflg')->default(false);
       $table->timestamps();

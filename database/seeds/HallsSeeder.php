@@ -58,7 +58,6 @@ class HallsSeeder extends Seeder
     ]);
     DB::table('seats')->insert([
       [
-        'hall_id' => 1,
         'layout_id' => 1,
         'name' => 'テスト席',
         'w' => 20,
