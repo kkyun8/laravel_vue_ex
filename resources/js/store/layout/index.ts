@@ -8,7 +8,8 @@ import mutations from "./mutations";
 export const state: LayoutState = {
     code: "",
     halls: [],
-    hallLayout: []
+    hallLayout: [],
+    seats: []
 };
 
 export const layout: Module<LayoutState, RootState> = {

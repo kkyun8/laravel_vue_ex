@@ -1,81 +1,104 @@
 <template>
-    <div>
-        <h2>Layout</h2>
-        <b-button @click.prevent="getLayout">API TEST</b-button>
+  <div>
+    <b-row>
+      <b-col cols="12"></b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="12">
         <SeatContainer
-            :layout.sync="layoutSeats"
-            :cellSize="cellSize"
-            :maxColumnCount="maxColumnCount"
-            :maxRowCount="maxRowCount"
-            :margin="margin"
-            :bubbleUp="bubbleUp"
+          class="border border-primary rounded-sm"
+          :layout.sync="layoutSeats"
+          :cellSize="cellSize"
+          :maxColumnCount="maxColumnCount"
+          :maxRowCount="maxRowCount"
+          :margin="margin"
+          :bubbleUp="bubbleUp"
         >
-            <SeatBox :boxId="1">testa</SeatBox>
-            <SeatBox :boxId="2" resizeVisible>testb</SeatBox>
+          <SeatBox :boxId="1" class="border border-danger rounded-sm p-1">testa</SeatBox>
+          <SeatBox :boxId="2" class="border border-danger rounded-sm p-1">testb</SeatBox>
         </SeatContainer>
-    </div>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { State, Action, Getter } from "vuex-class";
+import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
 const namespace: string = "layout";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
+import mutations from "../../store/layout/mutations";
 
 @Component({
-    components: {
-        SeatContainer: Container,
-        SeatBox: Box
-    }
+  components: {
+    SeatContainer: Container,
+    SeatBox: Box
+  }
 })
 export default class Index extends Vue {
-    @State("layout") layout!: LayoutState;
-    @Action("getLayout", { namespace }) getLayout: any;
+  @State("layout") layout!: LayoutState;
+  @Action("getHalls", { namespace }) getHalls: any;
+  @Mutation("setHallLayout", { namespace }) setHallLayout: any;
+  // @Getter('fullName', { namespace }) fullName: string;
+  //   private layout!: Layout[];
 
-    // @Getter('fullName', { namespace }) fullName: string;
+  //data
+  cellSize = {
+    w: 1,
+    h: 1
+  };
+  maxColumnCount = 600;
+  maxRowCount = 600;
+  bubbleUp = false;
+  margin = 2;
+  boxCount = 4;
+  layoutSeats = [
+    {
+      id: 1,
+      hidden: false,
+      pinned: false,
+      position: {
+        x: 0,
+        y: 0,
+        w: 20,
+        h: 30
+      }
+    },
+    {
+      id: 2,
+      hidden: false,
+      pinned: false,
+      position: {
+        x: 40,
+        y: 40,
+        w: 30,
+        h: 20
+      }
+    }
+  ];
 
-    //   private layout!: Layout[];
+  layoutConversion() {}
 
-    //data
-    cellSize = {
-        w: 100,
-        h: 100
-    };
-    maxColumnCount = 10;
-    maxRowCount = Infinity;
-    bubbleUp = false;
-    margin = 5;
-    boxCount = 4;
-    layoutSeats = [
-        {
-            id: 1,
-            hidden: false,
-            pinned: false,
-            position: {
-                x: 0,
-                y: 0,
-                w: 4,
-                h: 2
-            }
-        },
-        {
-            id: 2,
-            hidden: false,
-            pinned: false,
-            position: {
-                x: 4,
-                y: 0,
-                w: 2,
-                h: 1
-            }
-        }
-    ];
+  created() {
+    // vue
+    this.$store.dispatch("layout/getHalls");
+  }
 
-    mounted(): void {}
+  mounted() {
+    // vue
+  }
+
+  updated() {
+    // vue
+  }
+
+  destroyed() {
+    // vue
+  }
 }
 </script>
 
