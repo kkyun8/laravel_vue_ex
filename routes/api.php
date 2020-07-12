@@ -17,5 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-Route::get('/halls', 'SeatMaintenanceController@getHalls')->name('getHalls');
-Route::get('/layout', 'SeatMaintenanceController@getLayout')->name('getLayout');
+Route::get('/halls', 'HallLayoutController@getHalls')->name('getHalls');
+Route::get('/layout', 'HallLayoutController@getLayout')->name('getLayout');
