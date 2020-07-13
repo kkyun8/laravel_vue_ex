@@ -26,10 +26,14 @@ class HallLayoutController extends Controller
    */
   public function getHalls()
   {
-    $halls = Hall::with(['layouts' => function ($query) {
-      $query->with(['seats']);
-    }])->where('delflg', false)
+    $halls = Hall::with('layouts')
+      ->where('delflg', false)
       ->orderBy('id')->get();
+
+    // $halls = Hall::with(['layouts' => function ($query) {
+    //   $query->with(['seats']);
+    // }])->where('delflg', false)
+    //   ->orderBy('id')->get();
 
     // $halls = $this->hasManyThrough('App\Seat', 'App\Layout');
 

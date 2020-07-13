@@ -9,7 +9,9 @@ export const state: LayoutState = {
     code: "",
     halls: [],
     hallLayout: [],
-    seats: []
+    seats: [],
+    hallId: 0,
+    layoutId: 0
 };
 
 export const layout: Module<LayoutState, RootState> = {

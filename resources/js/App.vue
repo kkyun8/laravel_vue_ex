@@ -1,7 +1,7 @@
 <template>
   <div>
-    <main>
-      <b-container fluid class="p-1">
+    <main class="m-1">
+      <b-container fluid class="p-1 m-1">
         <RouterView />
       </b-container>
     </main>

@@ -7,6 +7,8 @@ export interface LayoutState {
     halls: Layout["halls"];
     hallLayout: Layout["hallLayout"];
     seats: Layout["seats"];
+    hallId: Layout["hallId"];
+    layoutId: Layout["layoutId"];
 }
 
 export interface Layout {
@@ -14,4 +16,6 @@ export interface Layout {
     halls: any[];
     hallLayout: any[];
     seats: any[];
+    hallId: number;
+    layoutId: number;
 }

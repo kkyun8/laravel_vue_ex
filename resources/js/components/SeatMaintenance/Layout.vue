@@ -5,18 +5,20 @@
     </b-row>
     <b-row>
       <b-col cols="12">
-        <SeatContainer
-          class="border border-primary rounded-sm"
-          :layout.sync="layoutSeats"
-          :cellSize="cellSize"
-          :maxColumnCount="maxColumnCount"
-          :maxRowCount="maxRowCount"
-          :margin="margin"
-          :bubbleUp="bubbleUp"
-        >
-          <SeatBox :boxId="1" class="border border-danger rounded-sm p-1">testa</SeatBox>
-          <SeatBox :boxId="2" class="border border-danger rounded-sm p-1">testb</SeatBox>
-        </SeatContainer>
+        <div class="card">
+          <SeatContainer
+            class="border border-primary rounded-sm"
+            :layout.sync="layoutSeats"
+            :cellSize="cellSize"
+            :maxColumnCount="maxColumnCount"
+            :maxRowCount="maxRowCount"
+            :margin="margin"
+            :bubbleUp="bubbleUp"
+          >
+            <SeatBox :boxId="1" class="border border-danger rounded-sm p-1">testa</SeatBox>
+            <SeatBox :boxId="2" class="border border-danger rounded-sm p-1">testb</SeatBox>
+          </SeatContainer>
+        </div>
       </b-col>
     </b-row>
   </div>
@@ -41,7 +43,6 @@ import mutations from "../../store/layout/mutations";
 })
 export default class Index extends Vue {
   @State("layout") layout!: LayoutState;
-  @Action("getHalls", { namespace }) getHalls: any;
   @Mutation("setHallLayout", { namespace }) setHallLayout: any;
   // @Getter('fullName', { namespace }) fullName: string;
   //   private layout!: Layout[];
@@ -52,7 +53,7 @@ export default class Index extends Vue {
     h: 1
   };
   maxColumnCount = 600;
-  maxRowCount = 600;
+  maxRowCount = 200;
   bubbleUp = false;
   margin = 2;
   boxCount = 4;
@@ -85,7 +86,6 @@ export default class Index extends Vue {
 
   created() {
     // vue
-    this.$store.dispatch("layout/getHalls");
   }
 
   mounted() {
