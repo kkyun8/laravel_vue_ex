@@ -1,21 +1,32 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <h3>Layout Header</h3>
-      <!-- TODO: -->
-      {{hallId}}
-      {{layoutId}}
-      <b-form-select v-model="hallId" :options="hallOptions.halls"></b-form-select>
-      <b-form-select v-model="layoutId" :options="hallOptions.layout"></b-form-select>
-      <!-- <b-form-group label-cols="4" label-cols-lg="2" label="Default" label-for="input-default">
-          <b-form-input id="input-default"></b-form-input>
-      </b-form-group>-->
-    </b-col>
-  </b-row>
+  <div>
+    <h3>Layout Header</h3>
+    <b-row class="py-2">
+      <b-col cols="6">
+        <b-form-select label-field="Hall" v-model="hallId" :options="hallOptions"></b-form-select>
+      </b-col>
+      <b-col cols="6">
+        <b-form-select label-field="Hall" v-model="layoutId" :options="layoutOptions"></b-form-select>
+      </b-col>
+    </b-row>
+    <!-- TODO: -->
+    <!-- <div>
+      <b-input-group class="mt-3">
+        <template v-slot:append>
+          <b-input-group-text>
+            <strong class="text-danger">!</strong>
+          </b-input-group-text>
+        </template>
+        <b-form-input></b-form-input>
+      </b-input-group>
+      <b-form-input></b-form-input>
+      <b-card></b-card>
+    </div>-->
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { Vue } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
@@ -29,7 +40,7 @@ import mutations from "../../store/layout/mutations";
 export default class Index extends Vue {
   @State("layout") layout!: LayoutState;
   @Action("getHalls", { namespace }) getHalls: any;
-  @Action("getHallLayouts", { namespace }) getHallLayouts: any;
+  @Action("getHallLayout", { namespace }) getHallLayout: any;
   @Mutation("setHallId", { namespace }) setHallId: any;
   @Mutation("setLayoutId", { namespace }) setLayoutId: any;
 
@@ -44,11 +55,11 @@ export default class Index extends Vue {
   }
   set layoutId(layoutId) {
     this.setLayoutId(layoutId);
+    this.$store.dispatch("layout/getHallLayout", layoutId);
   }
 
   get hallOptions() {
     const hallOptions: any[] = [];
-    const LayoutOptions: any[] = [];
     for (var h in this.layout.halls) {
       if (this.hallId === 0) {
         this.hallId = this.layout.halls[h].id;
@@ -59,20 +70,30 @@ export default class Index extends Vue {
           this.layout.halls[h].hall_code + " " + this.layout.halls[h].hall_name
       };
       hallOptions.push(hallObject);
+    }
+    return hallOptions;
+  }
 
-      for (var l in this.layout.halls[h].layouts) {
+  get layoutOptions() {
+    const layoutOptions: any[] = [];
+    if (this.hallId !== 0) {
+      const hall = this.layout.halls.filter(e => e.id === this.hallId);
+      for (var l in hall[0].layouts) {
+        if (this.layoutId === 0) {
+          this.layoutId = hall[0].layouts[l].id;
+        }
         let layoutObject: { value: number; text: string } = {
-          value: this.layout.halls[h].layouts[l].id,
+          value: hall[0].layouts[l].id,
           text:
-            this.layout.halls[h].layouts[l].layout_code +
+            hall[0].layouts[l].layout_code +
             " " +
-            this.layout.halls[h].layouts[l].layout_name
+            hall[0].layouts[l].layout_name
         };
 
-        LayoutOptions.push(layoutObject);
+        layoutOptions.push(layoutObject);
       }
     }
-    return { halls: hallOptions, layouts: LayoutOptions };
+    return layoutOptions;
   }
 
   created() {

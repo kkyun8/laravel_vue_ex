@@ -6,6 +6,7 @@ use App\Hall;
 use App\Layout;
 use App\Seat;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Integer;
 
 class HallLayoutController extends Controller
 {
@@ -42,10 +43,13 @@ class HallLayoutController extends Controller
 
   /**
    * 
+   *
+   * @param  Request  $request
+   * @return 
    */
   public function getLayout(Request $request)
   {
-    $id = $request->layoutId;
+    $id = $request->id;
 
     $layout = Layout::with('seats')
       ->where('id', $id)

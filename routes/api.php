@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/halls', 'HallLayoutController@getHalls')->name('getHalls');
-Route::get('/layout', 'HallLayoutController@getLayout')->name('getLayout');
+Route::get('/layout/{id}', 'HallLayoutController@getLayout')->name('getLayout');

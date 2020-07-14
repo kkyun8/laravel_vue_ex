@@ -7,9 +7,9 @@ const actions: ActionTree<LayoutState, RootState> = {
         const response = await window.axios.get("/api/halls");
         commit("setHalls", response.data);
     },
-    getHallLayouts: async ({ commit }, layout: Layout) => {
-        const response = await window.axios.get("/api/layout");
-        commit("setHallLayouts", response.data);
+    getHallLayout: async ({ commit }, layoutId: Layout["layoutId"]) => {
+        const response = await window.axios.get("/api/layout/" + layoutId);
+        commit("setHallLayout", response.data);
     }
 };
 

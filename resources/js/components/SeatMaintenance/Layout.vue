@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
@@ -47,7 +47,20 @@ export default class Index extends Vue {
   // @Getter('fullName', { namespace }) fullName: string;
   //   private layout!: Layout[];
 
-  //data
+  get hallLayout(): LayoutState["hallLayout"] {
+    return this.layout.hallLayout;
+  }
+
+  set hallLayout(hallLayout) {
+    this.setHallLayout(hallLayout);
+  }
+
+  @Watch("hallLayout")
+  onHallLayoutChange(newVal: any[], oldVal: any[]): any[] {
+    return newVal;
+  }
+
+  //Container Setting Data
   cellSize = {
     w: 1,
     h: 1
@@ -81,6 +94,7 @@ export default class Index extends Vue {
       }
     }
   ];
+  updateSeats = [];
 
   layoutConversion() {}
 
