@@ -17,6 +17,9 @@ const mutations: MutationTree<LayoutState> = {
     },
     setLayoutId: (state, layoutId: Layout["layoutId"]) => {
         state.layoutId = layoutId;
+    },
+    setEditHallLayout: (state, editHallLayout: Layout["editHallLayout"]) => {
+        editHallLayout.forEach(e => state.editHallLayout.push(e));
     }
 };
 

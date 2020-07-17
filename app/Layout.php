@@ -21,4 +21,12 @@ class Layout extends Model
   {
     return $this->hasMany('App\Seat');
   }
+
+  /**
+   * 
+   */
+  public function seatGroups()
+  {
+    return $this->hasMany('App\SeatGroup');
+  }
 }
