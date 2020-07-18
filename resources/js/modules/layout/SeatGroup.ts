@@ -1,4 +1,5 @@
-export default class Seat {
+//TODO:
+export default class SeatGroup {
     protected id: number;
     protected name: string;
     protected seatGroupId: number;
