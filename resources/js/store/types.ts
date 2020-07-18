@@ -9,7 +9,7 @@ export interface LayoutState {
     seats: Layout["seats"];
     hallId: Layout["hallId"];
     layoutId: Layout["layoutId"];
-    editHallLayout: Layout["editHallLayout"];
+    editSeats: Layout["editSeats"];
 }
 
 export interface Layout {
@@ -19,5 +19,5 @@ export interface Layout {
     seats: any[];
     hallId: number;
     layoutId: number;
-    editHallLayout: any[];
+    editSeats: any[];
 }

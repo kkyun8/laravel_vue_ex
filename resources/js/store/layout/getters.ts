@@ -1,17 +1,27 @@
+import Seat from "../../modules/layout/Seat";
 import { GetterTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState } from "@/store/types";
 
 const getters: GetterTree<LayoutState, RootState> = {
-    layoutToDivBox: (state: LayoutState) => {
-        return state.layout.length;
-    },
-    seatsToPattern: (state: LayoutState) => {
-        return state.layout.length;
-    },
-    patternToSeats: (state: LayoutState) => {
-        return state.layout.length;
-    }
+    //TODO:
+    // geteditSeats: (state: LayoutState) => {
+    //     const data = [];
+    //     state.layout.hallHayout.forEach(seat => {
+    //         const object = new Seat(seat);
+    //         data.push(object);
+    //     });
+    //     return data;
+    // },
+    // layoutToDivBox: (state: LayoutState) => {
+    //     return state.layout.layoutId.length;
+    // },
+    // seatsToPattern: (state: LayoutState) => {
+    //     return state.layout.layoutId.length;
+    // },
+    // patternToSeats: (state: LayoutState) => {
+    //     return state.layout.layoutId.length;
+    // }
 };
 
 export default getters;

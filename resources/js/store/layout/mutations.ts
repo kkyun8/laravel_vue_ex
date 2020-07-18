@@ -1,16 +1,25 @@
+import Seat from "../../modules/layout/Seat";
 import { MutationTree } from "vuex";
 //@ts-ignore
 import { LayoutState, Layout } from "@/store/types";
 
 const mutations: MutationTree<LayoutState> = {
     setHalls: (state, halls: Layout["halls"]) => {
+        state.halls = [];
         halls.forEach(e => state.halls.push(e));
     },
     setHallLayout: (state, hallLayout: Layout["hallLayout"]) => {
-        hallLayout.forEach(e => state.hallLayout.push(e));
+        state.hallLayout = [];
+        hallLayout.forEach(e => {
+            state.hallLayout.push(e);
+        });
     },
     setSeats: (state, seats: Layout["seats"]) => {
-        seats.forEach(e => state.seats.push(e));
+        state.seats = [];
+        seats.forEach(e => {
+            const seat = new Seat(e);
+            state.seats.push(seat);
+        });
     },
     setHallId: (state, hallId: Layout["hallId"]) => {
         state.hallId = hallId;
@@ -18,8 +27,12 @@ const mutations: MutationTree<LayoutState> = {
     setLayoutId: (state, layoutId: Layout["layoutId"]) => {
         state.layoutId = layoutId;
     },
-    setEditHallLayout: (state, editHallLayout: Layout["editHallLayout"]) => {
-        editHallLayout.forEach(e => state.editHallLayout.push(e));
+    setEditSeats: (state, editSeats: Layout["editSeats"]) => {
+        state.editSeats = [];
+        editSeats.forEach(e => {
+            const seat = new Seat(e);
+            state.editSeats.push(seat);
+        });
     }
 };
 

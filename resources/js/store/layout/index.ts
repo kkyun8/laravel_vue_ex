@@ -9,6 +9,7 @@ export const state: LayoutState = {
     code: "",
     halls: [],
     hallLayout: [],
+    editSeats: [],
     seats: [],
     hallId: 0,
     layoutId: 0
