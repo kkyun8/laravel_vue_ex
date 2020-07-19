@@ -59,8 +59,7 @@ export default class Index extends Vue {
 
     get hallLayout(): LayoutState["hallLayout"] {
         if (this.layout.hallLayout.length > 0) {
-            this.setSeats(this.layout.hallLayout[0].seats);
-            this.setEditSeats(this.layout.hallLayout[0].seats);
+            this.seats = this.layout.hallLayout[0].seats;
         }
         return this.layout.hallLayout;
     }
@@ -69,16 +68,29 @@ export default class Index extends Vue {
         this.setHallLayout(hallLayout);
     }
 
-    get editSeats(): LayoutState["editSeats"] {
-        return this.layout.editSeats;
+    get seats(): LayoutState["seats"] {
+        return this.layout.seats;
     }
 
-    set editSeats(seats) {
-        this.setEditSeats(seats);
+    set seats(seats) {
+        this.setSeats(seats);
     }
 
     @Watch("hallLayout")
     onHallLayoutChange(newVal: any[], oldVal: any[]): any[] {
+        return newVal;
+    }
+
+    //TODO:
+    setBoxStatus(pinnedFlg: boolean) {
+        this.layoutSeats.forEach((e: any) => {
+            e.pinned = pinnedFlg;
+        });
+    }
+
+    @Watch("seats")
+    setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
+        this.layoutSeats = newVal;
         return newVal;
     }
 
@@ -87,37 +99,13 @@ export default class Index extends Vue {
         w: 1,
         h: 1
     };
-    maxColumnCount = 400;
+    maxColumnCount = 500;
     maxRowCount = 200;
     bubbleUp = false;
     margin = 2;
     boxCount = 4;
     //layout
-    // layoutSeats = [];
-    layoutSeats = [
-        {
-            id: 1,
-            hidden: false,
-            pinned: false,
-            position: {
-                x: 0,
-                y: 0,
-                w: 20,
-                h: 30
-            }
-        },
-        {
-            id: 2,
-            hidden: false,
-            pinned: false,
-            position: {
-                x: 40,
-                y: 40,
-                w: 30,
-                h: 20
-            }
-        }
-    ];
+    layoutSeats: any[] = [];
 
     updateSeats = [];
 
