@@ -99,7 +99,7 @@ export default class Index extends Vue {
         w: 1,
         h: 1
     };
-    maxColumnCount = 500;
+    maxColumnCount = 550;
     maxRowCount = 200;
     bubbleUp = false;
     margin = 2;
