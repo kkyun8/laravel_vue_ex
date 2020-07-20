@@ -32,134 +32,145 @@
                 </b-form-group>
             </b-form-row>
         </div>
+        <div class="card mb-2">
+            <b-button
+                v-b-toggle="'insert-seat-collapse'"
+                variant="outline-primary"
+                >席登録
+            </b-button>
+        </div>
+        <b-collapse id="insert-seat-collapse" class="mt-2">
+            <div class="card p-3 mb-2">
+                <h4>Insert Seat</h4>
+                <b-form-row>
+                    <b-form-group
+                        class="col-md-3"
+                        label="Seat Group Number Count"
+                    >
+                        <b-form-select
+                            id="seat-group-number-input"
+                            v-model="seatGroupNumber"
+                            :options="seatGroupNumberOptions"
+                        ></b-form-select>
+                    </b-form-group>
+                    <b-form-group class="col-md-3" label="Type">
+                        <b-form-radio-group
+                            id="seat-type"
+                            v-model="seatType"
+                            :options="seatTypeOptions"
+                            name="seat-type"
+                        ></b-form-radio-group>
+                    </b-form-group>
+                    <b-form-group class="col-md-3" label="Direction">
+                        <b-form-radio-group
+                            id="seat-direction"
+                            v-model="seatDirection"
+                            :options="seatDirectionOptions"
+                            name="seat-direction"
+                        ></b-form-radio-group>
+                    </b-form-group>
+                    <b-form-group class="col-md-3" label="Arrangement">
+                        <b-form-radio-group
+                            id="seat-arrangement"
+                            v-model="seatArrangement"
+                            :options="seatArrangementOptions"
+                            name="seat-arrangement"
+                        ></b-form-radio-group>
+                    </b-form-group>
+                </b-form-row>
 
-        <div class="card p-3 mb-2">
-            <h4>Insert Seat</h4>
-            <b-form-row>
-                <b-form-group class="col-md-3" label="Seat Group Number Count">
-                    <b-form-select
-                        id="seat-group-number-input"
-                        v-model="seatGroupNumber"
-                        :options="seatGroupNumberOptions"
-                    ></b-form-select>
-                </b-form-group>
-                <b-form-group class="col-md-3" label="Type">
-                    <b-form-radio-group
-                        id="seat-type"
-                        v-model="seatType"
-                        :options="seatTypeOptions"
-                        name="seat-type"
-                    ></b-form-radio-group>
-                </b-form-group>
-                <b-form-group class="col-md-3" label="Direction">
-                    <b-form-radio-group
-                        id="seat-direction"
-                        v-model="seatDirection"
-                        :options="seatDirectionOptions"
-                        name="seat-direction"
-                    ></b-form-radio-group>
-                </b-form-group>
-                <b-form-group class="col-md-3" label="Arrangement">
-                    <b-form-radio-group
-                        id="seat-arrangement"
-                        v-model="seatArrangement"
-                        :options="seatArrangementOptions"
-                        name="seat-arrangement"
-                    ></b-form-radio-group>
-                </b-form-group>
-            </b-form-row>
-
-            <b-form-row>
-                <template v-for="(n, nidx) in seatGroupNumber">
-                    <b-form-group
-                        class="col-md-2"
-                        id="seat--number"
-                        label="Seat Group Number"
-                        :label-for="'seat-number-input' + nidx"
-                        description="select number"
-                        :key="'seat-number-' + nidx"
-                    >
-                        <b-form-input
-                            :id="'seat-group-number-input' + nidx"
-                            :value="nidx + 1"
-                            :disabled="true"
-                        ></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                        class="col-md-4"
-                        :id="'seat-name-' + nidx"
-                        description="set seat name."
-                        label="Seat Name"
-                        :label-for="'seat-name-input' + nidx"
-                        :invalid-feedback="
-                            inputSeatName.length >= 4
-                                ? ''
-                                : 'Enter at least 4 characters'
-                        "
-                        :key="'seat-name-' + nidx"
-                        :state="inputSeatName.length >= 4 ? true : false"
-                    >
-                        <b-form-input
-                            :id="'seat-name-input' + nidx"
-                            v-model="inputSeatName"
-                            :state="inputSeatName !== ''"
-                            :type="'text'"
-                            trim
-                        ></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                        class="col-md-2"
-                        id="seat-count"
-                        label="Seat Head Count"
-                        :label-for="'seat-count-input' + nidx"
-                        :key="'seat-count-' + nidx"
-                    >
-                        <b-form-input
-                            :id="'seat-count-input' + nidx"
-                            v-model="inputSeatCount"
-                            :type="'number'"
-                            trim
-                        ></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                        v-if="nidx === 0"
-                        class="col-md-4"
-                        id="seat-group-name"
-                        label="Seat Group Name"
-                        label-for="seat-group-name-input"
-                        :invalid-feedback="
-                            nidx > 0
-                                ? inputSeatGroupName.length >= 4
+                <b-form-row>
+                    <template v-for="(n, nidx) in seatGroupNumber">
+                        <b-form-group
+                            class="col-md-2"
+                            id="seat--number"
+                            label="Seat Group Number"
+                            :label-for="'seat-number-input' + nidx"
+                            description="select number"
+                            :key="'seat-number-' + nidx"
+                        >
+                            <b-form-input
+                                :id="'seat-group-number-input' + nidx"
+                                :value="nidx + 1"
+                                :disabled="true"
+                            ></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            class="col-md-4"
+                            :id="'seat-name-' + nidx"
+                            description="set seat name."
+                            label="Seat Name"
+                            :label-for="'seat-name-input' + nidx"
+                            :invalid-feedback="
+                                inputSeatName.length >= 4
                                     ? ''
                                     : 'Enter at least 4 characters'
-                                : ''
-                        "
-                        :key="'seat-group-name-' + nidx"
-                        :state="
-                            nidx > 0
-                                ? inputSeatGroupName.length >= 4
-                                    ? true
-                                    : false
-                                : true
-                        "
-                    >
-                        <b-form-input
-                            id="seat-group-name-input"
-                            v-model="inputSeatGroupName"
-                            :state="inputSeatGroupName !== ''"
-                            :type="'text'"
-                            :disabled="nidx === 0"
-                            trim
-                        ></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                        v-else
-                        :key="'seat-group-name-' + nidx"
-                        class="col-md-4"
-                    ></b-form-group>
-                </template>
-            </b-form-row>
-        </div>
+                            "
+                            :key="'seat-name-' + nidx"
+                            :state="inputSeatName.length >= 4 ? true : false"
+                        >
+                            <b-form-input
+                                :id="'seat-name-input' + nidx"
+                                v-model="inputSeatName"
+                                :state="inputSeatName !== ''"
+                                :type="'text'"
+                                trim
+                            ></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            class="col-md-2"
+                            id="seat-count"
+                            label="Seat Head Count"
+                            :label-for="'seat-count-input' + nidx"
+                            :key="'seat-count-' + nidx"
+                        >
+                            <b-form-input
+                                :id="'seat-count-input' + nidx"
+                                v-model="inputSeatCount"
+                                :type="'number'"
+                                trim
+                            ></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            v-if="nidx === 0"
+                            class="col-md-4"
+                            id="seat-group-name"
+                            label="Seat Group Name"
+                            label-for="seat-group-name-input"
+                            :invalid-feedback="
+                                nidx > 0
+                                    ? inputSeatGroupName.length >= 4
+                                        ? ''
+                                        : 'Enter at least 4 characters'
+                                    : ''
+                            "
+                            :key="'seat-group-name-' + nidx"
+                            :state="
+                                nidx > 0
+                                    ? inputSeatGroupName.length >= 4
+                                        ? true
+                                        : false
+                                    : true
+                            "
+                        >
+                            <b-form-input
+                                id="seat-group-name-input"
+                                v-model="inputSeatGroupName"
+                                :state="inputSeatGroupName !== ''"
+                                :type="'text'"
+                                :disabled="nidx === 0"
+                                trim
+                            ></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            v-else
+                            :key="'seat-group-name-' + nidx"
+                            class="col-md-4"
+                        ></b-form-group>
+                    </template>
+                </b-form-row>
+            </div>
+        </b-collapse>
         <!-- TODO: -->
     </div>
 </template>
@@ -220,7 +231,7 @@ export default class Index extends Vue {
         if (this.hallId !== 0) {
             const hall = this.layout.halls.filter(e => e.id === this.hallId);
             let setLayoutIdFlg = hall[0].layouts.some(
-                (s:any) => s.id === this.layoutId
+                (s: any) => s.id === this.layoutId
             );
             for (var l in hall[0].layouts) {
                 if (!setLayoutIdFlg) {
