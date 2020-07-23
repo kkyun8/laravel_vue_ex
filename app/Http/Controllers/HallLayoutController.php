@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Hall;
 use App\Layout;
 use App\Seat;
+use Faker\Provider\ar_JO\Internet;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -75,32 +76,31 @@ class HallLayoutController extends Controller
     $layoutCode = $request->layoutCode;
     $seats = $request->seats;
 
-    $layout = new Layout();
-
-    $layout->name = $layoutName;
-    $layout->code = $layoutCode;
+    $layout = new Layout;
+    $layout->hall_id = $hallId;
+    $layout->layout_name = $layoutName;
+    $layout->layout_code = $layoutCode;
 
     $layout->save();
+
     $layoutId = $layout->id;
 
-    $seatArray = json_decode($seats, true);
-
-    foreach ($seatArray as $seat) {
-      $createSeat = new Seat();
-      $createSeat->layou_id = $layoutId;
-      $createSeat->hall_id = $hallId;
-      $createSeat->name = $seat->name;
-      $createSeat->seat_group_id = $seat->seatGroupId;
-      $createSeat->w = $seat->position('w');
-      $createSeat->h = $seat->position('h');
-      $createSeat->x = $seat->position('x');
-      $createSeat->y = $seat->position('y');
-      $createSeat->count = $seat->count;
-      $createSeat->save();
+    if (!empty($seats)) {
+      foreach ($seats as $seat) {
+        $createSeat = new Seat;
+        $createSeat->layout_id = $layoutId;
+        $createSeat->name = $seat['name'];
+        $createSeat->seat_group_id = $seat['seatGroupId'];
+        $createSeat->w = $seat['position']['w'];
+        $createSeat->h = $seat['position']['h'];
+        $createSeat->x = $seat['position']['x'];
+        $createSeat->y = $seat['position']['y'];
+        $createSeat->count = $seat['count'];
+        $createSeat->save();
+      }
     }
 
-
-    return $seats;
+    return response($layout, 201);
   }
 
   /**
@@ -110,22 +110,49 @@ class HallLayoutController extends Controller
   {
     //バリデーション
     $request->validate([
-      'layoutid' => 'required',
-      'layoutName' => 'required',
-      'layoutCode' => 'required',
+      'hallId' => 'required',
+      'layoutId' => 'required',
       'seats' => 'required',
     ]);
 
-    $layoutid = $request->layoutid;
+    $hallId = $request->hallId;
+    $layoutId = $request->layoutId;
     $layoutName = $request->layoutName;
     $layoutCode = $request->layoutCode;
-    $seats = $request->seats;
+    $layout = Layout::with('seats')
+      ->where('id', $layoutId);
 
-    //TODO:作業中
+    $layout->layoutName = $layoutName;
+    $layout->layoutCode = $layoutCode;
+    $layout->seats->delete();
 
-    // $layout = Layout::with('seats')
-    //   ->where('id', $id)
-    //   ->where('delflg', false)->get();
+    $seatArray = json_decode($request->seats, true);
+    $seats = [];
+    foreach ($seatArray as $seat) {
+      $data = new Seat();
+      $data->hall_id = $hallId;
+      $data->layout_id = $layoutId;
+      $data->name = $seat->name;
+      $data->count = $seat->count;
+      $data->seat_group_id = $seat->seat_group_id;
+      $data->w = $seat->position->w;
+      $data->h = $seat->position->h;
+      $data->x = $seat->position->x;
+      $data->y = $seat->position->y;
+
+      array_push($seats, $seat);
+    }
+
+    $layout->seats()->insert($seats);
+
+    return response($layout, 200);
+  }
+
+  /**
+   */
+  private function createSeats(int $layoutId)
+  {
+    $seats = Seat::where('layout_id', $layoutId)->where('delflg', false)->get();
 
     return $seats;
   }

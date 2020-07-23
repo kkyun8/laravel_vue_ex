@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/halls', 'HallLayoutController@getHalls')->name('getHalls');
 Route::get('/layout/{id}', 'HallLayoutController@getLayout')->name('getLayout');
+Route::post('/layout', 'HallLayoutController@create')->name('createLayout');
+Route::put('/layout', 'HallLayoutController@store')->name('storeLayout');
