@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateHallsTable extends Migration
 {
@@ -19,7 +20,8 @@ class CreateHallsTable extends Migration
       $table->string('hall_name')->unique();
       $table->integer('number');
       $table->boolean('delflg')->default(false);
-      $table->timestamps();
+      $table->timestamp('created_at')->useCurrent()->nullable();
+      $table->timestamp('updated_at')->useCurrent()->nullable();
     });
   }
 

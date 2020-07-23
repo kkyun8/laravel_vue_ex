@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateLayoutsTable extends Migration
 {
@@ -19,7 +20,8 @@ class CreateLayoutsTable extends Migration
       $table->string('layout_code')->unique();
       $table->string('layout_name')->unique();
       $table->boolean('delflg')->default(false);
-      $table->timestamps();
+      $table->timestamp('created_at')->useCurrent()->nullable();
+      $table->timestamp('updated_at')->useCurrent()->nullable();
     });
   }
 
