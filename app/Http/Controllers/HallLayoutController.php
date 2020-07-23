@@ -48,9 +48,9 @@ class HallLayoutController extends Controller
    * @param  Request  $request
    * @return 
    */
-  public function getLayout(Request $request)
+  public static function getLayout(int $id)
   {
-    $id = $request->id;
+    // $id = $request->id;
 
     $layout = Layout::with('seats')
       ->where('id', $id)
@@ -100,7 +100,8 @@ class HallLayoutController extends Controller
       }
     }
 
-    return response($layout, 201);
+    $createLayout =  self::getLayout($layoutId);
+    return response($createLayout, 201);
   }
 
   /**
@@ -111,18 +112,24 @@ class HallLayoutController extends Controller
     //バリデーション
     $request->validate([
       'layoutId' => 'required',
-      'seats' => 'required',
+      'editSeats' => 'required',
     ]);
 
     $layoutId = $request->layoutId;
     $layoutName = $request->layoutName;
     $layoutCode = $request->layoutCode;
-    $seats = $request->seats;
+    $seats = $request->editSeats;
 
     $layout = Layout::find($layoutId);
 
-    $layout->layout_name = $layoutName;
-    $layout->layout_code = $layoutCode;
+    if (!empty($layoutName)) {
+
+      $layout->layout_name = $layoutName;
+    }
+
+    if (!empty($layoutCode)) {
+      $layout->layout_code = $layoutCode;
+    }
     $layout->save();
 
     if (!empty($seats)) {
@@ -132,7 +139,7 @@ class HallLayoutController extends Controller
       self::createSeats($layoutId, $seats);
     }
 
-    return response($layout, 200);
+    return response(self::getLayout($layoutId), 200);
   }
 
   /**

@@ -1,7 +1,7 @@
 export default class Seat {
     protected id: number;
     protected name: string;
-    protected seatGroupId: number;
+    protected seatGroupId: number | null;
     protected count: number;
     protected hidden: boolean;
     protected pinned: boolean;
@@ -24,7 +24,7 @@ export default class Seat {
     }) {
         this.id = data.id;
         this.name = data.name;
-        this.seatGroupId = data.seatGroupId;
+        this.seatGroupId = !data.seatGroupId ? null : data.seatGroupId;
         this.count = data.count;
         this.hidden = false;
         this.pinned = false;
