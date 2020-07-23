@@ -110,50 +110,47 @@ class HallLayoutController extends Controller
   {
     //バリデーション
     $request->validate([
-      'hallId' => 'required',
       'layoutId' => 'required',
       'seats' => 'required',
     ]);
 
-    $hallId = $request->hallId;
     $layoutId = $request->layoutId;
     $layoutName = $request->layoutName;
     $layoutCode = $request->layoutCode;
-    $layout = Layout::with('seats')
-      ->where('id', $layoutId);
+    $seats = $request->seats;
 
-    $layout->layoutName = $layoutName;
-    $layout->layoutCode = $layoutCode;
-    $layout->seats->delete();
+    $layout = Layout::find($layoutId);
 
-    $seatArray = json_decode($request->seats, true);
-    $seats = [];
-    foreach ($seatArray as $seat) {
-      $data = new Seat();
-      $data->hall_id = $hallId;
-      $data->layout_id = $layoutId;
-      $data->name = $seat->name;
-      $data->count = $seat->count;
-      $data->seat_group_id = $seat->seat_group_id;
-      $data->w = $seat->position->w;
-      $data->h = $seat->position->h;
-      $data->x = $seat->position->x;
-      $data->y = $seat->position->y;
+    $layout->layout_name = $layoutName;
+    $layout->layout_code = $layoutCode;
+    $layout->save();
 
-      array_push($seats, $seat);
+    if (!empty($seats)) {
+      //削除後登録
+      $seat = Seat::where('layout_id', $layoutId);
+      $seat->delete();
+      self::createSeats($layoutId, $seats);
     }
-
-    $layout->seats()->insert($seats);
 
     return response($layout, 200);
   }
 
   /**
    */
-  private function createSeats(int $layoutId)
+  private static function createSeats(int $layoutId, array $seats)
   {
-    $seats = Seat::where('layout_id', $layoutId)->where('delflg', false)->get();
-
+    foreach ($seats as $seat) {
+      $createSeat = new Seat;
+      $createSeat->layout_id = $layoutId;
+      $createSeat->name = $seat['name'];
+      $createSeat->seat_group_id = $seat['seatGroupId'];
+      $createSeat->w = $seat['position']['w'];
+      $createSeat->h = $seat['position']['h'];
+      $createSeat->x = $seat['position']['x'];
+      $createSeat->y = $seat['position']['y'];
+      $createSeat->count = $seat['count'];
+      $createSeat->save();
+    }
     return $seats;
   }
 }

@@ -12,7 +12,7 @@ class HallLayoutTest extends TestCase
   //./vendor/bin/phpunit
   //./vendor/bin/phpunit tests/Feature/HallLayoutTest.php 
   /**
-   * @test TODO: 必須
+   * 
    */
   public function should_新規レイアウト保存()
   {
@@ -41,35 +41,42 @@ class HallLayoutTest extends TestCase
   }
 
   /**
-   * @test
+   * 
    */
-  // public function should_レイアウト更新()
-  // {
-  //   factory(Photo::class)->create();
-  //   $photo = Photo::first();
+  public function should_レイアウト更新()
+  {
+    $data = [
+      'layoutId' => 1,
+      'layoutName' => 'レイアウト更新2',
+      'layoutCode' => '_UPDATE1',
+      'seats' => [
+        [
+          'name' => 'updateName1',
+          'seatGroupId' => 1,
+          'position' => [
+            'w' => 20,
+            'h' => 30,
+            'x' => 99,
+            'y' => 99
+          ],
+          'count' => 1
+        ],
+        [
+          'name' => 'updateName2',
+          'seatGroupId' => 1,
+          'position' => [
+            'w' => 20,
+            'h' => 30,
+            'x' => 99,
+            'y' => 99
+          ],
+          'count' => 1
+        ]
+      ]
+    ];
 
-  //   $response = $this->json('GET', route('photo.show', [
-  //     'id' => $photo->id,
-  //   ]));
+    $response = $this->json('PUT', route('storeLayout'), $data);
 
-  //   $response->assertStatus(200)
-  //     ->assertJsonFragment([
-  //       'id' => $photo->id,
-  //       'url' => $photo->url,
-  //       'owner' => [
-  //         'name' => $photo->owner->name,
-  //       ],
-  //       'comments' => $photo->comments
-  //         ->sortByDesc('id')
-  //         ->map(function ($comment) {
-  //           return [
-  //             'author' => [
-  //               'name' => $comment->author->name,
-  //             ],
-  //             'content' => $comment->content,
-  //           ];
-  //         })
-  //         ->all(),
-  //     ]);
-  // }
+    $response->assertStatus(200);
+  }
 }
