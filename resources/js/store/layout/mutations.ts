@@ -30,8 +30,7 @@ const mutations: MutationTree<LayoutState> = {
     setEditSeats: (state, editSeats: Layout["editSeats"]) => {
         state.editSeats = [];
         editSeats.forEach((e: any) => {
-            const seat = new Seat(e);
-            state.editSeats.push(seat);
+            state.editSeats.push(e);
         });
     }
 };

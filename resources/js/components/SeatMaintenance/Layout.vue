@@ -1,7 +1,13 @@
 <template>
     <div>
         <b-row>
-            <b-col cols="12"></b-col>
+            <b-col v-if="layoutSeatsUpdateFlg" cols="12">
+                <div class="card mb-2">
+                    <b-button variant="info" @click.prevent="updateLayout()"
+                        >レイアウト更新
+                    </b-button>
+                </div>
+            </b-col>
         </b-row>
         <b-row>
             <b-col cols="12">
@@ -60,6 +66,7 @@ export default class Index extends Vue {
     get hallLayout(): LayoutState["hallLayout"] {
         if (this.layout.hallLayout.length > 0) {
             this.seats = this.layout.hallLayout[0].seats;
+            this.layoutSeatsUpdateFlg = false;
         }
         return this.layout.hallLayout;
     }
@@ -81,6 +88,27 @@ export default class Index extends Vue {
         return newVal;
     }
 
+    @Watch("layoutSeats")
+    onLayoutSeatsChange(newVal: any[], oldVal: any[]): any[] {
+        // テーブルの位置が変更されたら更新ボタンを表示
+        newVal.forEach(e => {
+            if (
+                oldVal.some(
+                    o =>
+                        o.id === e.id &&
+                        (o.position.w !== e.position.w ||
+                            o.position.h !== e.position.h ||
+                            o.position.x !== e.position.x ||
+                            o.position.y !== e.position.y)
+                )
+            ) {
+                this.layoutSeatsUpdateFlg = true;
+            }
+        });
+
+        return newVal;
+    }
+
     //TODO:
     setBoxStatus(pinnedFlg: boolean) {
         this.layoutSeats.forEach((e: any) => {
@@ -92,6 +120,11 @@ export default class Index extends Vue {
     setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
         this.layoutSeats = newVal;
         return newVal;
+    }
+
+    updateLayout() {
+        this.setEditSeats(this.layoutSeats);
+        this.$store.dispatch("layout/updateLayout", this.layout);
     }
 
     //Container Setting Data
@@ -106,7 +139,7 @@ export default class Index extends Vue {
     boxCount = 4;
     //layout
     layoutSeats: any[] = [];
-
+    layoutSeatsUpdateFlg = false;
     updateSeats = [];
 
     layoutConversion() {}
