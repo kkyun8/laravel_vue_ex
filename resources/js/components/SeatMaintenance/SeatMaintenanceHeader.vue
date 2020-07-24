@@ -187,7 +187,7 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
 import mutations from "../../store/layout/mutations";
 
 @Component({})
-export default class Index extends Vue {
+export default class SeatMaintenanceHeader extends Vue {
     @State("layout") layout!: LayoutState;
     @Action("fetchHalls", { namespace }) fetchHalls: any;
     @Action("fetchHallLayout", { namespace }) fetchHallLayout: any;

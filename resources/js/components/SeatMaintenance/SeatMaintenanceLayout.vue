@@ -56,7 +56,7 @@ import mutations from "../../store/layout/mutations";
         SeatBox: Box
     }
 })
-export default class Index extends Vue {
+export default class SeatMaintenanceLayout extends Vue {
     @State("layout") layout!: LayoutState;
     @Mutation("setHallLayout", { namespace }) setHallLayout: any;
     @Mutation("setSeats", { namespace }) setSeats: any;
