@@ -2,7 +2,7 @@ import { ActionTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState, Layout } from "@/store/types";
 
-const actions: ActionTree<LayoutState, RootState> = {
+const layoutActions: ActionTree<LayoutState, RootState> = {
     fetchHalls: async ({ commit }) => {
         const response = await window.axios.get("/api/halls");
         commit("setHalls", response.data);
@@ -20,6 +20,10 @@ const actions: ActionTree<LayoutState, RootState> = {
         const response = await window.axios.put("/api/layout", layout);
         commit("setHallLayout", response.data);
     }
+};
+
+const actions = {
+    layoutActions
 };
 
 export default actions;

@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Index from "./components/index/Index.vue";
 import SeatingChart from "./components/seatingChart/Index.vue";
-import SeatMaintenance from "./components/seatMaintenance/Index.vue";
+import SeatMaintenance from "./components/seatMaintenance/SeatMaintenanceIndex.vue";
 Vue.use(VueRouter);
 
 const routes = [

@@ -3,7 +3,7 @@ import { GetterTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState } from "@/store/types";
 
-const getters: GetterTree<LayoutState, RootState> = {
+const layoutGetters: GetterTree<LayoutState, RootState> = {
     //TODO:
     // geteditSeats: (state: LayoutState) => {
     //     const data = [];
@@ -22,6 +22,10 @@ const getters: GetterTree<LayoutState, RootState> = {
     // patternToSeats: (state: LayoutState) => {
     //     return state.layout.layoutId.length;
     // }
+};
+
+const getters = {
+    // layoutGetters
 };
 
 export default getters;

@@ -2,6 +2,18 @@ export interface RootState {
     version: string;
 }
 
+export interface MessageState {
+    success: Message["success"];
+    warning: Message["warning"];
+    error: Message["error"];
+}
+
+export interface Message {
+    success: string;
+    warning: string;
+    error: string;
+}
+
 export interface LayoutState {
     code: Layout["code"];
     halls: Layout["halls"];
