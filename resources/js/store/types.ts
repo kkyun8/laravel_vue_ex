@@ -22,6 +22,9 @@ export interface LayoutState {
     hallId: Layout["hallId"];
     layoutId: Layout["layoutId"];
     editSeats: Layout["editSeats"];
+    success: Layout["success"];
+    warning: Layout["warning"];
+    error: Layout["error"];
 }
 
 export interface Layout {
@@ -32,4 +35,7 @@ export interface Layout {
     hallId: number;
     layoutId: number;
     editSeats: any[];
+    success: string;
+    warning: string;
+    error: string;
 }

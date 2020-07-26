@@ -12,7 +12,10 @@ const layoutState: LayoutState = {
     editSeats: [],
     seats: [],
     hallId: 0,
-    layoutId: 0
+    layoutId: 0,
+    success: "",
+    warning: "",
+    error: ""
 };
 
 export const layout: Module<LayoutState, RootState> = {

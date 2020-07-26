@@ -3,10 +3,6 @@
         <notifications group="success" position="top left" :speed="300" />
         <notifications group="warn" position="top left" :speed="300" />
         <notifications group="error" position="top left" :speed="300" />
-
-        <b-btn variant="success" @click="show('success', 'success')">S</b-btn>
-        <b-btn variant="warning" @click="show('warn', 'warn')">W</b-btn>
-        <b-btn variant="danger" @click="show('error', 'error')">D E</b-btn>
         <main class="m-1">
             <b-container fluid>
                 <RouterView />
@@ -16,53 +12,82 @@
 </template>
 
 <script lang="ts">
-const namespace: string = "message";
-import { Vue } from "vue-property-decorator";
+const namespace: string = "layout";
+import { Vue, Watch } from "vue-property-decorator";
 import Component from "vue-class-component";
 import { State, Action, Getter, Mutation } from "vuex-class";
-import { MessageState, Message } from "./store/types";
+import { LayoutState, Layout } from "./store/types";
 
 @Component
 export default class App extends Vue {
-    @State("message") message!: MessageState;
+    @State("layout") layout!: LayoutState;
     @Mutation("setSuccess", { namespace }) setSuccess: any;
     @Mutation("setWarning", { namespace }) setWarning: any;
     @Mutation("setError", { namespace }) setError: any;
 
-    get success(): MessageState["success"] {
-        return this.message.success;
+    get success(): LayoutState["success"] {
+        return this.layout.success;
     }
     set success(success) {
         this.setSuccess(success);
     }
-    get warning(): MessageState["warning"] {
-        return this.message.warning;
+
+    //TODO: warning message
+    get warning(): LayoutState["warning"] {
+        return this.layout.warning;
     }
     set warning(warning) {
         this.setWarning(warning);
     }
-    get error(): MessageState["error"] {
-        return this.message.error;
+
+    get error(): LayoutState["error"] {
+        return this.layout.error;
     }
     set error(error) {
         this.setError(error);
     }
 
-    show(group: string, type = "") {
-        const text = `
-        This is notification text!
-        <br>
-        Date: ${new Date()}
-      `;
+    @Watch("success")
+    onSuccessChange(newVal: string, oldVal: string): string {
+        if (newVal !== "") {
+            this.show("success", "success", newVal);
+        }
+        return newVal;
+    }
+
+    @Watch("error")
+    onErrorChange(newVal: string, oldVal: string): string {
+        if (newVal !== "") {
+            this.show("error", "error", newVal);
+        }
+        return newVal;
+    }
+
+    show(group: string, type = "", msg: string) {
+        const text = msg;
+
         this.$notify({
             group,
-            title: `Test`,
+            title: `${group}`,
             text,
             type,
             data: {
                 randomNumber: Math.random()
             }
         });
+
+        switch (group) {
+            case "success":
+                this.success = "";
+                break;
+            case "warning":
+                this.warning = "";
+                break;
+            case "error":
+                this.error = "";
+                break;
+            default:
+        }
     }
 }
 </script>

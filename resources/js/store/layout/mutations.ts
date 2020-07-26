@@ -32,6 +32,14 @@ const layoutMutations: MutationTree<LayoutState> = {
         editSeats.forEach((e: any) => {
             state.editSeats.push(e);
         });
+    },
+    setError: (state, message: Layout["error"]) => {
+        state.error = "";
+        state.error = message;
+    },
+    setSuccess: (state, message: Layout["success"]) => {
+        state.success = "";
+        state.success = message;
     }
 };
 
