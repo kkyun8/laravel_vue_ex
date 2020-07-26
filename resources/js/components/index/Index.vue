@@ -26,9 +26,10 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+
+//宣言しないと見えない
 @Component
 export default class Index extends Vue {
-    message = "Laravel + Vue.js + TypeScript";
     mounted(): void {}
 }
 </script>

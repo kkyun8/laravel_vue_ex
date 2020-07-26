@@ -1,9 +1,9 @@
 import Seat from "../../modules/layout/Seat";
 import { MutationTree } from "vuex";
 //@ts-ignore
-import { LayoutState, Layout } from "@/store/types";
+import { LayoutState, Layout, MessageState, Message } from "@/store/types";
 
-const mutations: MutationTree<LayoutState> = {
+const layoutMutations: MutationTree<LayoutState> = {
     setHalls: (state, halls: Layout["halls"]) => {
         state.halls = [];
         halls.forEach((e: any) => state.halls.push(e));
@@ -32,7 +32,35 @@ const mutations: MutationTree<LayoutState> = {
         editSeats.forEach((e: any) => {
             state.editSeats.push(e);
         });
+    },
+    setError: (state, message: Layout["error"]) => {
+        state.error = "";
+        state.error = message;
+    },
+    setSuccess: (state, message: Layout["success"]) => {
+        state.success = "";
+        state.success = message;
     }
+};
+
+const messageMutations: MutationTree<MessageState> = {
+    setSuccess: (state, message: Message["success"]) => {
+        state.success = "";
+        state.success = message;
+    },
+    setWarning: (state, message: Message["warning"]) => {
+        state.warning = "";
+        state.warning = message;
+    },
+    setError: (state, message: Message["error"]) => {
+        state.error = "";
+        state.error = message;
+    }
+};
+
+const mutations = {
+    layoutMutations,
+    messageMutations
 };
 
 export default mutations;

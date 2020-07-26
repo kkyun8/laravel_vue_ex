@@ -1,25 +1,43 @@
-import { ActionTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState, Layout } from "@/store/types";
+//@ts-ignore
+import Repository from "@/modules/repository/repository.ts";
+import { ActionTree } from "vuex";
+import { AxiosInstance, AxiosResponse } from "axios";
 
-const actions: ActionTree<LayoutState, RootState> = {
+const layoutActions: ActionTree<LayoutState, RootState> = {
     fetchHalls: async ({ commit }) => {
-        const response = await window.axios.get("/api/halls");
+        const response: any | AxiosResponse<any> = await Repository.get(
+            "/api/halls"
+        ).catch((e: any) => commit("setError", e));
         commit("setHalls", response.data);
     },
     fetchHallLayout: async ({ commit }, layoutId: Layout["layoutId"]) => {
-        const response = await window.axios.get("/api/layout/" + layoutId);
+        const response: any | AxiosResponse<any> = await Repository.get(
+            "/api/layout/" + layoutId
+        ).catch((e: any) => commit("setError", e));
         commit("setHallLayout", response.data);
     },
     createLayout: async ({ commit }, layout: Layout) => {
-        const response = await window.axios.post("/api/layout", layout);
+        const response: any | AxiosResponse<any> = await Repository.post(
+            "/api/layout",
+            layout
+        ).catch((e: any) => commit("setError", e));
         // commit("setHallLayout", response.data);
-        console.log(response.data);
+        // console.log(response.data);
     },
     updateLayout: async ({ commit }, layout: Layout) => {
-        const response = await window.axios.put("/api/layout", layout);
+        const response: any | AxiosResponse<any> = await Repository.put(
+            "/api/layout",
+            layout
+        ).catch((e: any) => commit("setError", e));
         commit("setHallLayout", response.data);
+        commit("setSuccess", "保存しました。");
     }
+};
+
+const actions = {
+    layoutActions
 };
 
 export default actions;
