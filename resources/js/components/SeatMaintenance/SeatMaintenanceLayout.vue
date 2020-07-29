@@ -1,12 +1,24 @@
 <template>
   <div>
-    <b-row>
-      <b-col v-if="layoutSeatsUpdateFlg" cols="12">
-        <div class="card mb-2">
-          <b-button variant="info" @click.prevent="updateLayout()">レイアウト更新</b-button>
-        </div>
-      </b-col>
-    </b-row>
+    <template v-if="layoutSeatsUpdateFlg">
+      <b-row>
+        <b-col cols="6">
+          <div class="card mb-2">
+            <b-button variant="info" @click.prevent="updateLayout()">レイアウト更新</b-button>
+          </div>
+        </b-col>
+        <b-col cols="6">
+          <div class="card mb-2">
+            <b-button variant="info" @click.prevent>更新キャンセル</b-button>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="12">
+          <div class="card mb-2"></div>
+        </b-col>
+      </b-row>
+    </template>
     <b-row>
       <b-col cols="12">
         <div class="card border border-primary rounded-sm" style="width:100%; height:600px;">
@@ -24,7 +36,10 @@
                 :boxId="seat.id"
                 :key="'SeatEditKey:' + seat.id"
                 class="border border-danger rounded-sm p-1"
-              >{{ seat.name }}</SeatBox>
+              >
+                {{ seat.name }}
+                <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+              </SeatBox>
             </template>
           </SeatContainer>
         </div>
@@ -46,8 +61,8 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
 @Component({
   components: {
     SeatContainer: Container,
-    SeatBox: Box
-  }
+    SeatBox: Box,
+  },
 })
 export default class SeatMaintenanceLayout extends Vue {
   @State("layout") layout!: LayoutState;
@@ -84,10 +99,10 @@ export default class SeatMaintenanceLayout extends Vue {
   @Watch("layoutSeats")
   onLayoutSeatsChange(newVal: any[], oldVal: any[]): any[] {
     // テーブルの位置が変更されたら更新ボタンを表示
-    newVal.forEach(e => {
+    newVal.forEach((e) => {
       if (
         oldVal.some(
-          o =>
+          (o) =>
             o.id === e.id &&
             (o.position.w !== e.position.w ||
               o.position.h !== e.position.h ||
@@ -123,7 +138,7 @@ export default class SeatMaintenanceLayout extends Vue {
   //Container Setting Data
   cellSize = {
     w: 1,
-    h: 1
+    h: 1,
   };
   maxColumnCount = 550;
   maxRowCount = 200;

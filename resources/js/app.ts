@@ -3,11 +3,11 @@ import router from "./router";
 import store from "./store";
 import App from "./App.vue";
 
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import Notifications from "vue-notification";
 
 Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
+Vue.use(BootstrapVueIcons);
 Vue.use(Notifications);
 
 const createApp = async () => {
