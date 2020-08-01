@@ -72,8 +72,8 @@ export default class App extends Vue {
       text,
       type,
       data: {
-        randomNumber: Math.random()
-      }
+        randomNumber: Math.random(),
+      },
     });
 
     switch (group) {

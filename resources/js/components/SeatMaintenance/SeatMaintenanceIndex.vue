@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Layout</h2>
     <SeatMaintenanceHeader />
     <SeatMaintenanceDetail @set_seats_data="setSeatsData" />
     <SeatMaintenanceLayout :seats_data="seatsData" />
@@ -18,8 +17,8 @@ import SeatMaintenanceLayout from "@/components/seatMaintenance/SeatMaintenanceL
   components: {
     SeatMaintenanceHeader,
     SeatMaintenanceDetail,
-    SeatMaintenanceLayout
-  }
+    SeatMaintenanceLayout,
+  },
 })
 export default class SeatMaintenanceIndex extends Vue {
   seatsData: any[] = [];
@@ -27,7 +26,7 @@ export default class SeatMaintenanceIndex extends Vue {
   setSeatsData(data: any[]) {
     this.seatsData = [];
     if (data.length > 0) {
-      data.forEach(e => this.seatsData.push(e));
+      data.forEach((e) => this.seatsData.push(e));
     }
   }
 
