@@ -38,7 +38,9 @@
                 class="border border-danger rounded-sm p-1"
               >
                 {{ seat.name }}
-                <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+                <div class="seat-resize-icon">
+                  <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+                </div>
               </SeatBox>
             </template>
           </SeatContainer>
