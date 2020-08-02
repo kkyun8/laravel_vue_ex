@@ -12,14 +12,14 @@
       <div class="card p-3 mb-2">
         <h4>Insert Seat</h4>
         <b-form-row>
-          <b-form-group class="col-md-3" label="Seat Group Number Count">
+          <b-form-group class="col-md-2" label="Seat Group Number Count">
             <b-form-select
               id="seat-group-number-input"
               v-model="seatGroupNumber"
               :options="seatGroupNumberOptions"
             ></b-form-select>
           </b-form-group>
-          <b-form-group class="col-md-3" label="Type">
+          <b-form-group class="col-md-2" label="Type">
             <b-form-radio-group
               id="seat-type"
               v-model="seatType"
@@ -27,7 +27,7 @@
               name="seat-type"
             ></b-form-radio-group>
           </b-form-group>
-          <b-form-group class="col-md-3" label="Direction">
+          <b-form-group class="col-md-2" label="Direction">
             <b-form-radio-group
               id="seat-direction"
               v-model="seatDirection"
@@ -35,13 +35,30 @@
               name="seat-direction"
             ></b-form-radio-group>
           </b-form-group>
-          <b-form-group class="col-md-3" label="Arrangement">
+          <b-form-group class="col-md-2" label="Arrangement">
             <b-form-radio-group
               id="seat-arrangement"
               v-model="seatArrangement"
               :options="seatArrangementOptions"
               name="seat-arrangement"
             ></b-form-radio-group>
+          </b-form-group>
+          <b-form-group
+            class="col-md-4"
+            id="seat-group-name"
+            label="Seat Group Name"
+            label-for="seat-group-name-input"
+            :invalid-feedback="'Enter at least 4 characters'"
+            :state="inputSeatGroupName.length >= 4 ? false: true"
+          >
+            <b-form-input
+              id="seat-group-name-input"
+              v-model="inputSeatGroupName"
+              :state="inputSeatGroupName !== ''"
+              :type="'text'"
+              :disabled="seatGroupNumber === 1"
+              trim
+            ></b-form-input>
           </b-form-group>
         </b-form-row>
 
@@ -92,43 +109,13 @@
             >
               <b-form-input
                 :id="'seat-count-input' + nidx"
-                v-model="inputSeatCount"
+                v-model="inputSeatHeadCount"
                 :type="'number'"
+                :disabled="nidx > 0"
                 trim
               ></b-form-input>
             </b-form-group>
-            <b-form-group
-              v-if="nidx === 0"
-              class="col-md-4"
-              id="seat-group-name"
-              label="Seat Group Name"
-              label-for="seat-group-name-input"
-              :invalid-feedback="
-                                nidx > 0
-                                    ? inputSeatGroupName.length >= 4
-                                        ? ''
-                                        : 'Enter at least 4 characters'
-                                    : ''
-                            "
-              :key="'seat-group-name-' + nidx"
-              :state="
-                                nidx > 0
-                                    ? inputSeatGroupName.length >= 4
-                                        ? true
-                                        : false
-                                    : true
-                            "
-            >
-              <b-form-input
-                id="seat-group-name-input"
-                v-model="inputSeatGroupName"
-                :state="inputSeatGroupName !== ''"
-                :type="'text'"
-                :disabled="nidx === 0"
-                trim
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group v-else :key="'seat-group-name-' + nidx" class="col-md-4"></b-form-group>
+            <b-col cols="4" :key="'seat-count-col-' + nidx"></b-col>
           </template>
         </b-form-row>
       </div>
@@ -147,7 +134,7 @@ import { LayoutState, Layout } from "../../store/types";
 export default class SeatMaintenanceDetail extends Vue {
   //insertData
   inputSeatName = "";
-  inputSeatCount = 1;
+  inputSeatHeadCount = 1;
   inputSeatGroupName = "";
   seatGroupNumber = 1;
   seatGroupNumberOptions = [
@@ -156,22 +143,22 @@ export default class SeatMaintenanceDetail extends Vue {
     { value: 3, text: "3" },
     { value: 4, text: "4" },
     { value: 5, text: "5" },
-    { value: 6, text: "6" }
+    { value: 6, text: "6" },
   ];
   seatDirection = 0;
   seatDirectionOptions = [
     { value: 0, text: "横長" },
-    { value: 1, text: "縦長" }
+    { value: 1, text: "縦長" },
   ];
   seatArrangement = 0;
   seatArrangementOptions = [
     { value: 0, text: "横並び" },
-    { value: 1, text: "縦並び" }
+    { value: 1, text: "縦並び" },
   ];
   seatType = 0;
   seatTypeOptions = [
     { value: 0, text: "ホール席" },
-    { value: 1, text: "個室" }
+    { value: 1, text: "個室" },
   ];
   insertSeatViewFlg = false;
 }
