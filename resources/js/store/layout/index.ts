@@ -6,6 +6,7 @@ import actions from "./actions";
 import mutations from "./mutations";
 
 const layoutState: LayoutState = {
+    loading: true,
     code: "",
     halls: [],
     hallLayout: [],

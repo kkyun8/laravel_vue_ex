@@ -15,6 +15,7 @@ export interface Message {
 }
 
 export interface LayoutState {
+    loading: Layout["loading"];
     code: Layout["code"];
     halls: Layout["halls"];
     hallLayout: Layout["hallLayout"];
@@ -28,6 +29,7 @@ export interface LayoutState {
 }
 
 export interface Layout {
+    loading: boolean;
     code: string;
     halls: any[];
     hallLayout: any[];

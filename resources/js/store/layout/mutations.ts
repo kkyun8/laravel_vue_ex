@@ -4,6 +4,9 @@ import { MutationTree } from "vuex";
 import { LayoutState, Layout, MessageState, Message } from "@/store/types";
 
 const layoutMutations: MutationTree<LayoutState> = {
+    setLoading: (state, loading: Layout["loading"]) => {
+        state.loading = loading;
+    },
     setHalls: (state, halls: Layout["halls"]) => {
         state.halls = [];
         halls.forEach((e: any) => state.halls.push(e));

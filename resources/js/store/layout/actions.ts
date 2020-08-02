@@ -11,12 +11,14 @@ const layoutActions: ActionTree<LayoutState, RootState> = {
             "/api/halls"
         ).catch((e: any) => commit("setError", e));
         commit("setHalls", response.data);
+        commit("setLoading", false);
     },
     fetchHallLayout: async ({ commit }, layoutId: Layout["layoutId"]) => {
         const response: any | AxiosResponse<any> = await Repository.get(
             "/api/layout/" + layoutId
         ).catch((e: any) => commit("setError", e));
         commit("setHallLayout", response.data);
+        commit("setLoading", false);
     },
     createLayout: async ({ commit }, layout: Layout) => {
         const response: any | AxiosResponse<any> = await Repository.post(
@@ -25,6 +27,7 @@ const layoutActions: ActionTree<LayoutState, RootState> = {
         ).catch((e: any) => commit("setError", e));
         // commit("setHallLayout", response.data);
         // console.log(response.data);
+        commit("setLoading", false);
     },
     updateLayout: async ({ commit }, layout: Layout) => {
         const response: any | AxiosResponse<any> = await Repository.put(
@@ -33,6 +36,7 @@ const layoutActions: ActionTree<LayoutState, RootState> = {
         ).catch((e: any) => commit("setError", e));
         commit("setHallLayout", response.data);
         commit("setSuccess", "保存しました。");
+        commit("setLoading", false);
     }
 };
 
