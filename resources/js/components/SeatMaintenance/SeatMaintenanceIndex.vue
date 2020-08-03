@@ -1,8 +1,8 @@
 <template>
   <div>
     <SeatMaintenanceHeader />
-    <SeatMaintenanceDetail @set_seats_data="setSeatsData" />
-    <SeatMaintenanceLayout :seats_data="seatsData" />
+    <SeatMaintenanceDetail @add_seats="addSeats" />
+    <SeatMaintenanceLayout :seats_data="seatsData" ref="layout" />
   </div>
 </template>
 
@@ -21,13 +21,14 @@ import SeatMaintenanceLayout from "@/components/seatMaintenance/SeatMaintenanceL
   },
 })
 export default class SeatMaintenanceIndex extends Vue {
+  get refs(): any {
+    return this.$refs;
+  }
+
   seatsData: any[] = [];
 
-  setSeatsData(data: any[]) {
-    this.seatsData = [];
-    if (data.length > 0) {
-      data.forEach((e) => this.seatsData.push(e));
-    }
+  addSeats(seats: any[]) {
+    this.refs().layout.addLayoutSeats(seats);
   }
 
   created() {

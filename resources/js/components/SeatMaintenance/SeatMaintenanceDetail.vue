@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="card mb-2">
+      <!-- TODO: 配置修正→共通項目左、詳細右 -->
       <b-button
         :aria-expanded="insertSeatViewFlg ? 'true' : 'false'"
         variant="outline-primary"
@@ -11,6 +12,10 @@
     <b-collapse id="insert-seat-collapse" v-model="insertSeatViewFlg" class="mt-2">
       <div class="card p-3 mb-2">
         <h4>Insert Seat</h4>
+        <div>
+          <b-button class="float-right">クリア</b-button>
+          <b-button class="float-right mr-2" @click.prevent="createSeats">追加</b-button>
+        </div>
         <b-form-row>
           <b-form-group class="col-md-2" label="Seat Group Number Count">
             <b-form-select
@@ -44,7 +49,7 @@
             ></b-form-radio-group>
           </b-form-group>
           <b-form-group
-            class="col-md-4"
+            class="col-md-2"
             id="seat-group-name"
             label="Seat Group Name"
             label-for="seat-group-name-input"
@@ -125,13 +130,32 @@
 
 <script lang="ts">
 const namespace: string = "layout";
-import { Vue, Watch } from "vue-property-decorator";
+import { Vue, Emit, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
+import Seat from "../../modules/layout/Seat";
 
 @Component
 export default class SeatMaintenanceDetail extends Vue {
+  @Emit("add_seats")
+  private addSeats(seat: any[]): void {}
+
+  //TODO:
+  createSeats() {
+    const seat = new Seat({
+      id: 0,
+      name: this.inputSeatName,
+      seatGroupId: 0,
+      count: this.inputSeatHeadCount,
+      //ディフォルトサイズ
+      x: 0,
+      y: 0,
+      w: 20,
+      h: 30,
+    });
+  }
+
   //insertData
   inputSeatName = "";
   inputSeatHeadCount = 1;

@@ -52,6 +52,7 @@
 
 <script lang="ts">
 const namespace: string = "layout";
+import Seat from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
@@ -124,6 +125,10 @@ export default class SeatMaintenanceLayout extends Vue {
     this.layoutSeats.forEach((e: any) => {
       e.pinned = pinnedFlg;
     });
+  }
+
+  addLayoutSeats(seat: any[]) {
+    this.layoutSeats.push(seat);
   }
 
   @Watch("seats")
