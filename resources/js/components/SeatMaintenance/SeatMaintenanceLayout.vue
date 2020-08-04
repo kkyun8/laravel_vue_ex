@@ -9,7 +9,7 @@
         </b-col>
         <b-col cols="6">
           <div class="card mb-2">
-            <b-button variant="info" @click.prevent>更新キャンセル</b-button>
+            <b-button variant="info" @click.prevent="cancel()">更新キャンセル</b-button>
           </div>
         </b-col>
       </b-row>
@@ -113,7 +113,9 @@ export default class SeatMaintenanceLayout extends Vue {
               o.position.y !== e.position.y)
         )
       ) {
-        this.layoutSeatsUpdateFlg = true;
+        if (!this.layoutSeatsUpdateFlg) {
+          this.layoutSeatsUpdateFlg = true;
+        }
       }
     });
 
@@ -140,6 +142,13 @@ export default class SeatMaintenanceLayout extends Vue {
   updateLayout() {
     this.setEditSeats(this.layoutSeats);
     this.$store.dispatch("layout/updateLayout", this.layout);
+  }
+
+  cancel() {
+    this.layoutSeats = [];
+    this.layout.hallLayout.forEach((e) => this.layoutSeats.push(e));
+
+    this.layoutSeatsUpdateFlg = false;
   }
 
   //Container Setting Data
