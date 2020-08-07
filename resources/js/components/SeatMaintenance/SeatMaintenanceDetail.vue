@@ -97,17 +97,17 @@
               label="Seat Name"
               :label-for="'seat-name-input' + r"
               :invalid-feedback="
-                                inputSeatName.length >= 4
+                                inputSeatName[r].length >= 4
                                     ? ''
                                     : 'Enter at least 4 characters'
                             "
               :key="'seat-name-' + r"
-              :state="inputSeatName.length >= 4 ? true : false"
+              :state="inputSeatName[r].length >= 4 ? true : false"
             >
               <b-form-input
                 :id="'seat-name-input' + r"
-                v-model="inputSeatName"
-                :state="inputSeatName !== ''"
+                v-model="inputSeatName[r]"
+                :state="inputSeatName[r] !== ''"
                 :type="'text'"
                 trim
               ></b-form-input>
@@ -139,19 +139,31 @@ export default class SeatMaintenanceDetail extends Vue {
   @Emit("add_seats")
   private addSeats(seat: Seat): void {}
 
-  //TODO:
   createSeats() {
+    let name: string = "";
+    //TODO:サイズ計算予定
+    let x: number = 0;
+    let y: number = 0;
+    let w: number = 20;
+    let h: number = 30;
+    const count = this.inputSeatHeadCount;
+    //
+    if (this.seatGroupNumber === 1) {
+      name = this.inputSeatName[1];
+    } else {
+      name = this.inputSeatGroupName;
+    }
     const seat = new Seat({
       //新規はid=0
       id: 0,
-      name: this.inputSeatName,
+      name,
       seatGroupId: 0,
-      count: this.inputSeatHeadCount,
+      count,
       //ディフォルトサイズ
-      x: 0,
-      y: 0,
-      w: 20,
-      h: 30,
+      x,
+      y,
+      w,
+      h,
     });
     this.addSeats(seat);
   }
@@ -170,8 +182,7 @@ export default class SeatMaintenanceDetail extends Vue {
   }
 
   //insertData
-  //TODO: name 配列にする
-  inputSeatName = "";
+  inputSeatName = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
   inputSeatHeadCount = 1;
   inputSeatGroupName = "";
   seatGroupNumber = 1;

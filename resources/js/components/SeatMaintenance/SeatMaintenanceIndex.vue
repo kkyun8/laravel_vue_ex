@@ -28,7 +28,7 @@ export default class SeatMaintenanceIndex extends Vue {
   seatsData: any[] = [];
 
   addSeats(seats: any[]) {
-    this.refs().layout.addLayoutSeats(seats);
+    this.refs.layout.addLayoutSeats(seats);
   }
 
   created() {

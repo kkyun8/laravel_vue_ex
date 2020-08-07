@@ -1,6 +1,10 @@
 <template>
   <div>
-    <template v-if="layoutSeatsUpdateFlg">
+    layoutSeatsUpdateFlg：{{layoutSeatsUpdateFlg}}
+    {{layoutSeats}}
+    <template
+      v-if="layoutSeatsUpdateFlg"
+    >
       <b-row>
         <b-col cols="6">
           <div class="card mb-2">
@@ -130,6 +134,8 @@ export default class SeatMaintenanceLayout extends Vue {
   }
 
   addLayoutSeats(seat: any[]) {
+    //TODO: 卓編集モード中しかpushできないバグ対応
+    this.layoutSeatsUpdateFlg = true;
     this.layoutSeats.push(seat);
   }
 
