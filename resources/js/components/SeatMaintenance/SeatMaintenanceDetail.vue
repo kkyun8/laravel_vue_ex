@@ -13,8 +13,8 @@
       <div class="card p-3 mb-2">
         <h4>Insert Seat</h4>
         <div>
-          <b-button class="float-right">クリア</b-button>
-          <b-button class="float-right mr-2" @click.prevent="createSeats">追加</b-button>
+          <b-button class="float-right" @click.stop.prevent>クリア</b-button>
+          <b-button class="float-right mr-2" @click.stop.prevent="createSeats">追加</b-button>
         </div>
         <b-form-row>
           <b-col>
@@ -132,12 +132,19 @@ import { Vue, Emit, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
-import Seat from "../../modules/layout/Seat";
+import { Seat, SeatInterface } from "../../modules/layout/Seat";
 
 @Component
 export default class SeatMaintenanceDetail extends Vue {
   @Emit("add_seats")
   private addSeats(seat: Seat): void {}
+
+  inputClear() {
+    this.inputSeatName = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
+    this.inputSeatHeadCount = 1;
+    this.inputSeatGroupName = "";
+    this.seatGroupNumber = 1;
+  }
 
   createSeats() {
     let name: string = "";
@@ -147,10 +154,22 @@ export default class SeatMaintenanceDetail extends Vue {
     let w: number = 20;
     let h: number = 30;
     const count = this.inputSeatHeadCount;
-    //
+
+    for (const [key, value] of Object.entries(this.inputSeatName)) {
+      if (value === "") {
+        return alert("テーブル名前を入力してください。");
+      }
+      if (this.seatGroupNumber === Number(key)) {
+        break;
+      }
+    }
+
     if (this.seatGroupNumber === 1) {
       name = this.inputSeatName[1];
     } else {
+      if (this.inputSeatGroupName === "") {
+        return alert("テーブルグループ前を入力してください。");
+      }
       name = this.inputSeatGroupName;
     }
     const seat = new Seat({
@@ -165,6 +184,7 @@ export default class SeatMaintenanceDetail extends Vue {
       w,
       h,
     });
+
     this.addSeats(seat);
   }
 
@@ -181,7 +201,6 @@ export default class SeatMaintenanceDetail extends Vue {
     return result;
   }
 
-  //insertData
   inputSeatName = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
   inputSeatHeadCount = 1;
   inputSeatGroupName = "";

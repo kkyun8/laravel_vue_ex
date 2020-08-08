@@ -1,10 +1,6 @@
 <template>
   <div>
-    layoutSeatsUpdateFlg：{{layoutSeatsUpdateFlg}}
-    {{layoutSeats}}
-    <template
-      v-if="layoutSeatsUpdateFlg"
-    >
+    <template v-if="layoutSeatsUpdateFlg">
       <b-row>
         <b-col cols="6">
           <div class="card mb-2">
@@ -36,14 +32,20 @@
             :bubbleUp="bubbleUp"
           >
             <template v-for="seat in layoutSeats">
-              <SeatBox
-                :boxId="seat.id"
-                :key="'SeatEditKey:' + seat.id"
-                class="border border-danger rounded-sm p-1"
-              >
-                {{ seat.name }}
-                <div class="seat-resize-icon">
-                  <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+              <SeatBox :boxId="seat.id" :key="'SeatEditKey:' + seat.id">
+                <div
+                  class="border border-danger rounded-sm p-1 w-100 h-100"
+                  :class="selectedSeatId == seat.id ? 'seat-selected-color': ''"
+                  @click.prevent="selectedBox(seat)"
+                  @mouseover="boxMouseOver()"
+                >
+                  <!-- TODO: seat group name -->
+                  <template v-if="seat.seatGroupId">{{ seat.name }}</template>
+                  <template v-else>{{ seat.name }}</template>
+                  {{ seat.count }}席
+                  <div class="seat-resize-icon">
+                    <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+                  </div>
                 </div>
               </SeatBox>
             </template>
@@ -56,7 +58,7 @@
 
 <script lang="ts">
 const namespace: string = "layout";
-import Seat from "../../modules/layout/Seat";
+import { Seat, SeatInterface } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
@@ -126,35 +128,54 @@ export default class SeatMaintenanceLayout extends Vue {
     return newVal;
   }
 
-  //TODO:
-  setBoxStatus(pinnedFlg: boolean) {
-    this.layoutSeats.forEach((e: any) => {
-      e.pinned = pinnedFlg;
-    });
+  @Watch("seats")
+  setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
+    this.layoutSeats = [];
+    newVal.forEach((e) => this.layoutSeats.push(e));
+    return newVal;
   }
 
-  addLayoutSeats(seat: any[]) {
+  addLayoutSeats(seat: SeatInterface) {
+    if (this.layoutSeats.some((e) => e.name === seat.name))
+      return alert("卓名が重複されてます。");
+
+    if (this.layoutSeats.some((e) => e.id === seat.id)) {
+      seat.id = this.createSeatId;
+      this.createSeatId--;
+    }
     //TODO: 卓編集モード中しかpushできないバグ対応
     this.layoutSeatsUpdateFlg = true;
     this.layoutSeats.push(seat);
   }
 
-  @Watch("seats")
-  setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
-    this.layoutSeats = newVal;
-    return newVal;
+  selectedBox(seat: SeatInterface) {
+    this.selectedSeatId = seat.id;
+    this.layoutSeats.forEach((e: any) => {
+      if (seat.id === e.id) {
+        e.pinned = false;
+      } else {
+        e.pinned = true;
+      }
+    });
+  }
+
+  boxMouseOver() {
+    //TODO: リサイズ機能制御
+    console.log(event);
   }
 
   updateLayout() {
     this.setEditSeats(this.layoutSeats);
     this.$store.dispatch("layout/updateLayout", this.layout);
+    this.selectedSeatId = null;
   }
 
   cancel() {
     this.layoutSeats = [];
-    this.layout.hallLayout.forEach((e) => this.layoutSeats.push(e));
+    this.seats.forEach((e) => this.layoutSeats.push(e));
 
     this.layoutSeatsUpdateFlg = false;
+    this.selectedSeatId = null;
   }
 
   //Container Setting Data
@@ -162,15 +183,17 @@ export default class SeatMaintenanceLayout extends Vue {
     w: 1,
     h: 1,
   };
-  maxColumnCount = 550;
-  maxRowCount = 200;
-  bubbleUp = false;
-  margin = 2;
-  boxCount = 4;
+  maxColumnCount: number = 550;
+  maxRowCount: number = 200;
+  bubbleUp: boolean = false;
+  margin: number = 2;
+  boxCount: number = 4;
   //layout
-  layoutSeats: any[] = [];
-  layoutSeatsUpdateFlg = false;
-  updateSeats = [];
+  layoutSeats: LayoutState["seats"] = [];
+  layoutSeatsUpdateFlg: boolean = false;
+  updateSeats: LayoutState["seats"] = [];
+  createSeatId: number = -1;
+  selectedSeatId: number | null = null;
 
   layoutConversion() {}
 
