@@ -1,4 +1,4 @@
-import Seat from "../../modules/layout/Seat";
+import { Seat } from "../../modules/layout/Seat";
 import { MutationTree } from "vuex";
 //@ts-ignore
 import { LayoutState, Layout, MessageState, Message } from "@/store/types";

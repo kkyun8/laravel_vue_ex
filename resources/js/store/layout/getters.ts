@@ -1,4 +1,4 @@
-import Seat from "../../modules/layout/Seat";
+import { Seat, SeatInterface } from "../../modules/layout/Seat";
 import { GetterTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState } from "@/store/types";

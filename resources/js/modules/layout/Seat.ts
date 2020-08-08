@@ -1,4 +1,4 @@
-export default class Seat {
+class Seat {
     protected id: number;
     protected name: string;
     protected seatGroupId: number | null;
@@ -36,3 +36,20 @@ export default class Seat {
         };
     }
 }
+
+interface SeatInterface {
+    id: number;
+    name: string;
+    seatGroupId: number | null;
+    count: number;
+    hidden: boolean;
+    pinned: boolean;
+    position: {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    };
+}
+
+export { Seat, SeatInterface };
