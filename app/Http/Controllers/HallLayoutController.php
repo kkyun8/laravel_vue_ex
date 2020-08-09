@@ -96,6 +96,7 @@ class HallLayoutController extends Controller
         $createSeat->x = $seat['position']['x'];
         $createSeat->y = $seat['position']['y'];
         $createSeat->count = $seat['count'];
+        $createSeat->type = $seat['type'];
         $createSeat->save();
       }
     }
@@ -156,6 +157,7 @@ class HallLayoutController extends Controller
       $createSeat->x = $seat['position']['x'];
       $createSeat->y = $seat['position']['y'];
       $createSeat->count = $seat['count'];
+      $createSeat->type = $seat['type'];
       $createSeat->save();
     }
     return $seats;
