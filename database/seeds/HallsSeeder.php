@@ -65,6 +65,7 @@ class HallsSeeder extends Seeder
         'x' => 0,
         'y' => 20,
         'count' => 4,
+        'type' => 1
       ],
     ]);
   }

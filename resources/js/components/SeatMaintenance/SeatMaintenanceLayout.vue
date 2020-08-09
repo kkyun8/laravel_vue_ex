@@ -1,24 +1,26 @@
 <template>
   <div>
-    <template v-if="layoutSeatsUpdateFlg">
-      <b-row>
-        <b-col cols="6">
-          <div class="card mb-2">
-            <b-button variant="info" @click.prevent="updateLayout()">レイアウト更新</b-button>
-          </div>
-        </b-col>
-        <b-col cols="6">
-          <div class="card mb-2">
-            <b-button variant="info" @click.prevent="cancel()">更新キャンセル</b-button>
-          </div>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12">
-          <div class="card mb-2"></div>
-        </b-col>
-      </b-row>
-    </template>
+    <transition name="fade">
+      <template v-if="layoutSeatsUpdateFlg">
+        <b-row>
+          <b-col cols="6">
+            <div class="card mb-2">
+              <b-button variant="info" @click.prevent="updateLayout()">レイアウト更新</b-button>
+            </div>
+          </b-col>
+          <b-col cols="6">
+            <div class="card mb-2">
+              <b-button variant="info" @click.prevent="cancel()">修正前に戻す</b-button>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="12">
+            <div class="card mb-2"></div>
+          </b-col>
+        </b-row>
+      </template>
+    </transition>
     <b-row>
       <b-col cols="12">
         <div class="card border border-primary rounded-sm" style="width:100%; height:600px;">
@@ -37,13 +39,13 @@
                   class="border border-danger rounded-sm p-1 w-100 h-100"
                   :class="selectedSeatId == seat.id ? 'seat-selected-color': ''"
                   @click.prevent="selectedBox(seat)"
-                  @mouseover="boxMouseOver()"
+                  @mouseleave="boxMouseOver( $event.target, seat.type)"
                 >
                   <!-- TODO: seat group name -->
                   <template v-if="seat.seatGroupId">{{ seat.name }}</template>
                   <template v-else>{{ seat.name }}</template>
                   {{ seat.count }}席
-                  <div class="seat-resize-icon">
+                  <div v-if="seat.type === SEAT_TYPE_ROOM" class="seat-resize-icon">
                     <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
                   </div>
                 </div>
@@ -58,7 +60,7 @@
 
 <script lang="ts">
 const namespace: string = "layout";
-import { Seat, SeatInterface } from "../../modules/layout/Seat";
+import { Seat, SeatInterface, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
@@ -105,27 +107,13 @@ export default class SeatMaintenanceLayout extends Vue {
     return newVal;
   }
 
-  @Watch("layoutSeats")
-  onLayoutSeatsChange(newVal: any[], oldVal: any[]): any[] {
-    // テーブルの位置が変更されたら更新ボタンを表示
-    newVal.forEach((e) => {
-      if (
-        oldVal.some(
-          (o) =>
-            o.id === e.id &&
-            (o.position.w !== e.position.w ||
-              o.position.h !== e.position.h ||
-              o.position.x !== e.position.x ||
-              o.position.y !== e.position.y)
-        )
-      ) {
-        if (!this.layoutSeatsUpdateFlg) {
-          this.layoutSeatsUpdateFlg = true;
-        }
-      }
-    });
-
-    return newVal;
+  @Watch("selectedSeatId")
+  setSelectedSeatId(newVal: number | null, oldVal: number | null): void {
+    if (newVal) {
+      this.layoutSeatsUpdateFlg = true;
+    } else {
+      this.layoutSeatsUpdateFlg = false;
+    }
   }
 
   @Watch("seats")
@@ -135,7 +123,7 @@ export default class SeatMaintenanceLayout extends Vue {
     return newVal;
   }
 
-  addLayoutSeats(seat: SeatInterface) {
+  addLayoutSeats(seat: SeatInterface): void {
     if (this.layoutSeats.some((e) => e.name === seat.name))
       return alert("卓名が重複されてます。");
 
@@ -148,7 +136,7 @@ export default class SeatMaintenanceLayout extends Vue {
     this.layoutSeats.push(seat);
   }
 
-  selectedBox(seat: SeatInterface) {
+  selectedBox(seat: SeatInterface): void {
     this.selectedSeatId = seat.id;
     this.layoutSeats.forEach((e: any) => {
       if (seat.id === e.id) {
@@ -159,25 +147,33 @@ export default class SeatMaintenanceLayout extends Vue {
     });
   }
 
-  boxMouseOver() {
-    //TODO: リサイズ機能制御
-    console.log(event);
+  boxMouseOver(target: HTMLElement, seatType: number): void {
+    // 個室のみリサイズ可能
+    if (seatType !== SEAT_TYPE_ROOM) {
+      const parent: ParentNode | null = <Element>target.parentNode;
+      const children: HTMLCollection = parent.children;
+      for (var i = 0; i < children.length; i++) {
+        children[i].classList.remove("resize-handle");
+      }
+    }
   }
 
-  updateLayout() {
+  updateLayout(): void {
     this.setEditSeats(this.layoutSeats);
     this.$store.dispatch("layout/updateLayout", this.layout);
-    this.selectedSeatId = null;
+
+    this.init();
   }
 
-  cancel() {
+  cancel(): void {
     this.layoutSeats = [];
     this.seats.forEach((e) => this.layoutSeats.push(e));
+  }
 
+  init() {
     this.layoutSeatsUpdateFlg = false;
     this.selectedSeatId = null;
   }
-
   //Container Setting Data
   cellSize = {
     w: 1,
@@ -194,6 +190,7 @@ export default class SeatMaintenanceLayout extends Vue {
   updateSeats: LayoutState["seats"] = [];
   createSeatId: number = -1;
   selectedSeatId: number | null = null;
+  SEAT_TYPE_ROOM = SEAT_TYPE_ROOM;
 
   layoutConversion() {}
 

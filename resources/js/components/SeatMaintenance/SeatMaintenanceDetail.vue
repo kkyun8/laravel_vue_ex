@@ -13,7 +13,7 @@
       <div class="card p-3 mb-2">
         <h4>Insert Seat</h4>
         <div>
-          <b-button class="float-right" @click.stop.prevent>クリア</b-button>
+          <b-button class="float-right" @click.stop.prevent="inputClear">クリア</b-button>
           <b-button class="float-right mr-2" @click.stop.prevent="createSeats">追加</b-button>
         </div>
         <b-form-row>
@@ -132,7 +132,7 @@ import { Vue, Emit, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout } from "../../store/types";
-import { Seat, SeatInterface } from "../../modules/layout/Seat";
+import { Seat, SeatInterface, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 
 @Component
 export default class SeatMaintenanceDetail extends Vue {
@@ -153,6 +153,16 @@ export default class SeatMaintenanceDetail extends Vue {
     let y: number = 0;
     let w: number = 20;
     let h: number = 30;
+
+    if (this.seatDirection === 0) {
+      w = 30;
+      h = 20;
+    }
+
+    if (this.seatGroupNumber > 1 && this.seatType === SEAT_TYPE_ROOM) {
+      return alert("卓が１つ以上の場合、個室設定はできません。");
+    }
+
     const count = this.inputSeatHeadCount;
 
     for (const [key, value] of Object.entries(this.inputSeatName)) {
@@ -172,12 +182,14 @@ export default class SeatMaintenanceDetail extends Vue {
       }
       name = this.inputSeatGroupName;
     }
+
     const seat = new Seat({
       //新規はid=0
       id: 0,
       name,
       seatGroupId: 0,
       count,
+      type: this.seatType,
       //ディフォルトサイズ
       x,
       y,

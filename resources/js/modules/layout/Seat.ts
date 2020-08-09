@@ -1,8 +1,11 @@
+const SEAT_TYPE_ROOM = 1;
+
 class Seat {
     protected id: number;
     protected name: string;
     protected seatGroupId: number | null;
     protected count: number;
+    protected type: number;
     protected hidden: boolean;
     protected pinned: boolean;
     protected position: {
@@ -17,6 +20,7 @@ class Seat {
         name: string;
         seatGroupId: number;
         count: number;
+        type: number;
         x: number;
         y: number;
         w: number;
@@ -26,8 +30,9 @@ class Seat {
         this.name = data.name;
         this.seatGroupId = !data.seatGroupId ? null : data.seatGroupId;
         this.count = data.count;
+        this.type = data.type;
         this.hidden = false;
-        this.pinned = false;
+        this.pinned = true;
         this.position = {
             x: data.x,
             y: data.y,
@@ -42,6 +47,7 @@ interface SeatInterface {
     name: string;
     seatGroupId: number | null;
     count: number;
+    type: number;
     hidden: boolean;
     pinned: boolean;
     position: {
@@ -52,4 +58,4 @@ interface SeatInterface {
     };
 }
 
-export { Seat, SeatInterface };
+export { Seat, SeatInterface, SEAT_TYPE_ROOM };
