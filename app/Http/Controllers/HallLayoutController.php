@@ -134,18 +134,49 @@ class HallLayoutController extends Controller
     $layout->save();
 
     if (!empty($seats)) {
-      //削除後登録
-      $seat = Seat::where('layout_id', $layoutId);
-      $seat->delete();
-      self::createSeats($layoutId, $seats);
+      self::createUpdateSeats($layoutId, $seats);
     }
 
     return response(self::getLayout($layoutId), 200);
   }
 
+
   /**
    */
-  private static function createSeats(int $layoutId, array $seats)
+  private static function createUpdateSeats(int $layoutId, array $seats)
+  {
+    foreach ($seats as $seat) {
+      $updateSeat = Seat::where('id', $seat['id']);
+      if (!empty($updateSeat)) {
+        $updateSeat->update([
+          'name' => $seat['name'],
+          'w' => $seat['position']['w'],
+          'h' => $seat['position']['h'],
+          'x' => $seat['position']['x'],
+          'y' => $seat['position']['y'],
+          'count' => $seat['count'],
+          'type' => $seat['type']
+        ]);
+      } else {
+        $createSeat = new Seat;
+        $createSeat->layout_id = $layoutId;
+        $createSeat->name = $seat['name'];
+        $createSeat->seat_group_id = $seat['seatGroupId'];
+        $createSeat->w = $seat['position']['w'];
+        $createSeat->h = $seat['position']['h'];
+        $createSeat->x = $seat['position']['x'];
+        $createSeat->y = $seat['position']['y'];
+        $createSeat->count = $seat['count'];
+        $createSeat->type = $seat['type'];
+        $createSeat->save();
+      }
+    }
+    return $seats;
+  }
+
+  /**
+   */
+  private static function createSeatGroups(int $layoutId, array $seats)
   {
     foreach ($seats as $seat) {
       $createSeat = new Seat;
