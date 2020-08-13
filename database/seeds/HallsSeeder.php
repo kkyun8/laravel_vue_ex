@@ -59,14 +59,38 @@ class HallsSeeder extends Seeder
     DB::table('seats')->insert([
       [
         'layout_id' => 1,
-        'name' => 'テスト席',
+        'name' => 'テスト席1',
         'w' => 20,
         'h' => 30,
         'x' => 0,
-        'y' => 20,
+        'y' => 0,
         'count' => 4,
-        'type' => 1
+        'type' => 2,
+        'seat_group_id' => 1,
       ],
+      [
+        'layout_id' => 1,
+        'name' => 'テスト席2',
+        'w' => 20,
+        'h' => 30,
+        'x' => 20,
+        'y' => 0,
+        'count' => 4,
+        'type' => 2,
+        'seat_group_id' => 1,
+      ],
+    ]);
+    DB::table('seat_groups')->insert([
+      [
+        'layout_id' => 1,
+        'seat_group_name' => 'テストグループ',
+        ///'seat_names' => '{\'テスト席1\',\'テスト席2\'}',
+        'w' => 40,
+        'h' => 30,
+        'x' => 0,
+        'y' => 0,
+        'count' => 8,
+      ]
     ]);
   }
 }

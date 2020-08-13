@@ -16,7 +16,6 @@ class CreateSeatGroupsTable extends Migration
   {
     Schema::create('seat_groups', function (Blueprint $table) {
       $table->bigIncrements('id');
-      $table->integer('hall_id');
       $table->integer('layout_id');
       $table->string('seat_group_name')->unique();
       $table->jsonb('seat_names')->nullable();
