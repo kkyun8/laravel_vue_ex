@@ -20,23 +20,27 @@ export interface LayoutState {
     halls: Layout["halls"];
     hallLayout: Layout["hallLayout"];
     seats: Layout["seats"];
+    seatGroups: Layout["seatGroups"];
     hallId: Layout["hallId"];
     layoutId: Layout["layoutId"];
     editSeats: Layout["editSeats"];
+    editSeatGroups: Layout["editSeatGroups"];
     success: Layout["success"];
     warning: Layout["warning"];
     error: Layout["error"];
 }
-
+// TODO: set type
 export interface Layout {
     loading: boolean;
     code: string;
     halls: any[];
     hallLayout: any[];
     seats: any[];
+    seatGroups: any[];
     hallId: number;
     layoutId: number;
     editSeats: any[];
+    editSeatGroups: any[];
     success: string;
     warning: string;
     error: string;

@@ -1,4 +1,5 @@
 import { Seat } from "../../modules/layout/Seat";
+import { SeatGroup } from "../../modules/layout/SeatGroup";
 import { MutationTree } from "vuex";
 //@ts-ignore
 import { LayoutState, Layout, MessageState, Message } from "@/store/types";
@@ -24,6 +25,13 @@ const layoutMutations: MutationTree<LayoutState> = {
             state.seats.push(seat);
         });
     },
+    setSeatGroups: (state, seatGroups: Layout["seatGroups"]) => {
+        state.seatGroups = [];
+        seatGroups.forEach((e: any) => {
+            const seat = new SeatGroup(e);
+            state.seatGroups.push(seat);
+        });
+    },
     setHallId: (state, hallId: Layout["hallId"]) => {
         state.hallId = hallId;
     },
@@ -34,6 +42,12 @@ const layoutMutations: MutationTree<LayoutState> = {
         state.editSeats = [];
         editSeats.forEach((e: any) => {
             state.editSeats.push(e);
+        });
+    },
+    setEditSeatGroups: (state, editSeatGroups: Layout["editSeatGroups"]) => {
+        state.editSeatGroups = [];
+        editSeatGroups.forEach((e: any) => {
+            state.editSeatGroups.push(e);
         });
     },
     setError: (state, message: Layout["error"]) => {
