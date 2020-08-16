@@ -153,7 +153,6 @@ export default class SeatMaintenanceDetail extends Vue {
     let y: number = 0;
     let w: number = 20;
     let h: number = 30;
-
     if (this.seatDirection === 0) {
       w = 30;
       h = 20;
@@ -161,6 +160,13 @@ export default class SeatMaintenanceDetail extends Vue {
 
     if (this.seatGroupNumber > 1 && this.seatType === SEAT_TYPE_ROOM) {
       return alert("卓が１つ以上の場合、個室設定はできません。");
+    }
+
+    if (this.seatArrangement === 0) {
+      //横並び
+      w = w * this.seatGroupNumber;
+    } else {
+      h = h * this.seatGroupNumber;
     }
 
     const count = this.inputSeatHeadCount;
@@ -214,7 +220,7 @@ export default class SeatMaintenanceDetail extends Vue {
   }
 
   inputSeatName = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
-  inputSeatHeadCount = 1;
+  inputSeatHeadCount = 4;
   inputSeatGroupName = "";
   seatGroupNumber = 1;
   seatGroupNumberOptions = [

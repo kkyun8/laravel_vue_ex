@@ -1,7 +1,7 @@
 <template>
   <div>
-    <transition name="fade">
-      <template v-if="layoutSeatsUpdateFlg">
+    <transition-group name="fade" tag="div">
+      <div v-if="layoutSeatsUpdateFlg" :key="'fade_key'">
         <b-row>
           <b-col cols="6">
             <div class="card mb-2">
@@ -19,8 +19,8 @@
             <div class="card mb-2"></div>
           </b-col>
         </b-row>
-      </template>
-    </transition>
+      </div>
+    </transition-group>
     <b-row>
       <b-col cols="12">
         <div class="card border border-primary rounded-sm" style="width:100%; height:600px;">
@@ -35,20 +35,26 @@
           >
             <template v-for="seat in layoutSeats">
               <SeatBox :boxId="seat.id" :key="'SeatEditKey:' + seat.id">
-                <div
-                  class="border border-danger rounded-sm p-1 w-100 h-100"
-                  :class="selectedSeatId == seat.id ? 'seat-selected-color': ''"
-                  @click.prevent="selectedBox(seat)"
-                  @mouseleave="boxMouseOver( $event.target, seat.type)"
-                >
-                  <!-- TODO: seat group name -->
-                  <template v-if="seat.seatGroupId">{{ seat.name }}</template>
-                  <template v-else>{{ seat.name }}</template>
-                  {{ seat.count }}席
-                  <div v-if="seat.type === SEAT_TYPE_ROOM" class="seat-resize-icon">
-                    <b-icon icon="arrow-down-right-circle-fill" style="width: 20px; height: 20px;"></b-icon>
+                <template v-if="seat.seatGroupId">{{ seat.name }}</template>
+
+                <template v-else>
+                  <div
+                    class="border border-danger rounded-sm p-1 w-100 h-100"
+                    :class="selectedSeatId == seat.id ? 'seat-selected-color': ''"
+                    @click.prevent="selectedBox(seat)"
+                    @mouseleave="boxMouseOver( $event.target, seat.type)"
+                  >
+                    <!-- TODO: seat group name -->
+                    {{ seat.name }}
+                    {{ seat.count }}席
+                    <div v-if="seat.type === SEAT_TYPE_ROOM" class="seat-resize-icon">
+                      <b-icon
+                        icon="arrow-down-right-circle-fill"
+                        style="width: 20px; height: 20px;"
+                      ></b-icon>
+                    </div>
                   </div>
-                </div>
+                </template>
               </SeatBox>
             </template>
           </SeatContainer>
@@ -79,14 +85,17 @@ export default class SeatMaintenanceLayout extends Vue {
   @State("layout") layout!: LayoutState;
   @Mutation("setHallLayout", { namespace }) setHallLayout: any;
   @Mutation("setSeats", { namespace }) setSeats: any;
+  @Mutation("setSeatGroups", { namespace }) setSeatGroups: any;
   @Mutation("setEditSeats", { namespace }) setEditSeats: any;
   //   private layout!: Layout[];
 
   get hallLayout(): LayoutState["hallLayout"] {
     if (this.layout.hallLayout.length > 0) {
       this.seats = this.layout.hallLayout[0].seats;
+      this.seatGroups = this.layout.hallLayout[0].seat_groups;
       this.layoutSeatsUpdateFlg = false;
     }
+    this.init();
     return this.layout.hallLayout;
   }
 
@@ -102,6 +111,14 @@ export default class SeatMaintenanceLayout extends Vue {
     this.setSeats(seats);
   }
 
+  get seatGroups(): LayoutState["seatGroups"] {
+    return this.layout.seatGroups;
+  }
+
+  set seatGroups(seatGroups) {
+    this.setSeatGroups(seatGroups);
+  }
+
   @Watch("hallLayout")
   onHallLayoutChange(newVal: any[], oldVal: any[]): any[] {
     return newVal;
@@ -109,7 +126,7 @@ export default class SeatMaintenanceLayout extends Vue {
 
   @Watch("selectedSeatId")
   setSelectedSeatId(newVal: number | null, oldVal: number | null): void {
-    if (newVal) {
+    if (newVal != null) {
       this.layoutSeatsUpdateFlg = true;
     } else {
       this.layoutSeatsUpdateFlg = false;

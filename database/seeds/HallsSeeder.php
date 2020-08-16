@@ -84,7 +84,7 @@ class HallsSeeder extends Seeder
       [
         'layout_id' => 1,
         'seat_group_name' => 'テストグループ',
-        ///'seat_names' => '{\'テスト席1\',\'テスト席2\'}',
+        'seat_id' => '[1,2]',
         'w' => 40,
         'h' => 30,
         'x' => 0,

@@ -12,7 +12,7 @@ class SeatGroup {
         w: number;
         h: number;
     };
-    protected seat_names!: Array<string>;
+    protected seat_id!: Array<number>;
 
     constructor(data: {
         id: number;
@@ -22,7 +22,7 @@ class SeatGroup {
         y: number;
         w: number;
         h: number;
-        seat_names: Array<string>;
+        seat_id: Array<number>;
     }) {
         this.id = data.id;
         this.seat_group_name = data.seat_group_name;
@@ -35,7 +35,7 @@ class SeatGroup {
             w: data.w,
             h: data.h
         };
-        data.seat_names.forEach(e => this.seat_names.push(e));
+        data.seat_id.forEach(e => this.seat_id.push(e));
     }
 }
 

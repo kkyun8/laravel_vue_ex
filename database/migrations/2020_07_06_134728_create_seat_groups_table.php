@@ -18,7 +18,8 @@ class CreateSeatGroupsTable extends Migration
       $table->bigIncrements('id');
       $table->integer('layout_id');
       $table->string('seat_group_name')->unique();
-      $table->jsonb('seat_names')->nullable();
+      //TODO: array型？
+      $table->jsonb('seat_id')->nullable();
       $table->integer('w');
       $table->integer('h');
       $table->integer('x');
