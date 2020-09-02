@@ -45,3 +45,30 @@ export interface Layout {
     warning: string;
     error: string;
 }
+
+
+export interface GroupsState {
+  loading: Groups["loading"];
+  code: Groups["code"];
+  date: Groups["date"];
+  groups: Groups["groups"];
+  groupId: Groups["groupId"];
+  seats: Groups["seats"];
+  seatGroups: Groups["seatGroups"];
+  success: Groups["success"];
+  warning: Groups["warning"];
+  error: Groups["error"];
+}
+
+export interface Groups {
+  loading: boolean;
+  code: string;
+  date: string;
+  groups: any[];
+  groupId: number;
+  seats: any[];
+  seatGroups: any[];
+  success: string;
+  warning: string;
+  error: string;
+}
