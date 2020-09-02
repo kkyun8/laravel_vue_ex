@@ -21,3 +21,6 @@ Route::get('/halls', 'HallLayoutController@getHalls')->name('getHalls');
 Route::get('/layout/{id}', 'HallLayoutController@getLayout')->name('getLayout');
 Route::post('/layout', 'HallLayoutController@create')->name('createLayout');
 Route::put('/layout', 'HallLayoutController@store')->name('storeLayout');
+
+
+Route::get('/groups', 'GroupController@getGroups')->name('getGroups');

@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Index from "./components/index/Index.vue";
-import SeatingChart from "./components/seatingChart/SeatingChartIndex.vue";
-import SeatMaintenance from "./components/seatMaintenance/SeatMaintenanceIndex.vue";
+import SeatingChart from "./components/SeatingChart/SeatingChartIndex.vue";
+import SeatMaintenance from "./components/SeatMaintenance/SeatMaintenanceIndex.vue";
 Vue.use(VueRouter);
 
 const routes = [
