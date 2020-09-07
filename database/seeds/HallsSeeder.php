@@ -17,21 +17,25 @@ class HallsSeeder extends Seeder
         'hall_code' => 'A1',
         'hall_name' => 'A_Hall_1階',
         'number' => 500,
+        'layout_id' => 1,
       ],
       [
         'hall_code' => 'A2',
         'hall_name' => 'A_Hall_2階',
         'number' => 400,
+        'layout_id' => 3,
       ],
       [
         'hall_code' => 'T',
         'hall_name' => 'テラス',
         'number' => 100,
+        'layout_id' => 4,
       ],
       [
         'hall_code' => 'BBQ',
         'hall_name' => 'バーベキュー',
         'number' => 1000,
+        'layout_id' => 0,
       ],
     ]);
     DB::table('layouts')->insert([
@@ -90,6 +94,20 @@ class HallsSeeder extends Seeder
         'x' => 0,
         'y' => 0,
         'count' => 8,
+      ]
+    ]);
+    DB::table('active_layouts')->insert([
+      [
+        'hall_id' => 1,
+        'layout_id' => 1,
+        'start_time' => '2000-01-01 00:00:00',
+        'end_time' => '2030-01-01 00:00:00',
+      ],
+      [
+        'hall_id' => 2,
+        'layout_id' => 3,
+        'start_time' => '2000-01-01 00:00:00',
+        'end_time' => '2030-01-01 00:00:00',
       ]
     ]);
   }

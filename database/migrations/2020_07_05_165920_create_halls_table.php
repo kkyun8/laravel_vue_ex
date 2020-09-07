@@ -19,6 +19,7 @@ class CreateHallsTable extends Migration
       $table->string('hall_code')->unique();
       $table->string('hall_name')->unique();
       $table->integer('number');
+      $table->integer('layout_id')->nullable();
       $table->boolean('delflg')->default(false);
       $table->timestamp('created_at')->useCurrent()->nullable();
       $table->timestamp('updated_at')->useCurrent()->nullable();

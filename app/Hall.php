@@ -17,8 +17,8 @@ class Hall extends Model
   /**
    * 
    */
-  // public function layoutSeats()
-  // {
-  //   return $this->hasManyThrough('App\Seat', 'App\Layout');
-  // }
+  public function activeLayout()
+  {
+    return $this->hasOne('App\ActiveLayout');
+  }
 }

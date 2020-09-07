@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\ActiveLayout;
 use App\Hall;
 use App\Layout;
+use App\LayoutActive;
 use App\Seat;
 use Faker\Provider\ar_JO\Internet;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
+use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class HallLayoutController extends Controller
 {
@@ -28,20 +32,20 @@ class HallLayoutController extends Controller
    */
   public function getHalls()
   {
-    $halls = Hall::with('layouts')
+    $halls = Hall::with(['layouts'])
       ->where('delflg', false)
       ->orderBy('id')->get();
-
-    // $halls = Hall::with(['layouts' => function ($query) {
-    //   $query->with(['seats']);
-    // }])->where('delflg', false)
-    //   ->orderBy('id')->get();
-
-    // $halls = $this->hasManyThrough('App\Seat', 'App\Layout');
-
     return $halls;
   }
 
+  public function getActiveLayouts()
+  {
+    $activeLayouts = ActiveLayout::with(['halls', 'layouts'])
+      ->where('start_time', '<=', Carbon::now())
+      ->where('end_time', '>=', Carbon::now())->get();
+
+    return $activeLayouts;
+  }
   /**
    * 
    *
@@ -52,7 +56,7 @@ class HallLayoutController extends Controller
   {
     // $id = $request->id;
 
-    $layout = Layout::with('seats')
+    $layout = Layout::with(['seats', 'seatGroups'])
       ->where('id', $id)
       ->where('delflg', false)->get();
 
@@ -145,7 +149,17 @@ class HallLayoutController extends Controller
    */
   private static function createUpdateSeats(int $layoutId, array $seats)
   {
+    // $collection = new Collection($seats);
+
+    // $ids = $collection->map(function ($s) {
+    //   return $s['id'];
+    // })->all();
+
+    // $updateSeats = Seat::whereIn('id', $ids);
+
     foreach ($seats as $seat) {
+      //TODO: bug
+      //$updateSeat = $updateSeats::where('id', '=', $seat['id']);
       $updateSeat = Seat::where('id', $seat['id']);
       if (!empty($updateSeat)) {
         $updateSeat->update([
@@ -171,6 +185,8 @@ class HallLayoutController extends Controller
         $createSeat->save();
       }
     }
+
+
     return $seats;
   }
 

@@ -24,3 +24,4 @@ Route::put('/layout', 'HallLayoutController@store')->name('storeLayout');
 
 
 Route::get('/groups', 'GroupController@getGroups')->name('getGroups');
+Route::get('/active_layouts', 'HallLayoutController@getActiveLayouts')->name('getActiveLayouts');

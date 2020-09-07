@@ -16,7 +16,7 @@ class GroupController extends Controller
   {
     $date = $request->date;
     $startTtme = $date. + ' 00:00:00'; 
-    $endTtme = $date. + ' 00:00:00';
+    $endTtme = $date. + ' 23:59:59';
 
     $groups = Group::where('delflg', false)
       ->whereBetween('start_time', [$startTtme, $endTtme])

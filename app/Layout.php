@@ -29,4 +29,9 @@ class Layout extends Model
   {
     return $this->hasMany('App\SeatGroup');
   }
+
+  public function activeLayout()
+  {
+    return $this->hasOne('App\ActiveLayout');
+  }
 }
