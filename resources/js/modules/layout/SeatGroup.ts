@@ -35,7 +35,9 @@ class SeatGroup {
             w: data.w,
             h: data.h
         };
-        data.seat_id ? data.seat_id.forEach(e => this.seat_id.push(e)) : this.seat_id = []
+        Array.isArray(data.seat_id)
+            ? data.seat_id.forEach(e => this.seat_id.push(e))
+            : (this.seat_id = []);
     }
 }
 

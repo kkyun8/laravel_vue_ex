@@ -40,7 +40,7 @@
                 <template v-else>
                   <div
                     class="border border-danger rounded-sm p-1 w-100 h-100"
-                    :class="selectedSeatId == seat.id ? 'seat-selected-color': ''"
+                    :class="{'seat-selected-color': selectedSeatId == seat.id}"
                     @click.prevent="selectedBox(seat)"
                     @mouseleave="boxMouseOver( $event.target, seat.type)"
                   >
