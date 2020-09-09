@@ -1,19 +1,22 @@
 <template>
   <div>
     <SeatingChartHeader />
-    <SeatingChartLayout />
+    <SeatingChartGroups />
+    <SeatingChartLayout /> 
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import SeatingChartLayout from "@/components/SeatingChart/SeatingChartLayout.vue";
 import SeatingChartHeader from "@/components/SeatingChart/SeatingChartHeader.vue";
+import SeatingChartLayout from "@/components/SeatingChart/SeatingChartLayout.vue";
+import SeatingChartGroups from "@/components/SeatingChart/SeatingChartGroups.vue";
 
 @Component({
   components: {
     SeatingChartHeader,
-    SeatingChartIndex,
+    SeatingChartLayout,
+    SeatingChartGroups,
   },
 })
 export default class SeatingChartIndex extends Vue {

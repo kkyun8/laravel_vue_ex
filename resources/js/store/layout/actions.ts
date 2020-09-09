@@ -37,6 +37,16 @@ const layoutActions: ActionTree<LayoutState, RootState> = {
         commit("setHallLayout", response.data);
         commit("setSuccess", "保存しました。");
         commit("setLoading", false);
+    },
+    fetchActiveLayouts: async ({ commit }, layout: Layout) => {
+        const response: any | AxiosResponse<any> = await Repository.get(
+            "/api/active_layouts"
+        ).catch((e: any) => commit("setError", e));
+        commit(
+            "setHalls",
+            response.data.map((e: any) => e.halls)
+        );
+        commit("setLoading", false);
     }
 };
 

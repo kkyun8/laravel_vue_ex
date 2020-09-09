@@ -4,11 +4,12 @@ import { GroupsState, MessageState, RootState } from "@/store/types";
 import getters from "./getters";
 import actions from "./actions";
 import mutations from "./mutations";
+import * as moment from "moment";
 
 const groupsState: GroupsState = {
     loading: true,
     code: "",
-    date: "",
+    date: moment().format("YYYY-MM-DD"),
     groups: [],
     groupId: 0,
     seats: [],

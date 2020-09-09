@@ -12,11 +12,10 @@ class GroupController extends Controller
    *
    * @return 
    */
-  public function getGroup(Request $request)
+  public function getGroups(String $date)
   {
-    $date = $request->date;
-    $startTtme = $date. + ' 00:00:00'; 
-    $endTtme = $date. + ' 23:59:59';
+    $startTtme = $date . ' 00:00:00';
+    $endTtme = $date . ' 23:59:59';
 
     $groups = Group::where('delflg', false)
       ->whereBetween('start_time', [$startTtme, $endTtme])
@@ -24,5 +23,4 @@ class GroupController extends Controller
 
     return $groups;
   }
-
 }

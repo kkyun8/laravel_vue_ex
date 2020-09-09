@@ -6,17 +6,17 @@ import { ActionTree } from "vuex";
 import { AxiosInstance, AxiosResponse } from "axios";
 
 const groupsActions: ActionTree<GroupsState, RootState> = {
-    fetchGroups: async ({ commit }) => {
+    fetchGroups: async ({ commit }, date: Groups["date"]) => {
         const response: any | AxiosResponse<any> = await Repository.get(
-            "/api/groups"
+            "/api/groups/" + date
         ).catch((e: any) => commit("setError", e));
         commit("setGroups", response.data);
         commit("setLoading", false);
-    },
+    }
 };
 
 const actions = {
-  groupsActions
+    groupsActions
 };
 
 export default actions;

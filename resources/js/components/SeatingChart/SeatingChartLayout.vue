@@ -21,8 +21,8 @@
                     class="border border-danger rounded-sm p-1 w-100 h-100"
                     :class="{ 'seat-selected-color': selectedSeatId == seat.id}"
                     @click.prevent="selectedBox(seat)"
-                    @mouseleave="boxMouseOver( $event.target, seat.type)"
                   >
+                  <!-- @mouseleave="boxMouseOver( $event.target, seat.type)" -->
                     {{ seat.name }}
                     {{ seat.count }}席
                   </div>
@@ -53,7 +53,7 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
     SeatBox: Box,
   },
 })
-export default class SeatMaintenanceLayout extends Vue {
+export default class SeatingChartLayout extends Vue {
   @State("layout") layout!: LayoutState;
   @Mutation("setHallLayout", { namespace }) setHallLayout: any;
   @Mutation("setSeats", { namespace }) setSeats: any;
