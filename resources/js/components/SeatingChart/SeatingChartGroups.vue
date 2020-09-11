@@ -1,44 +1,45 @@
 <template>
-  <div>
-    <b-tabs content-class="my-3">
-      <b-tab title="Reserve Groups" active>
-        <ReserveGroups />
-      </b-tab>
-      <b-tab title="Second">
-        <p>I'm the second tab</p>
-      </b-tab>
-    </b-tabs>
-  </div>
+    <div>
+        <b-tabs content-class="my-3">
+            <b-tab title="Reserve Groups" active>
+                <ReserveGroups />
+            </b-tab>
+            <b-tab title="Selectd Seat Reserve Only">
+                <!-- TODO: 該当ホールに配席ずみの予約のみ表示
+                <p>I'm the second tab</p> -->
+            </b-tab>
+        </b-tabs>
+    </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
 import ReserveGroups from "@/components/SeatingChart/Groups/ReserveGroups.vue";
 @Component({
-  components: {
-    ReserveGroups,
-  },
+    components: {
+        ReserveGroups
+    }
 })
 export default class SeatingChartGroups extends Vue {
-  get refs(): any {
-    return this.$refs;
-  }
+    get refs(): any {
+        return this.$refs;
+    }
 
-  created() {
-    // vue
-  }
+    created() {
+        // vue
+    }
 
-  mounted() {
-    // vue
-  }
+    mounted() {
+        // vue
+    }
 
-  updated() {
-    // vue
-  }
+    updated() {
+        // vue
+    }
 
-  destroyed() {
-    // vue
-  }
+    destroyed() {
+        // vue
+    }
 }
 </script>
 
