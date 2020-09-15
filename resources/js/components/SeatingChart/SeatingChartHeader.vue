@@ -1,14 +1,18 @@
 <template>
     <div>
-        <div class="card p-3 mb-2">
-            <h3>Select Hall</h3>
+        <div
+            class="card p-3 mb-2"
+            style="background: linear-gradient(87deg, rgb(87 13 142), rgb(55 165 139)) !important;"
+        >
+            <h3 class="text-white">Select Hall</h3>
             <b-form-row>
                 <b-form-group
                     id="select-hall-label"
-                    class="pl-2 col-md-4"
+                    class="pl-5 pr-3 col-md-4"
                     label-cols="5"
                     label="Hall"
                     label-for="select-hall"
+                    label-class="text-white"
                 >
                     <b-form-select
                         id="select-hall"
@@ -17,7 +21,9 @@
                     ></b-form-select>
                 </b-form-group>
                 <div role="group" class="form-row form-group pl-2 col-md-4">
-                    <label for="date" class="col-5 col-form-label">Date</label>
+                    <label for="date" class="col-3 col-form-label text-white"
+                        >Date</label
+                    >
                     <div class="bv-no-focus-ring col">
                         <b-form-datepicker
                             id="date"

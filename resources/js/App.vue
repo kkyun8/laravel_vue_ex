@@ -22,7 +22,7 @@
                         </b-navbar-nav>
                     </b-collapse>
                 </b-navbar>
-                <div style="padding-top: 65px;" />
+                <div style="padding-top: 6rem;" />
                 <RouterView />
             </b-container>
         </main>

@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <SeatMaintenanceHeader />
-    <SeatMaintenanceDetail @add_seats="addSeats" />
-    <SeatMaintenanceLayout :seats_data="seatsData" ref="layout" />
-  </div>
+    <div>
+        <SeatMaintenanceHeader />
+        <SeatMaintenanceDetail @add_seats="addSeats" />
+        <SeatMaintenanceLayout :seats_data="seatsData" ref="layout" />
+    </div>
 </template>
 
 <script lang="ts">
@@ -14,38 +14,38 @@ import SeatMaintenanceDetail from "@/components/seatMaintenance/SeatMaintenanceD
 import SeatMaintenanceLayout from "@/components/seatMaintenance/SeatMaintenanceLayout.vue";
 
 @Component({
-  components: {
-    SeatMaintenanceHeader,
-    SeatMaintenanceDetail,
-    SeatMaintenanceLayout,
-  },
+    components: {
+        SeatMaintenanceHeader,
+        SeatMaintenanceDetail,
+        SeatMaintenanceLayout
+    }
 })
 export default class SeatMaintenanceIndex extends Vue {
-  get refs(): any {
-    return this.$refs;
-  }
+    get refs(): any {
+        return this.$refs;
+    }
 
-  seatsData: any[] = [];
+    seatsData: any[] = [];
 
-  addSeats(seats: any[]) {
-    this.refs.layout.addLayoutSeats(seats);
-  }
+    addSeats(seats: any[]) {
+        this.refs.layout.addLayoutSeats(seats);
+    }
 
-  created() {
-    // vue
-  }
+    created() {
+        // vue
+    }
 
-  mounted() {
-    // vue
-  }
+    mounted() {
+        // vue
+    }
 
-  updated() {
-    // vue
-  }
+    updated() {
+        // vue
+    }
 
-  destroyed() {
-    // vue
-  }
+    destroyed() {
+        // vue
+    }
 }
 </script>
 
