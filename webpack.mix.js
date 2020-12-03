@@ -6,13 +6,17 @@ mix.browserSync({
 })
     .ts("resources/js/app.ts", "public/js")
     .sass("resources/sass/app.scss", "public/css")
-    .version();
+    // TODO:
+    // .ts("resources/js/**/*", "public/js");
+    // TODO: こうすることで、ビルドするごとに作成されたランダムなパラメータがURLに追加され、毎回新しいソースコードが読み込まれることになります。
+    //.version();
 
 mix.webpackConfig({
     resolve: {
         extensions: [".js", ".jsx", ".vue", ".ts", ".tsx"],
         alias: {
-            // vue$: "vue/dist/vue.esm.js",
+          // TODO:
+            vue$: "vue/dist/vue.esm.js",
             "@": __dirname + "/resources/js"
         }
     },
