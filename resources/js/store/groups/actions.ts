@@ -12,6 +12,14 @@ const groupsActions: ActionTree<GroupsState, RootState> = {
         ).catch((e: any) => commit("setError", e));
         commit("setGroups", response.data);
         commit("setLoading", false);
+    },
+    setSeats: async ({ commit }, param: Groups["setSeatsParam"]) => {
+        const response: any | AxiosResponse<any> = await Repository.put(
+            "/api/groups/set_seats",
+            param
+        ).catch((e: any) => commit("setError", e));
+        commit("setGroups", response.data);
+        commit("setLoading", false);
     }
 };
 

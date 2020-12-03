@@ -1,9 +1,9 @@
-import { Seat, SeatInterface } from "../../modules/layout/Seat";
+import { Seat,  } from "../../modules/layout/Seat";
 import { GetterTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState } from "@/store/types";
 
-const layoutGetters: GetterTree<LayoutState, RootState> = {
+const groupsGetter: GetterTree<LayoutState, RootState> = {
     //TODO:
     // geteditSeats: (state: LayoutState) => {
     //     const data = [];
@@ -25,7 +25,7 @@ const layoutGetters: GetterTree<LayoutState, RootState> = {
 };
 
 const getters = {
-    // layoutGetters
+    // groupGetter
 };
 
 export default getters;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <SeatMaintenanceHeader />
-        <SeatMaintenanceDetail @add_seats="addSeats" />
+        <SeatMaintenanceDetail @add_seats="addSeats" @add_seat_groups="addSeatGroups"/>
         <SeatMaintenanceLayout :seats_data="seatsData" ref="layout" />
     </div>
 </template>
@@ -29,6 +29,10 @@ export default class SeatMaintenanceIndex extends Vue {
 
     addSeats(seats: any[]) {
         this.refs.layout.addLayoutSeats(seats);
+    }
+
+    addSeatGroups(seatGroups: any[]) {
+        this.refs.layout.addLayoutSeatGroups(seatGroups);
     }
 
     created() {

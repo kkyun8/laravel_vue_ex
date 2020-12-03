@@ -5,6 +5,9 @@ import App from "./App.vue";
 
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import Notifications from "vue-notification";
+//  SidebarPlugin動作しない
+import { SidebarPlugin } from 'bootstrap-vue'
+Vue.use(SidebarPlugin)
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
