@@ -181,7 +181,8 @@ class HallLayoutController extends Controller
           return in_array($seat['name'], $jsonSeats);
         });
         $group = $targetSeatGroups->all();
-        $createSeat->seat_group_id = $group[1]['id'];
+        $firstKey = array_key_first($group);
+        $createSeat->seat_group_id = $group[$firstKey]['id'];
 
         $createSeat->w = $seat['position']['w'];
         $createSeat->h = $seat['position']['h'];
