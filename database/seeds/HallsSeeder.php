@@ -69,7 +69,7 @@ class HallsSeeder extends Seeder
         'x' => 0,
         'y' => 0,
         'count' => 4,
-        'type' => 2,
+        'type' => 0,
         'seat_group_id' => 1,
       ],
       [
@@ -80,15 +80,26 @@ class HallsSeeder extends Seeder
         'x' => 20,
         'y' => 0,
         'count' => 4,
-        'type' => 2,
+        'type' => 0,
         'seat_group_id' => 1,
+      ],
+      [
+        'layout_id' => 1,
+        'name' => 'テスト席3',
+        'w' => 20,
+        'h' => 30,
+        'x' => 0,
+        'y' => 60,
+        'count' => 4,
+        'type' => 2,
+        'seat_group_id' => null,
       ],
     ]);
     DB::table('seat_groups')->insert([
       [
         'layout_id' => 1,
         'seat_group_name' => 'テストグループ',
-        'seat_id' => '[1,2]',
+        'seats' => '["テスト席1","テスト席2"]',
         'w' => 40,
         'h' => 30,
         'x' => 0,

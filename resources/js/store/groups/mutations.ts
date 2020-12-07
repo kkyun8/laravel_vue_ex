@@ -13,6 +13,9 @@ const groupsMutations: MutationTree<GroupsState> = {
     setDate: (state, date: Groups["date"]) => {
         state.date = date;
     },
+    setGroupId: (state, groupId: Groups["groupId"]) => {
+      state.groupId = groupId;
+  },
 };
 
 const messageMutations: MutationTree<MessageState> = {

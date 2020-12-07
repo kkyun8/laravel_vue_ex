@@ -23,7 +23,7 @@ class CreateGroupsTable extends Migration
       $table->timestamp('end_time');
       $table->integer('lock')->nullable();
       $table->integer('layout_id')->nullable();
-      $table->jsonb('seat')->nullable();
+      $table->jsonb('seats')->nullable();
       $table->boolean('delflg')->default(false);
       $table->timestamp('created_at')->useCurrent()->nullable();
       $table->timestamp('updated_at')->useCurrent()->nullable();

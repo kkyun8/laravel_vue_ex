@@ -7,6 +7,7 @@ use App\Hall;
 use App\Layout;
 use App\LayoutActive;
 use App\Seat;
+use App\SeatGroup;
 use Faker\Provider\ar_JO\Internet;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
@@ -54,8 +55,6 @@ class HallLayoutController extends Controller
    */
   public static function getLayout(int $id)
   {
-    // $id = $request->id;
-
     $layout = Layout::with(['seats', 'seatGroups'])
       ->where('id', $id)
       ->where('delflg', false)->get();
@@ -124,6 +123,7 @@ class HallLayoutController extends Controller
     $layoutName = $request->layoutName;
     $layoutCode = $request->layoutCode;
     $seats = $request->editSeats;
+    $seatGroups = $request->editSeatGroups;
 
     $layout = Layout::find($layoutId);
 
@@ -135,47 +135,55 @@ class HallLayoutController extends Controller
     if (!empty($layoutCode)) {
       $layout->layout_code = $layoutCode;
     }
+
     $layout->save();
 
+    if (!empty($seatGroups)) {
+      $resultSeatGroups = self::createSeatGroups($layoutId, $seatGroups);
+    }
+
     if (!empty($seats)) {
-      self::createUpdateSeats($layoutId, $seats);
+      self::createUpdateSeats($layoutId, $seats, $resultSeatGroups);
     }
 
     return response(self::getLayout($layoutId), 200);
   }
 
-
   /**
+   * 
    */
-  private static function createUpdateSeats(int $layoutId, array $seats)
+  private static function createUpdateSeats(int $layoutId, array $seats, $resultSeatGroups)
   {
-    // $collection = new Collection($seats);
-
-    // $ids = $collection->map(function ($s) {
-    //   return $s['id'];
-    // })->all();
-
-    // $updateSeats = Seat::whereIn('id', $ids);
+    $allSeats = [];
 
     foreach ($seats as $seat) {
-      //TODO: bug
-      //$updateSeat = $updateSeats::where('id', '=', $seat['id']);
-      $updateSeat = Seat::where('id', $seat['id']);
+
+      $updateSeat = Seat::find($seat['id']);
+
       if (!empty($updateSeat)) {
-        $updateSeat->update([
-          'name' => $seat['name'],
-          'w' => $seat['position']['w'],
-          'h' => $seat['position']['h'],
-          'x' => $seat['position']['x'],
-          'y' => $seat['position']['y'],
-          'count' => $seat['count'],
-          'type' => $seat['type']
-        ]);
+        $updateSeat->name = $seat['name'];
+        $updateSeat->w = $seat['position']['w'];
+        $updateSeat->h = $seat['position']['h'];
+        $updateSeat->x = $seat['position']['x'];
+        $updateSeat->y = $seat['position']['y'];
+        $updateSeat->count = $seat['count'];
+        $updateSeat->type = $seat['type'];
+        $updateSeat->save();
+        array_push($allSeats, $updateSeat->id);
       } else {
         $createSeat = new Seat;
         $createSeat->layout_id = $layoutId;
         $createSeat->name = $seat['name'];
-        $createSeat->seat_group_id = $seat['seatGroupId'];
+
+        $collection = new Collection($resultSeatGroups);
+        $targetSeatGroups = $collection->filter(function ($value, $key) use ($seat) {
+          $jsonSeats = json_decode($value->seats);
+          return in_array($seat['name'], $jsonSeats);
+        });
+        $group = $targetSeatGroups->all();
+        $firstKey = array_key_first($group);
+        $createSeat->seat_group_id = $group[$firstKey]['id'];
+
         $createSeat->w = $seat['position']['w'];
         $createSeat->h = $seat['position']['h'];
         $createSeat->x = $seat['position']['x'];
@@ -183,30 +191,58 @@ class HallLayoutController extends Controller
         $createSeat->count = $seat['count'];
         $createSeat->type = $seat['type'];
         $createSeat->save();
+        array_push($allSeats, $createSeat->id);
       }
     }
 
+    Seat::whereNotIn('id', $allSeats)->delete();
 
     return $seats;
   }
 
   /**
    */
-  private static function createSeatGroups(int $layoutId, array $seats)
+  private static function createSeatGroups(int $layoutId, array $seatGroups)
   {
-    foreach ($seats as $seat) {
-      $createSeat = new Seat;
-      $createSeat->layout_id = $layoutId;
-      $createSeat->name = $seat['name'];
-      $createSeat->seat_group_id = $seat['seatGroupId'];
-      $createSeat->w = $seat['position']['w'];
-      $createSeat->h = $seat['position']['h'];
-      $createSeat->x = $seat['position']['x'];
-      $createSeat->y = $seat['position']['y'];
-      $createSeat->count = $seat['count'];
-      $createSeat->type = $seat['type'];
-      $createSeat->save();
+    $allSeatGroups = [];
+
+    foreach ($seatGroups as $seatGroup) {
+
+      $updateGroup = SeatGroup::find($seatGroup['id']);
+
+      if (!empty($updateGroup)) {
+        $updateGroup->seat_group_name = $seatGroup['seat_group_name'];
+        $updateGroup->seats =  json_encode($seatGroup['seats']);
+
+        $updateGroup->w = $seatGroup['position']['w'];
+        $updateGroup->h = $seatGroup['position']['h'];
+        $updateGroup->x = $seatGroup['position']['x'];
+        $updateGroup->y = $seatGroup['position']['y'];
+        $updateGroup->count = $seatGroup['count'];
+        $updateGroup->type = $seatGroup['type'];
+        $updateGroup->save();
+        array_push($allSeatGroups, $updateGroup->id);
+      } else {
+        $createGroup = new SeatGroup;
+        $createGroup->layout_id = $layoutId;
+        $createGroup->seat_group_name = $seatGroup['seat_group_name'];
+        $createGroup->seats = json_encode($seatGroup['seats']);
+
+        $createGroup->w = $seatGroup['position']['w'];
+        $createGroup->h = $seatGroup['position']['h'];
+        $createGroup->x = $seatGroup['position']['x'];
+        $createGroup->y = $seatGroup['position']['y'];
+        $createGroup->count = $seatGroup['count'];
+        $createGroup->type = $seatGroup['type'];
+        $createGroup->save();
+        array_push($allSeatGroups, $createGroup->id);
+      }
     }
-    return $seats;
+
+    SeatGroup::whereNotIn('id', $allSeatGroups)->delete();
+
+    $resultSeatGroups = SeatGroup::where('delflg', false)->get();
+
+    return $resultSeatGroups;
   }
 }

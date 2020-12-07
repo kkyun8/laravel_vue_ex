@@ -1,34 +1,36 @@
 const SEAT_TYPE_ROOM = 1;
 
 class Seat {
-    protected id: number;
-    protected name: string;
-    protected seatGroupId: number | null;
-    protected count: number;
-    protected type: number;
-    protected hidden: boolean;
-    protected pinned: boolean;
-    protected position: {
+    public id: number;
+    public name: string;
+    public seatGroupId: number | null;
+    public count: number;
+    public type: number;
+    public hidden: boolean;
+    public pinned: boolean;
+    public position: {
         x: number;
         y: number;
         w: number;
         h: number;
     };
+    public isChange: boolean;
 
     constructor(data: {
         id: number;
         name: string;
-        seatGroupId: number;
+        seat_group_id: number | null;
         count: number;
         type: number;
         x: number;
         y: number;
         w: number;
         h: number;
+        isChange: boolean;
     }) {
         this.id = data.id;
         this.name = data.name;
-        this.seatGroupId = !data.seatGroupId ? null : data.seatGroupId;
+        this.seatGroupId = !data.seat_group_id ? null : data.seat_group_id;
         this.count = data.count;
         this.type = data.type;
         this.hidden = false;
@@ -39,23 +41,12 @@ class Seat {
             w: data.w,
             h: data.h
         };
+        if(typeof true === "boolean"){
+          this.isChange = data.isChange;
+        }else{
+          this.isChange = false;
+        }
     }
 }
 
-interface SeatInterface {
-    id: number;
-    name: string;
-    seatGroupId: number | null;
-    count: number;
-    type: number;
-    hidden: boolean;
-    pinned: boolean;
-    position: {
-        x: number;
-        y: number;
-        w: number;
-        h: number;
-    };
-}
-
-export { Seat, SeatInterface, SEAT_TYPE_ROOM };
+export { Seat, SEAT_TYPE_ROOM };

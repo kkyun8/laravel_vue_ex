@@ -17,11 +17,6 @@
                                 :boxId="seat.id"
                                 :key="'SeatEditKey:' + seat.id"
                             >
-                                <template v-if="seat.seatGroupId">{{
-                                    seat.name
-                                }}</template>
-
-                                <template v-else>
                                     <div
                                         class="table p-1 w-100 h-100"
                                         :class="{
@@ -34,7 +29,6 @@
                                         {{ seat.name }}
                                         {{ seat.count }}席
                                     </div>
-                                </template>
                             </SeatBox>
                         </template>
                     </SeatContainer>
@@ -46,7 +40,7 @@
 
 <script lang="ts">
 const namespace: string = "layout";
-import { Seat, SeatInterface, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
+import { Seat, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
@@ -67,6 +61,7 @@ export default class SeatingChartLayout extends Vue {
     @Mutation("setSeats", { namespace }) setSeats: any;
     @Mutation("setSeatGroups", { namespace }) setSeatGroups: any;
     @Mutation("setEditSeats", { namespace }) setEditSeats: any;
+    @Mutation("setEditSeatGroups", { namespace }) setEditSeatGroups: any;
     //   private layout!: Layout[];
 
     get hallLayout(): LayoutState["hallLayout"] {
@@ -108,12 +103,17 @@ export default class SeatingChartLayout extends Vue {
 
     @Watch("seats")
     setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
-        this.layoutSeats = [];
-        newVal.forEach(e => this.layoutSeats.push(e));
+        this.layoutSeats = newVal.slice();
         return newVal;
     }
 
-    selectedBox(seat: SeatInterface): void {
+    @Watch("seatGroups")
+    setLayoutSeatGroups(newVal: any[], oldVal: any[]): any[] {
+        this.layoutSeatGroups = newVal.slice();
+        return newVal;
+    }
+
+    selectedBox(seat: Seat): void {
         this.selectedSeatId = seat.id;
     }
 
@@ -145,6 +145,7 @@ export default class SeatingChartLayout extends Vue {
     boxCount: number = 4;
     //layout
     layoutSeats: LayoutState["seats"] = [];
+    layoutSeatGroups: LayoutState["seatGroups"] = [];
     layoutSeatsUpdateFlg: boolean = false;
     updateSeats: LayoutState["seats"] = [];
     createSeatId: number = -1;

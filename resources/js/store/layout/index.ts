@@ -12,6 +12,8 @@ const layoutState: LayoutState = {
     hallLayout: [],
     editSeats: [],
     editSeatGroups: [],
+    editSeatsMinId: 0,
+    editSeatGroupsMinId: 0,
     seats: [],
     seatGroups: [],
     hallId: 0,
@@ -24,7 +26,7 @@ const layoutState: LayoutState = {
 export const layout: Module<LayoutState, RootState> = {
     namespaced: true,
     state: layoutState,
-    getters,
+    getters: getters.layoutGetters,
     actions: actions.layoutActions,
     mutations: mutations.layoutMutations
 };

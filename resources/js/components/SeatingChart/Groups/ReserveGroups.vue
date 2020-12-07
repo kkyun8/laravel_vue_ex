@@ -16,9 +16,7 @@
                             class="card card-stats mb-4"
                             show-footer-line="true"
                         >
-                            <div class="card-body">
-                                <!---->
-                                <!---->
+                            <div class="card-body" @click.prevent="seletedGroupId = groups.id">
                                 <div class="row">
                                     <div class="col">
                                         <h5
@@ -54,6 +52,7 @@
     </div>
 </template>
 <script lang="ts">
+const namespace: string = "groups";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { State, Action, Getter, Mutation } from "vuex-class";
@@ -64,6 +63,7 @@ import { GroupsState, Groups } from "../../../store/types";
 })
 export default class SeatingChartIndex extends Vue {
     @State("groups") groups!: GroupsState;
+    @Mutation("setGroupId", { namespace }) setGroupId: any;
 
     get refs(): any {
         return this.$refs;
@@ -71,6 +71,14 @@ export default class SeatingChartIndex extends Vue {
 
     get reserveGroups(): GroupsState["groups"] {
         return this.groups.groups;
+    }
+
+    get seletedGroupId(): GroupsState["groupId"] {
+        return this.groups.groupId;
+    }
+
+    set seletedGroupId(groupId: GroupsState["groupId"]) {
+        this.setGroupId(groupId);
     }
 
     setTimeRange(groups: any) {

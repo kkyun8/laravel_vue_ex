@@ -10,13 +10,11 @@ const layoutMutations: MutationTree<LayoutState> = {
     },
     setHalls: (state, halls: Layout["halls"]) => {
         state.halls = [];
-        halls.forEach((e: any) => state.halls.push(e));
+        state.halls = halls.slice();
     },
     setHallLayout: (state, hallLayout: Layout["hallLayout"]) => {
         state.hallLayout = [];
-        hallLayout.forEach((e: any) => {
-            state.hallLayout.push(e);
-        });
+        state.hallLayout = hallLayout.slice();
     },
     setSeats: (state, seats: Layout["seats"]) => {
         state.seats = [];
@@ -40,15 +38,17 @@ const layoutMutations: MutationTree<LayoutState> = {
     },
     setEditSeats: (state, editSeats: Layout["editSeats"]) => {
         state.editSeats = [];
-        editSeats.forEach((e: any) => {
-            state.editSeats.push(e);
-        });
+        state.editSeats = editSeats.slice();
     },
     setEditSeatGroups: (state, editSeatGroups: Layout["editSeatGroups"]) => {
         state.editSeatGroups = [];
-        editSeatGroups.forEach((e: any) => {
-            state.editSeatGroups.push(e);
-        });
+        state.editSeatGroups = editSeatGroups.slice();
+    },
+    setEditSeatsMinId: (state, editSeatsMinId: Layout["editSeatsMinId"]) => {
+      state.editSeatsMinId = editSeatsMinId;
+    },
+    setEditSeatGroupsMinId: (state, editSeatGroupsMinId: Layout["editSeatGroupsMinId"]) => {
+      state.editSeatGroupsMinId = editSeatGroupsMinId;
     },
     setError: (state, message: Layout["error"]) => {
         state.error = "";

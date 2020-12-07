@@ -25,6 +25,8 @@ export interface LayoutState {
     layoutId: Layout["layoutId"];
     editSeats: Layout["editSeats"];
     editSeatGroups: Layout["editSeatGroups"];
+    editSeatsMinId: Layout["editSeatsMinId"];
+    editSeatGroupsMinId: Layout["editSeatGroupsMinId"];
     success: Layout["success"];
     warning: Layout["warning"];
     error: Layout["error"];
@@ -41,34 +43,36 @@ export interface Layout {
     layoutId: number;
     editSeats: any[];
     editSeatGroups: any[];
+    editSeatsMinId: number,
+    editSeatGroupsMinId: number,
     success: string;
     warning: string;
     error: string;
 }
 
-
 export interface GroupsState {
-  loading: Groups["loading"];
-  code: Groups["code"];
-  date: Groups["date"];
-  groups: Groups["groups"];
-  groupId: Groups["groupId"];
-  seats: Groups["seats"];
-  seatGroups: Groups["seatGroups"];
-  success: Groups["success"];
-  warning: Groups["warning"];
-  error: Groups["error"];
+    loading: Groups["loading"];
+    code: Groups["code"];
+    date: Groups["date"];
+    groups: Groups["groups"];
+    groupId: Groups["groupId"];
+    seats: Groups["seats"];
+    seatGroups: Groups["seatGroups"];
+    success: Groups["success"];
+    warning: Groups["warning"];
+    error: Groups["error"];
 }
 
 export interface Groups {
-  loading: boolean;
-  code: string;
-  date: string;
-  groups: any[];
-  groupId: number;
-  seats: any[];
-  seatGroups: any[];
-  success: string;
-  warning: string;
-  error: string;
+    loading: boolean;
+    code: string;
+    date: string;
+    groups: any[];
+    groupId: number;
+    seats: string[];
+    seatGroups: any[];
+    success: string;
+    warning: string;
+    error: string;
+    setSeatsParam: { seats: string[]; groupId: number };
 }
