@@ -139,7 +139,7 @@ class HallLayoutController extends Controller
     $layout->save();
 
     if (!empty($seatGroups)) {
-      $resultSeatGroups = self::createSeatGroups($layoutId, $seatGroups);
+      $resultSeatGroups = self::createUpdateSeatGroups($layoutId, $seatGroups);
     }
 
     if (!empty($seats)) {
@@ -202,7 +202,7 @@ class HallLayoutController extends Controller
 
   /**
    */
-  private static function createSeatGroups(int $layoutId, array $seatGroups)
+  private static function createUpdateSeatGroups(int $layoutId, array $seatGroups)
   {
     $allSeatGroups = [];
 

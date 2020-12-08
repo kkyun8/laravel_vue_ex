@@ -13,10 +13,17 @@ const groupsActions: ActionTree<GroupsState, RootState> = {
         commit("setGroups", response.data);
         commit("setLoading", false);
     },
-    setSeats: async ({ commit }, param: Groups["setSeatsParam"]) => {
-        const response: any | AxiosResponse<any> = await Repository.put(
-            "/api/groups/set_seats",
-            param
+    fetchLayoutReserveSeats: async ({ commit }, groups: Groups) => {
+        const response: any | AxiosResponse<any> = await Repository.get(
+          "/api/groups/" + groups.date + "/layout_id/" + groups.layoutId
+        ).catch((e: any) => commit("setError", e));
+        commit("setGroups", response.data);
+        commit("setLoading", false);
+    },
+    setReserveSeats: async ({ commit }, groups: Groups) => {
+        const response: any | AxiosResponse<any> = await Repository.post(
+            "/api/groups/reserve_seats",
+            groups
         ).catch((e: any) => commit("setError", e));
         commit("setGroups", response.data);
         commit("setLoading", false);

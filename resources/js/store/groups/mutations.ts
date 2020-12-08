@@ -8,14 +8,25 @@ const groupsMutations: MutationTree<GroupsState> = {
     },
     setGroups: (state, groups: Groups["groups"]) => {
         state.groups = [];
-        groups.forEach((e: any) => state.groups.push(e));
+        state.groups = groups.slice();
     },
     setDate: (state, date: Groups["date"]) => {
         state.date = date;
     },
     setGroupId: (state, groupId: Groups["groupId"]) => {
       state.groupId = groupId;
-  },
+    },
+    setLayoutId: (state, layoutId: Groups["layoutId"]) => {
+      state.layoutId = layoutId;
+    },
+    setReserveSeats: (state, reserveSeats: Groups["reserveSeats"]) => {
+      state.reserveSeats = [];
+      state.reserveSeats = reserveSeats.slice();
+    },
+    setLayoutReserveSeats: (state, layoutReserveSeats: Groups["layoutReserveSeats"]) => {
+      state.layoutReserveSeats = [];
+      state.layoutReserveSeats = layoutReserveSeats.slice();
+    },
 };
 
 const messageMutations: MutationTree<MessageState> = {

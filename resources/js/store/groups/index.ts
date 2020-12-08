@@ -12,8 +12,9 @@ const groupsState: GroupsState = {
     date: moment().format("YYYY-MM-DD"),
     groups: [],
     groupId: 0,
-    seats: [],
-    seatGroups: [],
+    reserveSeats: [],
+    layoutReserveSeats: [],
+    layoutId: 0,
     success: "",
     warning: "",
     error: ""

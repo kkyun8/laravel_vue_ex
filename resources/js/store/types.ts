@@ -56,8 +56,9 @@ export interface GroupsState {
     date: Groups["date"];
     groups: Groups["groups"];
     groupId: Groups["groupId"];
-    seats: Groups["seats"];
-    seatGroups: Groups["seatGroups"];
+    reserveSeats: Groups["reserveSeats"];
+    layoutReserveSeats: Groups["layoutReserveSeats"];
+    layoutId: Groups["layoutId"];
     success: Groups["success"];
     warning: Groups["warning"];
     error: Groups["error"];
@@ -69,10 +70,10 @@ export interface Groups {
     date: string;
     groups: any[];
     groupId: number;
-    seats: string[];
-    seatGroups: any[];
+    reserveSeats: number[];
+    layoutReserveSeats: any[];
+    layoutId: number;
     success: string;
     warning: string;
     error: string;
-    setSeatsParam: { seats: string[]; groupId: number };
 }
