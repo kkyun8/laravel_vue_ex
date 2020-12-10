@@ -61,6 +61,7 @@ export default class SeatingChartHeader extends Vue {
     @Mutation("setHallId", { namespace }) setHallId: any;
     @Mutation("setLayoutId", { namespace }) setLayoutId: any;
     @Mutation("setDate", { namespace: "groups" }) setDate: any;
+    @Mutation("setLayoutId", { namespace: "groups" }) setGroupLayoutId: any;
 
     get hallId(): LayoutState["hallId"] {
         const hall = this.layout.halls.filter(
@@ -76,17 +77,23 @@ export default class SeatingChartHeader extends Vue {
         this.setHallId(hallId);
     }
     get layoutId(): LayoutState["layoutId"] {
+        this.$store.dispatch("groups/fetchLayoutReserveSeats", this.groups);
         return this.layout.layoutId;
     }
+
     set layoutId(layoutId) {
+        this.setGroupLayoutId(layoutId);
         this.setLayoutId(layoutId);
         this.$store.dispatch("layout/fetchHallLayout", layoutId);
     }
+
     get date(): GroupsState["date"] {
         if (!this.groups) return "";
         this.$store.dispatch("groups/fetchGroups", this.groups.date);
+        this.$store.dispatch("groups/fetchLayoutReserveSeats", this.groups);
         return this.groups.date;
     }
+
     set date(date) {
         this.setDate(date);
     }

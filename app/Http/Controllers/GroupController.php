@@ -37,11 +37,12 @@ class GroupController extends Controller
 
     $groups = Group::where('delflg', false)
       ->where('layout_id', $layoutId)
+      ->whereNotNull('seats')
       ->whereBetween('start_time', [$startTtme, $endTtme])
       ->orderBy('start_time')->get();
 
-    $result = $collection = new Collection($groups);
-    $collection->mapWithKeys(function ($group) {
+    $collection = new Collection($groups);
+    $result = $collection->mapWithKeys(function ($group) {
       return [$group['id'] => $group['seats']];
     });
 
@@ -63,6 +64,6 @@ class GroupController extends Controller
     $group->seats = json_encode($reserveSeats);
     $group->save();
 
-    return $this->getGroups($date);
+    return $this->layoutReserveSeats($date, $layoutId);
   }
 }

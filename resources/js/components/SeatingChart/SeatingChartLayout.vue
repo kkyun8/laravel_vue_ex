@@ -3,7 +3,6 @@
         <b-row>
             <b-col cols="12">
                 <div class="card" style="width:100%; height:600px;">
-                    <!-- layoutSeats editSeats-->
                     <SeatContainer
                         :layout.sync="layoutSeats"
                         :cellSize="cellSize"
@@ -15,20 +14,36 @@
                         <template v-for="seat in layoutSeats">
                             <SeatBox
                                 :boxId="seat.id"
-                                :key="'SeatEditKey:' + seat.id"
+                                :key="'BoxKey:' + seat.id"
                             >
-                                    <div
-                                        class="table p-1 w-100 h-100"
-                                        :class="{
-                                            'seat-selected-color':
-                                                selectedSeatId == seat.id
-                                        }"
-                                        @click.prevent="selectedBox(seat)"
-                                    >
-                                        <!-- @mouseleave="boxMouseOver( $event.target, seat.type)" -->
-                                        {{ seat.name }}
-                                        {{ seat.count }}席
-                                    </div>
+                                <div
+                                    class="table p-1 w-100 h-100 seatbox-tooltip"
+                                    :class="{
+                                        'seat-selected-color': reserveSeats.includes(
+                                            seat.id
+                                        ),
+                                        'border-danger': layoutReserveSeatsMap.has(
+                                            seat.id
+                                        )
+                                    }"
+                                    @click.prevent="selectedBox(seat)"
+                                >
+                                    <span
+                                        v-if="
+                                            layoutReserveSeatsMap.has(seat.id)
+                                        "
+                                        class="seatbox-tooltiptext"
+                                        ><template
+                                            v-for="groupId in layoutReserveSeatsMap.get(
+                                                seat.id
+                                            )"
+                                        >
+                                            {{ getGroupsMap.get(groupId) }}
+                                        </template>
+                                    </span>
+                                    {{ seat.name }}
+                                    {{ seat.count }}席
+                                </div>
                             </SeatBox>
                         </template>
                     </SeatContainer>
@@ -39,15 +54,15 @@
 </template>
 
 <script lang="ts">
-const namespace: string = "layout";
 import { Seat, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
-import { LayoutState, Layout } from "../../store/types";
+import { LayoutState, Layout, GroupsState } from "../../store/types";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
+import { groups } from "../../store/groups";
 
 @Component({
     components: {
@@ -57,13 +72,15 @@ import "@dattn/dnd-grid/dist/dnd-grid.css";
 })
 export default class SeatingChartLayout extends Vue {
     @State("layout") layout!: LayoutState;
-    @Mutation("setHallLayout", { namespace }) setHallLayout: any;
-    @Mutation("setSeats", { namespace }) setSeats: any;
-    @Mutation("setSeatGroups", { namespace }) setSeatGroups: any;
-    @Mutation("setEditSeats", { namespace }) setEditSeats: any;
-    @Mutation("setEditSeatGroups", { namespace }) setEditSeatGroups: any;
-    //   private layout!: Layout[];
-
+    @State("groups") groups!: GroupsState;
+    @Mutation("setHallLayout", { namespace: "layout" }) setHallLayout: any;
+    @Mutation("setSeats", { namespace: "layout" }) setSeats: any;
+    @Mutation("setSeatGroups", { namespace: "layout" }) setSeatGroups: any;
+    @Mutation("setReserveSeats", { namespace: "groups" }) setReserveSeats: any;
+    tipMethod() {
+        // Note this is called each time the tooltip is first opened.
+        return "<strong>" + new Date() + "</strong>";
+    }
     get hallLayout(): LayoutState["hallLayout"] {
         if (this.layout.hallLayout.length > 0) {
             this.seats = this.layout.hallLayout[0].seats;
@@ -93,13 +110,52 @@ export default class SeatingChartLayout extends Vue {
         this.setSeatGroups(seatGroups);
     }
 
+    get reserveSeats(): GroupsState["reserveSeats"] {
+        return this.groups.reserveSeats;
+    }
+
+    set reserveSeats(reserveSeats) {
+        this.setReserveSeats(reserveSeats);
+    }
+
+    get layoutReserveSeatsMap(): GroupsState["layoutReserveSeats"] {
+        const result = new Map();
+        Object.entries(this.groups.layoutReserveSeats).forEach(e => {
+            JSON.parse(e[1]).forEach((s: any) => {
+                if (result.has(s)) {
+                    const valueArray = result.get(s).slice();
+                    valueArray.push(Number(e[0]));
+                    result.set(s, valueArray);
+                } else {
+                    result.set(s, [Number(e[0])]);
+                }
+            });
+        });
+        return result;
+    }
+
+    get getGroupsMap(): Map<number, string> {
+        const result = new Map();
+        this.groups.groups.forEach((e: any) => {
+            result.set(
+                e.id,
+                "name:" +
+                    `${e.group_name}` +
+                    " number:" +
+                    `${e.group_number}` +
+                    " " +
+                    `${e.start_time.substr(10, 6)}` +
+                    "~" +
+                    `${e.end_time.substr(10, 6)}`
+            );
+        });
+        return result;
+    }
+
     @Watch("hallLayout")
     onHallLayoutChange(newVal: any[], oldVal: any[]): any[] {
         return newVal;
     }
-
-    @Watch("selectedSeatId")
-    setSelectedSeatId(newVal: number | null, oldVal: number | null): void {}
 
     @Watch("seats")
     setLayoutSeat(newVal: any[], oldVal: any[]): any[] {
@@ -114,24 +170,15 @@ export default class SeatingChartLayout extends Vue {
     }
 
     selectedBox(seat: Seat): void {
-        this.selectedSeatId = seat.id;
-    }
-
-    updateLayout(): void {
-        this.setEditSeats(this.layoutSeats);
-        this.$store.dispatch("layout/updateLayout", this.layout);
-
-        this.init();
-    }
-
-    cancel(): void {
-        this.layoutSeats = [];
-        this.seats.forEach(e => this.layoutSeats.push(e));
+        if (this.reserveSeats.includes(seat.id)) {
+            this.reserveSeats = this.reserveSeats.filter(e => e !== seat.id);
+        } else {
+            this.reserveSeats.push(seat.id);
+        }
     }
 
     init() {
-        this.layoutSeatsUpdateFlg = false;
-        this.selectedSeatId = null;
+        this.reserveSeats = [];
     }
     //Container Setting Data
     cellSize = {
@@ -146,13 +193,7 @@ export default class SeatingChartLayout extends Vue {
     //layout
     layoutSeats: LayoutState["seats"] = [];
     layoutSeatGroups: LayoutState["seatGroups"] = [];
-    layoutSeatsUpdateFlg: boolean = false;
-    updateSeats: LayoutState["seats"] = [];
-    createSeatId: number = -1;
-    selectedSeatId: number | null = null;
     SEAT_TYPE_ROOM = SEAT_TYPE_ROOM;
-
-    layoutConversion() {}
 
     created() {
         // vue
