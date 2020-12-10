@@ -71,7 +71,7 @@ export interface Groups {
     groups: any[];
     groupId: number;
     reserveSeats: number[];
-    layoutReserveSeats: any[];
+    layoutReserveSeats: object;
     layoutId: number;
     success: string;
     warning: string;

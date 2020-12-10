@@ -17,7 +17,7 @@ const groupsActions: ActionTree<GroupsState, RootState> = {
         const response: any | AxiosResponse<any> = await Repository.get(
           "/api/groups/" + groups.date + "/layout_id/" + groups.layoutId
         ).catch((e: any) => commit("setError", e));
-        commit("setGroups", response.data);
+        commit("setLayoutReserveSeats", response.data);
         commit("setLoading", false);
     },
     setReserveSeats: async ({ commit }, groups: Groups) => {
@@ -25,7 +25,7 @@ const groupsActions: ActionTree<GroupsState, RootState> = {
             "/api/groups/reserve_seats",
             groups
         ).catch((e: any) => commit("setError", e));
-        commit("setGroups", response.data);
+        commit("setLayoutReserveSeats", response.data);
         commit("setLoading", false);
     }
 };

@@ -24,8 +24,8 @@ const groupsMutations: MutationTree<GroupsState> = {
       state.reserveSeats = reserveSeats.slice();
     },
     setLayoutReserveSeats: (state, layoutReserveSeats: Groups["layoutReserveSeats"]) => {
-      state.layoutReserveSeats = [];
-      state.layoutReserveSeats = layoutReserveSeats.slice();
+      state.layoutReserveSeats = {};
+      Object.assign(state.layoutReserveSeats,layoutReserveSeats);
     },
 };
 

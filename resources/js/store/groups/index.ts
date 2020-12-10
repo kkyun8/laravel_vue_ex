@@ -13,7 +13,7 @@ const groupsState: GroupsState = {
     groups: [],
     groupId: 0,
     reserveSeats: [],
-    layoutReserveSeats: [],
+    layoutReserveSeats: {},
     layoutId: 0,
     success: "",
     warning: "",
