@@ -1,10 +1,9 @@
 import { Seat,  } from "../../modules/layout/Seat";
 import { GetterTree } from "vuex";
 //@ts-ignore
-import { GroupState, RootState } from "@/store/types";
+import { CommonState, RootState } from "@/store/types";
 
-const getters: GetterTree<GroupState, RootState> = {
-
+const getters: GetterTree<CommonState, RootState> = {
 };
 
 export default getters;

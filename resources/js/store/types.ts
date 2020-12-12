@@ -1,21 +1,23 @@
 export interface RootState {
     version: string;
+    common: Common
 }
 
-export interface MessageState {
-    success: Message["success"];
-    warning: Message["warning"];
-    error: Message["error"];
+export interface CommonState {
+    loading: Common["loading"];
+    success: Common["success"];
+    warning: Common["warning"];
+    error: Common["error"];
 }
 
-export interface Message {
+export interface Common {
+    loading: boolean;
     success: string;
     warning: string;
     error: string;
 }
 
 export interface LayoutState {
-    loading: Layout["loading"];
     code: Layout["code"];
     halls: Layout["halls"];
     hallLayout: Layout["hallLayout"];
@@ -27,13 +29,8 @@ export interface LayoutState {
     editSeatGroups: Layout["editSeatGroups"];
     editSeatsMinId: Layout["editSeatsMinId"];
     editSeatGroupsMinId: Layout["editSeatGroupsMinId"];
-    success: Layout["success"];
-    warning: Layout["warning"];
-    error: Layout["error"];
 }
-// TODO: set type
 export interface Layout {
-    loading: boolean;
     code: string;
     halls: any[];
     hallLayout: any[];
@@ -45,13 +42,9 @@ export interface Layout {
     editSeatGroups: any[];
     editSeatsMinId: number,
     editSeatGroupsMinId: number,
-    success: string;
-    warning: string;
-    error: string;
 }
 
 export interface GroupsState {
-    loading: Groups["loading"];
     code: Groups["code"];
     date: Groups["date"];
     groups: Groups["groups"];
@@ -59,13 +52,9 @@ export interface GroupsState {
     reserveSeats: Groups["reserveSeats"];
     layoutReserveSeats: Groups["layoutReserveSeats"];
     layoutId: Groups["layoutId"];
-    success: Groups["success"];
-    warning: Groups["warning"];
-    error: Groups["error"];
 }
 
 export interface Groups {
-    loading: boolean;
     code: string;
     date: string;
     groups: any[];
@@ -73,7 +62,4 @@ export interface Groups {
     reserveSeats: number[];
     layoutReserveSeats: object;
     layoutId: number;
-    success: string;
-    warning: string;
-    error: string;
 }

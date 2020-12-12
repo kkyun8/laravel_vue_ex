@@ -3,7 +3,7 @@ import { GetterTree } from "vuex";
 //@ts-ignore
 import { LayoutState, RootState } from "@/store/types";
 
-const layoutGetters: GetterTree<LayoutState, RootState> = {
+const getters: GetterTree<LayoutState, RootState> = {
     getMaxSeatId: (state: LayoutState) => {
       if(state.seats.length === 0) return 0
 
@@ -16,10 +16,6 @@ const layoutGetters: GetterTree<LayoutState, RootState> = {
       });
       return maxSeat.id;
     }
-};
-
-const getters = {
-    layoutGetters
 };
 
 export default getters;

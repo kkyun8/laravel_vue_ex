@@ -1,14 +1,15 @@
 import { MutationTree } from "vuex";
 //@ts-ignore
-import { GroupsState, Groups, MessageState, Message } from "@/store/types";
+import { GroupsState, Groups, CommonState, Common } from "@/store/types";
 
-const groupsMutations: MutationTree<GroupsState> = {
-    setLoading: (state, loading: Groups["loading"]) => {
-        state.loading = loading;
-    },
+const mutations: MutationTree<GroupsState> = {
     setGroups: (state, groups: Groups["groups"]) => {
         state.groups = [];
+        groups.sort((a:any, b:any)=>{
+          return a.id - b.id
+        })
         state.groups = groups.slice();
+
     },
     setDate: (state, date: Groups["date"]) => {
         state.date = date;
@@ -26,27 +27,7 @@ const groupsMutations: MutationTree<GroupsState> = {
     setLayoutReserveSeats: (state, layoutReserveSeats: Groups["layoutReserveSeats"]) => {
       state.layoutReserveSeats = {};
       Object.assign(state.layoutReserveSeats,layoutReserveSeats);
-    },
-};
-
-const messageMutations: MutationTree<MessageState> = {
-    setSuccess: (state, message: Message["success"]) => {
-        state.success = "";
-        state.success = message;
-    },
-    setWarning: (state, message: Message["warning"]) => {
-        state.warning = "";
-        state.warning = message;
-    },
-    setError: (state, message: Message["error"]) => {
-        state.error = "";
-        state.error = message;
     }
-};
-
-const mutations = {
-    groupsMutations,
-    messageMutations
 };
 
 export default mutations;
