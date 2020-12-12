@@ -10,7 +10,7 @@ const store: StoreOptions<RootState> = {
     state: {
         version: "1.0.0",
         common: {
-          loading: true,
+          loading: false,
           success: "",
           warning: "",
           error: ""

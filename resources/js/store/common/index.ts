@@ -6,7 +6,7 @@ import actions from "./actions";
 import mutations from "./mutations";
 
 export const state: CommonState = {
-    loading: true,
+    loading: false,
     success: "",
     warning: "",
     error: ""
