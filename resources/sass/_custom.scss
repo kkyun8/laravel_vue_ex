@@ -47,3 +47,38 @@
     background-color: #5e72e4;
     border-color: #5e72e4;
 }
+
+.seatbox-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+/* Tooltip text */
+.seatbox-tooltip .seatbox-tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+}
+
+.seatbox-tooltip:hover .seatbox-tooltiptext {
+    visibility: visible;
+}
+
+.seatbox-tooltip .seatbox-tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}

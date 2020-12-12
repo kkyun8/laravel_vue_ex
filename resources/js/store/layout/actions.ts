@@ -5,53 +5,71 @@ import Repository from "@/modules/repository/repository.ts";
 import { ActionTree } from "vuex";
 import { AxiosInstance, AxiosResponse } from "axios";
 
-const layoutActions: ActionTree<LayoutState, RootState> = {
-    fetchHalls: async ({ commit }) => {
+const actions: ActionTree<LayoutState, RootState> = {
+    fetchHalls: async ({ commit, rootState }) => {
+        rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.get(
             "/api/halls"
-        ).catch((e: any) => commit("setError", e));
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
         commit("setHalls", response.data);
-        commit("setLoading", false);
     },
-    fetchHallLayout: async ({ commit }, layoutId: Layout["layoutId"]) => {
+    fetchHallLayout: async ({ commit, rootState }, layoutId: Layout["layoutId"]) => {
+      rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.get(
             "/api/layout/" + layoutId
-        ).catch((e: any) => commit("setError", e));
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
         commit("setHallLayout", response.data);
-        commit("setLoading", false);
+
     },
-    createLayout: async ({ commit }, layout: Layout) => {
+    createLayout: async ({ commit, rootState }, layout: Layout) => {
+      rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.post(
             "/api/layout",
             layout
-        ).catch((e: any) => commit("setError", e));
-        // commit("setHallLayout", response.data);
-        // console.log(response.data);
-        commit("setLoading", false);
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
+
     },
-    updateLayout: async ({ commit }, layout: Layout) => {
+    updateLayout: async ({ commit, rootState }, layout: Layout) => {
+      rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.put(
             "/api/layout",
             layout
-        ).catch((e: any) => commit("setError", e));
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
         commit("setHallLayout", response.data);
-        commit("setSuccess", "保存しました。");
-        commit("setLoading", false);
+        rootState.common.success = "保存しました。"
+
     },
-    fetchActiveLayouts: async ({ commit }, layout: Layout) => {
+    fetchActiveLayouts: async ({ commit, rootState }, layout: Layout) => {
+      rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.get(
             "/api/active_layouts"
-        ).catch((e: any) => commit("setError", e));
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
         commit(
             "setHalls",
             response.data.map((e: any) => e.halls)
         );
-        commit("setLoading", false);
-    }
-};
 
-const actions = {
-    layoutActions
+    }
 };
 
 export default actions;

@@ -5,26 +5,45 @@ import Repository from "@/modules/repository/repository.ts";
 import { ActionTree } from "vuex";
 import { AxiosInstance, AxiosResponse } from "axios";
 
-const groupsActions: ActionTree<GroupsState, RootState> = {
-    fetchGroups: async ({ commit }, date: Groups["date"]) => {
+const actions: ActionTree<GroupsState, RootState> = {
+    fetchGroups: async ({ commit, rootState }, date: Groups["date"]) => {
+        rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.get(
             "/api/groups/" + date
-        ).catch((e: any) => commit("setError", e));
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        })
         commit("setGroups", response.data);
-        commit("setLoading", false);
+        
     },
-    setSeats: async ({ commit }, param: Groups["setSeatsParam"]) => {
-        const response: any | AxiosResponse<any> = await Repository.put(
-            "/api/groups/set_seats",
-            param
-        ).catch((e: any) => commit("setError", e));
-        commit("setGroups", response.data);
-        commit("setLoading", false);
-    }
-};
+    fetchLayoutReserveSeats: async ({ commit, rootState }, groups: Groups) => {
+        rootState.common.loading = true
+        const response: any | AxiosResponse<any> = await Repository.get(
+          "/api/groups/" + groups.date + "/layout_id/" + groups.layoutId
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
+        commit("setLayoutReserveSeats", response.data);
 
-const actions = {
-    groupsActions
+    },
+    setReserveSeats: async ({ commit, rootState }, groups: Groups) => {
+        rootState.common.loading = true
+        const response: any | AxiosResponse<any> = await Repository.post(
+            "/api/groups/reserve_seats",
+            groups
+        ).catch((e: any) => {
+          return rootState.common.error = e
+        }).finally(()=>{
+          return rootState.common.loading = false
+        });
+        commit("setLayoutReserveSeats", response.data);
+        rootState.common.success = "保存しました。"
+
+    }
 };
 
 export default actions;
