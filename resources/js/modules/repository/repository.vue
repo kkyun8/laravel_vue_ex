@@ -5,15 +5,15 @@ import { Vue } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 //@ts-ignore
-import { MessageState, RootState, Message } from "@/store/types";
+import { CommonState, RootState, Common } from "@/store/types";
 import Axios, { AxiosStatic, AxiosInstance } from "axios";
-const namespace: string = "message";
+const namespace: string = "common";
 
 const repository = Axios.create();
 
 @Component({})
 export default class Repository extends Vue {
-    @State("message") message!: MessageState;
+    @State("common") common!: CommonState;
     @Mutation("setError", { namespace }) setError: any;
 
     repository: AxiosInstance = Axios.create();
