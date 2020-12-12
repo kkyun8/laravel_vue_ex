@@ -1,14 +1,5 @@
 <template>
     <div>
-        <button
-            type="button"
-            class="btn btn-secondary"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Tooltip on top"
-        >
-            Tooltip on top
-        </button>
         <b-card no-body>
             <b-card-body style="overflow-x: scroll;">
                 <!-- b-row set width size -->
@@ -19,7 +10,7 @@
                     <div
                         class="group-card"
                         v-for="groups in getGroups"
-                        :key="'groups_id_' + `${groups.id}`"
+                        :key="`groups_id_${groups.id}`"
                     >
                         <div
                             class="card card-stats mb-4"
@@ -62,7 +53,7 @@
                                     </div>
                                 </div>
                                 <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-success mr-2">3.48%</span>
+                                    <span class="text-success mr-2">{{getSeatName(layoutReserveSeats[groups.id])}}</span>
                                     <span class="text-nowrap">{{
                                         groups.seat
                                     }}</span>
@@ -71,19 +62,14 @@
                                     <div v-if="seletedGroupId === groups.id">
                                         <b-button
                                             class="float-right mx-1"
-                                            @click.stop.prevent="
-                                                updateReserveSeats
-                                            "
+                                            @click.stop.prevent="updateReserveSeats"
+                                            :disabled="loading"
                                             >保存
                                         </b-button>
                                         <b-button
                                             class="float-right mx-1"
                                             @click.stop.prevent=""
-                                            :disabled="
-                                                !layoutReserveSeats[
-                                                    String(groups.id)
-                                                ]
-                                            "
+                                            :disabled="loading ? loading : !layoutReserveSeats[groups.id]"
                                             >席リセット
                                         </b-button>
                                     </div>
@@ -100,12 +86,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { State, Action, Getter, Mutation } from "vuex-class";
-import { LayoutState, GroupsState, Groups } from "../../../store/types";
+import { CommonState, LayoutState, GroupsState, Groups } from "../../../store/types";
 
 @Component
 export default class ReserveGroups extends Vue {
     @State("layout") layout!: LayoutState;
     @State("groups") groups!: GroupsState;
+    @State("common") common!: CommonState;
     @Mutation("setGroupId", { namespace: "groups" }) setGroupId: any;
     @Mutation("setLayoutId", { namespace: "groups" }) setLayoutId: any;
     @Mutation("setReserveSeats", { namespace: "groups" }) setReserveSeats: any;
@@ -114,8 +101,16 @@ export default class ReserveGroups extends Vue {
         return this.$refs;
     }
 
+    get loading(): CommonState["loading"] {
+        return this.common.loading;
+    }
+
     get getGroups(): GroupsState["groups"] {
         return this.groups.groups;
+    }
+
+    get seats(): LayoutState["seats"] {
+        return this.layout.seats;
     }
 
     get reserveSeats(): GroupsState["reserveSeats"] {
@@ -140,10 +135,7 @@ export default class ReserveGroups extends Vue {
 
     setTimeRange(groups: any) {
         const date = `${groups.start_time.substr(0, 11)}`;
-        const range =
-            `${groups.start_time.substr(11, 5)}` +
-            " ~ " +
-            `${groups.end_time.substr(11, 5)}`;
+        const range = `${groups.start_time.substr(11, 5)} ~ ${groups.end_time.substr(11, 5)}`;
         return date + range;
     }
 
@@ -151,6 +143,13 @@ export default class ReserveGroups extends Vue {
         if (this.reserveSeats.length === 0)
             return alert("席を選択してください。");
         this.$store.dispatch("groups/setReserveSeats", this.groups);
+    }
+
+    getSeatName(jsonArray:string){
+      if(!jsonArray) return ''
+
+      const seatIds = JSON.parse(jsonArray);
+      return this.seats.filter(e => seatIds.includes(e.id)).map(e => e.name).join(" ")
     }
 
     mouseOverId: number = 0;

@@ -8,6 +8,7 @@
                             <b-button
                                 variant="info"
                                 @click.prevent="updateLayout()"
+                                :disabled="loading"
                                 >レイアウト更新</b-button
                             >
                         </div>
@@ -93,7 +94,7 @@ import { Seat, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
-import { LayoutState, Layout } from "../../store/types";
+import { LayoutState, Layout, CommonState } from "../../store/types";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
@@ -107,6 +108,7 @@ import { SeatGroup } from "../../modules/layout/SeatGroup";
 })
 export default class SeatMaintenanceLayout extends Vue {
     @State("layout") layout!: LayoutState;
+    @State("common") common!: CommonState;
     @Mutation("setHallLayout", { namespace }) setHallLayout: any;
     @Mutation("setSeats", { namespace }) setSeats: any;
     @Mutation("setSeatGroups", { namespace }) setSeatGroups: any;
@@ -114,6 +116,10 @@ export default class SeatMaintenanceLayout extends Vue {
     @Mutation("setEditSeatGroups", { namespace }) setEditSeatGroups: any;
     @Mutation("setEditSeatsMinId", { namespace }) setEditSeatsMinId: any;
     @Mutation("setEditSeatGroupsMinId", { namespace }) setEditSeatGroupsMinId: any;
+
+    get loading(): CommonState["loading"] {
+        return this.common.loading;
+    }
 
     get hallLayout(): LayoutState["hallLayout"] {
         if (this.layout.hallLayout.length > 0) {

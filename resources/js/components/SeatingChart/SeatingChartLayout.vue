@@ -139,14 +139,7 @@ export default class SeatingChartLayout extends Vue {
         this.groups.groups.forEach((e: any) => {
             result.set(
                 e.id,
-                "name:" +
-                    `${e.group_name}` +
-                    " number:" +
-                    `${e.group_number}` +
-                    " " +
-                    `${e.start_time.substr(10, 6)}` +
-                    "~" +
-                    `${e.end_time.substr(10, 6)}`
+                `name:${e.group_name} number:${e.group_number} time:${e.start_time.substr(10, 6)} ~ ${e.end_time.substr(10, 6)}`
             );
         });
         return result;

@@ -3,6 +3,14 @@
         <notifications group="success" position="top left" :speed="300" />
         <notifications group="warn" position="top left" :speed="300" />
         <notifications group="error" position="top left" :speed="300" />
+        <template v-if="loading">
+          <div class="background-class" />
+          <div class="loading-grow">
+            <b-spinner :variant="'info'" type="grow" label="Loading..."></b-spinner>
+            <b-spinner :variant="'info'" type="grow" label="Loading..."></b-spinner>
+            <b-spinner :variant="'info'" type="grow" label="Loading..."></b-spinner>
+          </div>
+        </template>
         <main class="m-1">
             <b-container fluid>
                 <b-navbar variant="faded" type="light" class="">
@@ -30,36 +38,43 @@
 </template>
 
 <script lang="ts">
-const namespace: string = "layout";
+const namespace: string = "common";
 import { Vue, Watch } from "vue-property-decorator";
 import Component from "vue-class-component";
 import { State, Action, Getter, Mutation } from "vuex-class";
-import { LayoutState, Layout } from "./store/types";
+import { LayoutState, Layout, CommonState } from "./store/types";
 
 @Component
 export default class App extends Vue {
-    @State("layout") layout!: LayoutState;
+    @State("common") common!: CommonState;
+    @Mutation("setLoading", { namespace }) setLoading: any;
     @Mutation("setSuccess", { namespace }) setSuccess: any;
     @Mutation("setWarning", { namespace }) setWarning: any;
     @Mutation("setError", { namespace }) setError: any;
 
-    get success(): LayoutState["success"] {
-        return this.layout.success;
+    get loading(): CommonState["loading"] {
+        return this.common.loading;
+    }
+    set loading(loading) {
+        this.setLoading(loading);
+    }
+
+    get success(): CommonState["success"] {
+        return this.common.success;
     }
     set success(success) {
         this.setSuccess(success);
     }
 
-    //TODO: warning message
-    get warning(): LayoutState["warning"] {
-        return this.layout.warning;
+    get warning(): CommonState["warning"] {
+        return this.common.warning;
     }
     set warning(warning) {
         this.setWarning(warning);
     }
 
-    get error(): LayoutState["error"] {
-        return this.layout.error;
+    get error(): CommonState["error"] {
+        return this.common.error;
     }
     set error(error) {
         this.setError(error);
@@ -117,5 +132,20 @@ export default class App extends Vue {
 h1 {
     text-align: center;
     margin: 4rem 0;
+}
+.loading-grow{
+  position: absolute;
+  top: 50%;
+  left: 47.5%;
+  z-index: 1;
+}
+.background-class{
+  background-color: #452b632b;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
 }
 </style>
