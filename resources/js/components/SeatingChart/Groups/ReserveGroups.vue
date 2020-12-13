@@ -9,8 +9,8 @@
                 <b-row style="flex-wrap: nowrap;">
                     <div
                         class="group-card"
-                        v-for="groups in getGroups"
-                        :key="`groups_id_${groups.id}`"
+                        v-for="group in getGroups"
+                        :key="`group_id_${group.id}`"
                     >
                         <div
                             class="card card-stats mb-4"
@@ -21,27 +21,27 @@
                                 :class="[
                                     {
                                         'seat-selected-color':
-                                            seletedGroupId === groups.id
+                                            seletedGroupId === group.id
                                     },
                                     {
                                         'border border-danger':
-                                            mouseOverId == groups.id
+                                            mouseOverId == group.id
                                     }
                                 ]"
-                                @mouseover.prevent="mouseOverId = groups.id"
+                                @mouseover.prevent="mouseOverId = group.id"
                                 @mouseout.prevent="mouseOverId = 0"
-                                @click.prevent="seletedGroupId = groups.id"
+                                @click.prevent="seleteGroup(group)"
                             >
                                 <div class="row">
                                     <div class="col">
                                         <h5
                                             class="card-title text-uppercase text-muted mb-0"
                                         >
-                                            {{ setTimeRange(groups) }}
+                                            {{ setTimeRange(group) }}
                                         </h5>
                                         <span
                                             class="h2 font-weight-bold mb-0"
-                                            >{{ groups.group_name }}</span
+                                            >{{ group.group_name }}</span
                                         >
                                     </div>
                                     <div class="col-auto">
@@ -53,13 +53,13 @@
                                     </div>
                                 </div>
                                 <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-success mr-2">{{getSeatName(layoutReserveSeats[groups.id])}}</span>
+                                    <span class="text-success mr-2">{{getSeatName(layoutReserveSeats[group.id])}}</span>
                                     <span class="text-nowrap">{{
-                                        groups.seat
+                                        group.seat
                                     }}</span>
                                 </p>
                                 <transition name="fade">
-                                    <div v-if="seletedGroupId === groups.id">
+                                    <div v-if="seletedGroupId === group.id">
                                         <b-button
                                             class="float-right mx-1"
                                             @click.stop.prevent="updateReserveSeats"
@@ -68,8 +68,8 @@
                                         </b-button>
                                         <b-button
                                             class="float-right mx-1"
-                                            @click.stop.prevent=""
-                                            :disabled="loading ? loading : !layoutReserveSeats[groups.id]"
+                                            @click.stop.prevent="resetSeats"
+                                            :disabled="loading ? loading : !layoutReserveSeats[group.id]"
                                             >席リセット
                                         </b-button>
                                     </div>
@@ -87,6 +87,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import { CommonState, LayoutState, GroupsState, Groups } from "../../../store/types";
+import * as moment from "moment";
 
 @Component
 export default class ReserveGroups extends Vue {
@@ -96,6 +97,8 @@ export default class ReserveGroups extends Vue {
     @Mutation("setGroupId", { namespace: "groups" }) setGroupId: any;
     @Mutation("setLayoutId", { namespace: "groups" }) setLayoutId: any;
     @Mutation("setReserveSeats", { namespace: "groups" }) setReserveSeats: any;
+    @Mutation("resetReserveSeats", { namespace: "groups" }) resetReserveSeats: any;
+    @Mutation("setWarning", { namespace: "common" }) setWarning: any;
 
     get refs(): any {
         return this.$refs;
@@ -133,6 +136,24 @@ export default class ReserveGroups extends Vue {
         return this.groups.layoutReserveSeats;
     }
 
+    // get warning(): CommonState["warning"] {
+    //     return this.common.warning;
+    // }
+
+    // set warning(warning) {
+    //     this.setWarning(warning);
+    // }
+
+    seleteGroup(group: any) {
+      this.seletedGroupId = group.id;
+      this.reserveSeats = []
+
+      if(!this.layoutReserveSeats[group.id]) return 
+
+      const seatIds:number[] = JSON.parse(this.layoutReserveSeats[group.id]);
+      this.reserveSeats = seatIds.slice()
+    }
+
     setTimeRange(groups: any) {
         const date = `${groups.start_time.substr(0, 11)}`;
         const range = `${groups.start_time.substr(11, 5)} ~ ${groups.end_time.substr(11, 5)}`;
@@ -142,7 +163,14 @@ export default class ReserveGroups extends Vue {
     updateReserveSeats(): void {
         if (this.reserveSeats.length === 0)
             return alert("席を選択してください。");
+        if(this.checkTimeLine()) return
+
         this.$store.dispatch("groups/setReserveSeats", this.groups);
+    }
+
+    resetSeats(): void {
+        this.reserveSeats = []
+        this.$store.dispatch("groups/resetReserveSeats", this.groups);
     }
 
     getSeatName(jsonArray:string){
@@ -152,6 +180,51 @@ export default class ReserveGroups extends Vue {
       return this.seats.filter(e => seatIds.includes(e.id)).map(e => e.name).join(" ")
     }
 
+    checkTimeLine():boolean {
+      const seleteGroup = this.groups.groups.filter(e => e.id === this.seletedGroupId)[0]
+      const startTime = moment(seleteGroup.start_time) 
+      const endTime = moment(seleteGroup.end_time) 
+      const seleteSeats = this.groups.reserveSeats.slice()
+
+      const duplicateGroups:any[] = []
+      const duplicateSeatIds = []
+      
+      const duplicate = Object.entries(this.groups.layoutReserveSeats).forEach(e => {
+        const [ groupId, seatId] = e;
+        const seatIds = JSON.parse(seatId)
+        
+        seleteSeats.forEach((s:any) => { 
+          if(seatIds.includes(s)){
+            duplicateSeatIds.push(s)
+          }  
+        })
+        
+        if(duplicateSeatIds.length){
+          const groupData = this.groups.groups.filter(g => g.id === Number(groupId))[0]
+
+          const targetStart = moment(groupData.start_time)
+          const targetEnd = moment(groupData.end_time)
+
+          const result = targetStart.isBetween(startTime, endTime) || targetEnd.isBetween(startTime, endTime)
+          || startTime.isBetween(targetStart, targetEnd) || endTime.isBetween(targetStart, targetEnd)
+          || (targetStart.isSame(startTime) && targetEnd.isSame(endTime))
+
+          if(result){
+            duplicateGroups.push(groupData)
+          }
+        }
+      });
+
+      if(duplicateGroups.length){
+        const duplicateGroupsInfo =  duplicateGroups.map((m:any) =>{ return `name: ${m.group_name} ${m.start_time.substr(10, 6)} ~ ${m.start_time.substr(10, 6)}`}).join("\n")
+        const msg = `予約時間・席が重複されてます。\n${duplicateGroupsInfo}`
+        this.setWarning(msg);
+        return true 
+      }
+
+      return false
+    }
+    
     mouseOverId: number = 0;
 
     created() {
