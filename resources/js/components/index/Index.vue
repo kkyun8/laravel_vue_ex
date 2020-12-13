@@ -3,8 +3,17 @@
         <b-row align-v="center">
             <b-col>
                 <b-card>
+                    <b-card-title>Create Reserve Group</b-card-title>
+                    <b-card-text>予約グループを作成</b-card-text>
+                    <b-button variant="primary" href="/" :disabled="true"
+                        >Open</b-button
+                    >
+                </b-card>
+            </b-col>
+            <b-col>
+                <b-card>
                     <b-card-title>Seating chart</b-card-title>
-                    <b-card-text>testA</b-card-text>
+                    <b-card-text>予約に配席</b-card-text>
                     <b-button variant="primary" href="/seating_chart"
                         >Open</b-button
                     >
@@ -13,7 +22,7 @@
             <b-col>
                 <b-card>
                     <b-card-title>Seat maintenance</b-card-title>
-                    <b-card-text>testB</b-card-text>
+                    <b-card-text>席の配置</b-card-text>
                     <b-button variant="primary" href="/seat_maintenance"
                         >Open</b-button
                     >
