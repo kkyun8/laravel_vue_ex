@@ -28,8 +28,8 @@ const actions: ActionTree<GroupsState, RootState> = {
           return rootState.common.loading = false
         });
         commit("setLayoutReserveSeats", response.data);
-
     },
+
     setReserveSeats: async ({ commit, rootState }, groups: Groups) => {
         rootState.common.loading = true
         const response: any | AxiosResponse<any> = await Repository.post(
@@ -42,7 +42,20 @@ const actions: ActionTree<GroupsState, RootState> = {
         });
         commit("setLayoutReserveSeats", response.data);
         rootState.common.success = "保存しました。"
-
+    },
+    
+    resetReserveSeats: async ({ commit, rootState }, groups: Groups) => {
+      rootState.common.loading = true
+      const response: any | AxiosResponse<any> = await Repository.post(
+          "/api/groups/reserve_seats/reset",
+          groups
+      ).catch((e: any) => {
+        return rootState.common.error = e
+      }).finally(()=>{
+        return rootState.common.loading = false
+      });
+      commit("setLayoutReserveSeats", response.data);
+      rootState.common.success = "リセットしました。"
     }
 };
 

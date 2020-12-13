@@ -26,3 +26,4 @@ Route::get('/active_layouts', 'HallLayoutController@getActiveLayouts')->name('ge
 Route::get('/groups/{date}', 'GroupController@getGroups')->name('getGroups');
 Route::get('/groups/{date}/layout_id/{layout_id}', 'GroupController@layoutReserveSeats')->name('layoutReserveSeats');
 Route::post('/groups/reserve_seats', 'GroupController@setReserveSeats')->name('setReserveSeats');
+Route::post('/groups/reserve_seats/reset', 'GroupController@resetReserveSeats')->name('resetReserveSeats');

@@ -4,10 +4,11 @@
             <b-tab title="Reserve Groups" active>
                 <ReserveGroups />
             </b-tab>
+            <!-- TODO: 該当ホールに配席ずみの予約のみ表示
             <b-tab title="Selectd Seat Reserve Only">
-                <!-- TODO: 該当ホールに配席ずみの予約のみ表示
-                <p>I'm the second tab</p> -->
-            </b-tab>
+                
+                <p>I'm the second tab</p>
+            </b-tab> -->
         </b-tabs>
     </div>
 </template>

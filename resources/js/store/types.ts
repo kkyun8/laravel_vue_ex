@@ -60,6 +60,6 @@ export interface Groups {
     groups: any[];
     groupId: number;
     reserveSeats: number[];
-    layoutReserveSeats: object;
+    layoutReserveSeats: { [key: number]: any } ;
     layoutId: number;
 }
