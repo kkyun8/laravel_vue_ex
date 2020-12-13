@@ -66,4 +66,22 @@ class GroupController extends Controller
 
     return $this->layoutReserveSeats($date, $layoutId);
   }
+
+  /**
+   * 
+   */
+  public function resetReserveSeats(Request $request)
+  {
+    $reserveSeats = $request->reserveSeats;
+    $layoutId = $request->layoutId;
+    $groupId = $request->groupId;
+    $date = $request->date;
+
+    $group = Group::find($groupId);
+    $group->layout_id = null;
+    $group->seats = null;
+    $group->save();
+
+    return $this->layoutReserveSeats($date, $layoutId);
+  }
 }
