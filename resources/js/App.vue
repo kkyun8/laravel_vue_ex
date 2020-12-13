@@ -88,6 +88,14 @@ export default class App extends Vue {
         return newVal;
     }
 
+   @Watch("warning")
+    onWarningChange(newVal: string, oldVal: string): string {
+        if (newVal !== "") {
+            this.show("warn", "warn", newVal);
+        }
+        return newVal;
+    }
+
     @Watch("error")
     onErrorChange(newVal: string, oldVal: string): string {
         if (newVal !== "") {
@@ -113,7 +121,7 @@ export default class App extends Vue {
             case "success":
                 this.success = "";
                 break;
-            case "warning":
+            case "warn":
                 this.warning = "";
                 break;
             case "error":
