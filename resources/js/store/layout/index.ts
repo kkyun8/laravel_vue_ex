@@ -17,6 +17,10 @@ const state: LayoutState = {
     seatGroups: [],
     hallId: 0,
     layoutId: 0,
+    activeLayoutId: 0,
+    activeStartTime: "",
+    activeEndTime: "",
+    activeLayoutIds: {},
 };
 
 export const layout: Module<LayoutState, RootState> = {
@@ -24,5 +28,5 @@ export const layout: Module<LayoutState, RootState> = {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

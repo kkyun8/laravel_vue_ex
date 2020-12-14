@@ -22,6 +22,8 @@ Route::get('/layout/{id}', 'HallLayoutController@getLayout')->name('getLayout');
 Route::post('/layout', 'HallLayoutController@create')->name('createLayout');
 Route::put('/layout', 'HallLayoutController@store')->name('storeLayout');
 Route::get('/active_layouts', 'HallLayoutController@getActiveLayouts')->name('getActiveLayouts');
+Route::put('/active_layout', 'HallLayoutController@updateActiveLayout')->name('updateActiveLayout');
+Route::get('/active_layout_ids', 'HallLayoutController@getActiveLayoutIds')->name('getActiveLayoutIds');
 
 Route::get('/groups/{date}', 'GroupController@getGroups')->name('getGroups');
 Route::get('/groups/{date}/layout_id/{layout_id}', 'GroupController@layoutReserveSeats')->name('layoutReserveSeats');

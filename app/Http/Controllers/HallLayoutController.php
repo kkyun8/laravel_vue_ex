@@ -39,6 +39,9 @@ class HallLayoutController extends Controller
     return $halls;
   }
 
+  /**
+   * 
+   */
   public function getActiveLayouts()
   {
     $activeLayouts = ActiveLayout::with(['halls', 'layouts'])
@@ -46,6 +49,47 @@ class HallLayoutController extends Controller
       ->where('end_time', '>=', Carbon::now())->get();
 
     return $activeLayouts;
+  }
+
+  /**
+   * 
+   */
+  public function getActiveLayoutIds()
+  {
+    $activeLayoutIds = ActiveLayout::where("delflg", false)->get();
+
+    $collection = new Collection($activeLayoutIds);
+    $activeLayoutIdsMap = $collection->mapWithKeys(function ($item) {
+      return [$item['hall_id'] => $item['layout_id']];
+    });
+
+    return $activeLayoutIdsMap->all();
+  }
+
+  /**
+   * 
+   */
+  public function updateActiveLayout(Request $request)
+  {
+    $hallId = $request->hallId;
+    $layoutId = $request->activeLayoutId;
+    $startTime = $request->activeStartTime . ' 00:00:00';
+    $endTime = $request->activeEndTime . ' 23:59:59';
+
+    $activeLayout = ActiveLayout::where("hall_id", $hallId)
+      ->where("layout_id", $layoutId);
+
+    if (!empty($activeLayout)) {
+      $activeLayout = new ActiveLayout;
+      $activeLayout->hall_id = $hallId;
+      $activeLayout->layout_id = $layoutId;
+    }
+
+    $activeLayout->start_time = $startTime;
+    $activeLayout->end_time = $endTime;
+    $activeLayout->save();
+
+    return $this->getActiveLayoutIds();
   }
   /**
    * 
@@ -138,6 +182,7 @@ class HallLayoutController extends Controller
 
     $layout->save();
 
+    $resultSeatGroups = [];
     if (!empty($seatGroups)) {
       $resultSeatGroups = self::createUpdateSeatGroups($layoutId, $seatGroups);
     }
@@ -175,14 +220,16 @@ class HallLayoutController extends Controller
         $createSeat->layout_id = $layoutId;
         $createSeat->name = $seat['name'];
 
-        $collection = new Collection($resultSeatGroups);
-        $targetSeatGroups = $collection->filter(function ($value, $key) use ($seat) {
-          $jsonSeats = json_decode($value->seats);
-          return in_array($seat['name'], $jsonSeats);
-        });
-        $group = $targetSeatGroups->all();
-        $firstKey = array_key_first($group);
-        $createSeat->seat_group_id = $group[$firstKey]['id'];
+        if (!empty($resultSeatGroups)) {
+          $collection = new Collection($resultSeatGroups);
+          $targetSeatGroups = $collection->filter(function ($value, $key) use ($seat) {
+            $jsonSeats = json_decode($value->seats);
+            return in_array($seat['name'], $jsonSeats);
+          });
+          $group = $targetSeatGroups->all();
+          $firstKey = array_key_first($group);
+          $createSeat->seat_group_id = $group[$firstKey]['id'];
+        }
 
         $createSeat->w = $seat['position']['w'];
         $createSeat->h = $seat['position']['h'];
@@ -195,7 +242,7 @@ class HallLayoutController extends Controller
       }
     }
 
-    Seat::whereNotIn('id', $allSeats)->delete();
+    Seat::where("layout_id", $layoutId)->whereNotIn('id', $allSeats)->delete();
 
     return $seats;
   }
@@ -239,7 +286,7 @@ class HallLayoutController extends Controller
       }
     }
 
-    SeatGroup::whereNotIn('id', $allSeatGroups)->delete();
+    SeatGroup::where("layout_id", $layoutId)->whereNotIn('id', $allSeatGroups)->delete();
 
     $resultSeatGroups = SeatGroup::where('delflg', false)->get();
 
