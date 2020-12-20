@@ -9,18 +9,18 @@ const routes = [
     {
         path: "/",
         component: Index,
-        props: true
+        props: true,
     },
     {
         path: "/seating_chart",
         component: SeatingChart,
-        props: true
+        props: true,
     },
     {
         path: "/seat_maintenance",
         component: SeatMaintenance,
-        props: true
-    }
+        props: true,
+    },
 ];
 
 const router = new VueRouter({
@@ -28,7 +28,7 @@ const router = new VueRouter({
     scrollBehavior() {
         return { x: 0, y: 0 };
     },
-    routes
+    routes,
 });
 
 export default router;

@@ -7,8 +7,8 @@
                         <div class="card mb-2">
                             <b-button
                                 variant="info"
-                                @click.prevent="updateLayout()"
                                 :disabled="loading"
+                                @click.prevent="updateLayout()"
                                 >レイアウト更新</b-button
                             >
                         </div>
@@ -22,7 +22,9 @@
                     </b-col>
                     <b-col cols="4">
                         <div class="card mb-2">
-                            <b-button variant="info" @click.prevent="deleteSeats()"
+                            <b-button
+                                variant="info"
+                                @click.prevent="deleteSeats()"
                                 >選択中のテーブル削除</b-button
                             >
                         </div>
@@ -37,48 +39,49 @@
         </transition-group>
         <b-row>
             <b-col cols="12">
-                <div class="card" style="width:100%; height:600px;">
+                <div class="card" style="width: 100%; height: 600px">
                     <!-- layoutSeats editSeats-->
                     <SeatContainer
                         :layout.sync="layoutSeats"
-                        :cellSize="cellSize"
-                        :maxColumnCount="maxColumnCount"
-                        :maxRowCount="maxRowCount"
+                        :cell-size="cellSize"
+                        :max-column-count="maxColumnCount"
+                        :max-row-count="maxRowCount"
                         :margin="margin"
-                        :bubbleUp="bubbleUp"
+                        :bubble-up="bubbleUp"
                     >
                         <template v-for="seat in layoutSeats">
-                          <!-- :key="seat.seatGroupId ? ('BoxGroupKey:' + seat.name) : ('BoxKey:' + seat.name)" -->
+                            <!-- :key="seat.seatGroupId ? ('BoxGroupKey:' + seat.name) : ('BoxKey:' + seat.name)" -->
                             <SeatBox
-                                :boxId="seat.id"
                                 :key="'BoxKey:' + seat.id"
+                                :box-id="seat.id"
                             >
+                                <div
+                                    class="table p-1 w-100 h-100"
+                                    :class="{
+                                        'seat-selected-color':
+                                            selectedSeatId == seat.id,
+                                    }"
+                                    @click.prevent="
+                                        seat.seatGroupId !== null
+                                            ? seatsToGroupBox(seat)
+                                            : selectedBox(seat)
+                                    "
+                                    @mouseleave="
+                                        boxMouseOver($event.target, seat.type)
+                                    "
+                                >
+                                    <span>{{ seat.name }}</span>
+                                    <span>{{ seat.count }}席</span>
                                     <div
-                                        class="table p-1 w-100 h-100"
-                                        :class="{
-                                            'seat-selected-color':
-                                                selectedSeatId == seat.id
-                                        }"
-                                        @click.prevent="seat.seatGroupId ? seatsToGroupBox(seat): selectedBox(seat)"
-                                        @mouseleave="
-                                            boxMouseOver(
-                                                $event.target,
-                                                seat.type
-                                            )
-                                        "
+                                        v-if="seat.type === SEAT_TYPE_ROOM"
+                                        class="seat-resize-icon"
                                     >
-                                        <span>{{ seat.name }}</span>
-                                        <span>{{ seat.count }}席</span>
-                                        <div
-                                            v-if="seat.type === SEAT_TYPE_ROOM"
-                                            class="seat-resize-icon"
-                                        >
-                                            <b-icon
-                                                icon="arrow-down-right-circle-fill"
-                                                style="width: 20px; height: 20px;"
-                                            ></b-icon>
-                                        </div>
+                                        <b-icon
+                                            icon="arrow-down-right-circle-fill"
+                                            style="width: 20px; height: 20px"
+                                        ></b-icon>
                                     </div>
+                                </div>
                             </SeatBox>
                         </template>
                     </SeatContainer>
@@ -89,7 +92,7 @@
 </template>
 
 <script lang="ts">
-const namespace: string = "layout";
+const namespace = "layout";
 import { Seat, SEAT_TYPE_ROOM } from "../../modules/layout/Seat";
 import { Vue, Watch } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
@@ -103,8 +106,8 @@ import { SeatGroup } from "../../modules/layout/SeatGroup";
 @Component({
     components: {
         SeatContainer: Container,
-        SeatBox: Box
-    }
+        SeatBox: Box,
+    },
 })
 export default class SeatMaintenanceLayout extends Vue {
     @State("layout") layout!: LayoutState;
@@ -115,7 +118,8 @@ export default class SeatMaintenanceLayout extends Vue {
     @Mutation("setEditSeats", { namespace }) setEditSeats: any;
     @Mutation("setEditSeatGroups", { namespace }) setEditSeatGroups: any;
     @Mutation("setEditSeatsMinId", { namespace }) setEditSeatsMinId: any;
-    @Mutation("setEditSeatGroupsMinId", { namespace }) setEditSeatGroupsMinId: any;
+    @Mutation("setEditSeatGroupsMinId", { namespace })
+    setEditSeatGroupsMinId: any;
 
     get loading(): CommonState["loading"] {
         return this.common.loading;
@@ -147,7 +151,7 @@ export default class SeatMaintenanceLayout extends Vue {
         return this.layout.seatGroups;
     }
 
-    set seatGroups(seatGroups:LayoutState["seatGroups"]) {
+    set seatGroups(seatGroups: LayoutState["seatGroups"]) {
         this.setSeatGroups(seatGroups);
     }
 
@@ -163,7 +167,9 @@ export default class SeatMaintenanceLayout extends Vue {
         return this.layout.editSeatGroupsMinId;
     }
 
-    set editSeatGroupsMinId(editSeatGroupsMinId: LayoutState["editSeatGroupsMinId"]) {
+    set editSeatGroupsMinId(
+        editSeatGroupsMinId: LayoutState["editSeatGroupsMinId"]
+    ) {
         this.setEditSeatGroupsMinId(editSeatGroupsMinId);
     }
 
@@ -205,20 +211,20 @@ export default class SeatMaintenanceLayout extends Vue {
         return newVal;
     }
 
-    getMinId(array: any[]):number{
-      if(array.length === 0) return 0
-      const minSeat = array.reduce((a:any, b:any) => {
-        if(a.id < b.id){
-          return a;
-        }else{
-          return b;
-        }
-      })
-      return minSeat.id < 0 ? minSeat.id -1 : -1;
+    getMinId(array: any[]): number {
+        if (array.length === 0) return 0;
+        const minSeat = array.reduce((a: any, b: any) => {
+            if (a.id < b.id) {
+                return a;
+            } else {
+                return b;
+            }
+        });
+        return minSeat.id < 0 ? minSeat.id - 1 : -1;
     }
 
     addLayoutSeats(seat: Seat): void {
-        if (this.layoutSeats.some(e => e.name === seat.name))
+        if (this.layoutSeats.some((e) => e.name === seat.name))
             return alert("卓名が重複されてます。");
 
         this.layoutSeatsUpdateFlg = true;
@@ -227,7 +233,11 @@ export default class SeatMaintenanceLayout extends Vue {
     }
 
     addLayoutSeatGroups(seatGroups: SeatGroup): void {
-        if (this.layoutSeatGroups.some(e => e.name === seatGroups.seat_group_name))
+        if (
+            this.layoutSeatGroups.some(
+                (e) => e.name === seatGroups.seat_group_name
+            )
+        )
             return alert("卓名が重複されてます。");
 
         this.layoutSeatsUpdateFlg = true;
@@ -235,141 +245,160 @@ export default class SeatMaintenanceLayout extends Vue {
     }
 
     seatsToGroupBox(seat: Seat): void {
-      if(seat.isChange) return
-      this.groupToSeatBox()
+        if (seat.isChange) return;
+        this.groupToSeatBox();
 
-      const targetGroup = this.layoutSeats.filter(e => e.seatGroupId === seat.seatGroupId)
-      // レイアウト上のseats削除
-      this.layoutSeats = this.layoutSeats.filter(e => e.seatGroupId !== seat.seatGroupId)
-      const minIdSeat = targetGroup.reduce((a:Seat, b:Seat) => { return a.id < b.id ? a : b })
-      // レイアウト上のgroupサイズの卓追加
-      const xSeat = targetGroup.reduce((a:Seat, b:Seat) => {
-        if(a.position.x === b.position.x){
-          if(a.position.y < b.position.y){
-            return a;
-          }else{
-            return b;
-          }
-        }else{
-          if(a.position.x < b.position.x){
-            return a;
-          }else{
-            return b;
-          }
-        }
-      })
+        const targetGroup = this.layoutSeats.filter(
+            (e) => e.seatGroupId === seat.seatGroupId
+        );
+        // レイアウト上のseats削除
+        this.layoutSeats = this.layoutSeats.filter(
+            (e) => e.seatGroupId !== seat.seatGroupId
+        );
+        const minIdSeat = targetGroup.reduce((a: Seat, b: Seat) => {
+            return a.id < b.id ? a : b;
+        });
+        // レイアウト上のgroupサイズの卓追加
+        const xSeat = targetGroup.reduce((a: Seat, b: Seat) => {
+            if (a.position.x === b.position.x) {
+                if (a.position.y < b.position.y) {
+                    return a;
+                } else {
+                    return b;
+                }
+            } else {
+                if (a.position.x < b.position.x) {
+                    return a;
+                } else {
+                    return b;
+                }
+            }
+        });
 
-      const ySeat = targetGroup.reduce((a:Seat, b:Seat) => {
-        if(a.position.x === b.position.x){
-          if(a.position.y > b.position.y){
-            return a;
-          }else{
-            return b;
-          }
-        }else{
-          if(a.position.x > b.position.x){
-            return a;
-          }else{
-            return b;
-          }
-        }
-      })
+        const ySeat = targetGroup.reduce((a: Seat, b: Seat) => {
+            if (a.position.x === b.position.x) {
+                if (a.position.y > b.position.y) {
+                    return a;
+                } else {
+                    return b;
+                }
+            } else {
+                if (a.position.x > b.position.x) {
+                    return a;
+                } else {
+                    return b;
+                }
+            }
+        });
 
-      const id = minIdSeat.id - 1 < 1 ? minIdSeat.id - 1 : 0
-      const w = xSeat.position.x === ySeat.position.x ? xSeat.position.w : (targetGroup.length * xSeat.position.w)
-      const h = xSeat.position.y === ySeat.position.y ? xSeat.position.h : (targetGroup.length * xSeat.position.h)
-      const targetSeatGroup = this.layoutSeatGroups.filter(e => e.id === seat.seatGroupId)[0];
+        const id = minIdSeat.id - 1 < 1 ? minIdSeat.id - 1 : 0;
+        const w =
+            xSeat.position.x === ySeat.position.x
+                ? xSeat.position.w
+                : targetGroup.length * xSeat.position.w;
+        const h =
+            xSeat.position.y === ySeat.position.y
+                ? xSeat.position.h
+                : targetGroup.length * xSeat.position.h;
+        const targetSeatGroup = this.layoutSeatGroups.filter(
+            (e) => e.id === seat.seatGroupId
+        )[0];
 
-      const group = new Seat ({
+        const group = new Seat({
             id,
-            name:targetSeatGroup.seat_group_name,
+            name: targetSeatGroup.seat_group_name,
             seat_group_id: seat.seatGroupId,
             count: xSeat.count,
             type: xSeat.seatType,
-            x:xSeat.position.x,
-            y:xSeat.position.y,
+            x: xSeat.position.x,
+            y: xSeat.position.y,
             w,
             h,
-            isChange:true
-          });
-      //グループテーブルをプッシュ
-      this.layoutSeats.push(group);
-      this.selectedBox(group, true);
+            isChange: true,
+        });
+        //グループテーブルをプッシュ
+        this.layoutSeats.push(group);
+        this.selectedBox(group, true);
     }
 
-    groupToSeatBox(){
-      const changeTargetGroup = this.layoutSeats.filter(e => e.isChange)
-      if (changeTargetGroup.length === 0) return 
+    groupToSeatBox() {
+        const changeTargetGroup = this.layoutSeats.filter((e) => e.isChange);
+        if (changeTargetGroup.length === 0) return;
 
-      let isXtype = true;
-      
-      let beforeSeats = this.seats.filter(e => e.seatGroupId === changeTargetGroup[0].seatGroupId)
-      if(changeTargetGroup[0].seatGroupId < 1){
-        beforeSeats = this.createdSeats.filter(e => e.seatGroupId === changeTargetGroup[0].seatGroupId)
-      }
-      
-      beforeSeats.sort((a:any, b:any) => {
-          if(a.position.x === b.position.x){
-            isXtype = false
-            if(a.position.y < b.position.y){
-              return a
-            }else{
-              return b
-            }
-          }else{
-            if(a.position.x < b.position.x){
-              return a
-            }else{
-              return b
-            }
-          }
-      })
+        let isXtype = true;
 
-        let xValue = changeTargetGroup[0].position.x
-        let yValue = changeTargetGroup[0].position.y
-
-        for(let i=0; i < beforeSeats.length; i++){
-          const after = new Seat ({
-            id:beforeSeats[i].id,
-            name:beforeSeats[i].name,
-            seat_group_id: changeTargetGroup[0].seatGroupId,
-            count: beforeSeats[i].count,
-            type: beforeSeats[i].type,
-            x:xValue,
-            y:yValue,
-            w:beforeSeats[i].position.w,
-            h:beforeSeats[i].position.h,
-            isChange:false
-          });
-          //グループテーブルをプッシュ
-          this.layoutSeats.push(after);
-
-          if(isXtype){
-            xValue = xValue + beforeSeats[i].position.w
-          }else{
-            yValue = yValue + beforeSeats[i].position.h
-          }
+        let beforeSeats = this.seats.filter(
+            (e) => e.seatGroupId === changeTargetGroup[0].seatGroupId
+        );
+        if (changeTargetGroup[0].seatGroupId < 1) {
+            beforeSeats = this.createdSeats.filter(
+                (e) => e.seatGroupId === changeTargetGroup[0].seatGroupId
+            );
         }
 
+        beforeSeats.sort((a: any, b: any) => {
+            if (a.position.x === b.position.x) {
+                isXtype = false;
+                if (a.position.y < b.position.y) {
+                    return a;
+                } else {
+                    return b;
+                }
+            } else {
+                if (a.position.x < b.position.x) {
+                    return a;
+                } else {
+                    return b;
+                }
+            }
+        });
 
-      this.layoutSeats = this.layoutSeats.filter(e => e.id !== changeTargetGroup[0].id);
+        let xValue = changeTargetGroup[0].position.x;
+        let yValue = changeTargetGroup[0].position.y;
 
-      // changeSeats.forEach(e => this.layoutSeats.push(e));
-    }  
+        for (let i = 0; i < beforeSeats.length; i++) {
+            const after = new Seat({
+                id: beforeSeats[i].id,
+                name: beforeSeats[i].name,
+                seat_group_id: changeTargetGroup[0].seatGroupId,
+                count: beforeSeats[i].count,
+                type: beforeSeats[i].type,
+                x: xValue,
+                y: yValue,
+                w: beforeSeats[i].position.w,
+                h: beforeSeats[i].position.h,
+                isChange: false,
+            });
+            //グループテーブルをプッシュ
+            this.layoutSeats.push(after);
+
+            if (isXtype) {
+                xValue = xValue + beforeSeats[i].position.w;
+            } else {
+                yValue = yValue + beforeSeats[i].position.h;
+            }
+        }
+
+        this.layoutSeats = this.layoutSeats.filter(
+            (e) => e.id !== changeTargetGroup[0].id
+        );
+
+        // changeSeats.forEach(e => this.layoutSeats.push(e));
+    }
 
     selectedBox(seat: Seat, isGroupBoxClick = false): void {
-      if(!isGroupBoxClick){
-        this.groupToSeatBox()
-      }
-      
-      this.selectedSeatId = seat.id;
-      this.layoutSeats.forEach((e: Seat) => {
-          if (seat.id === e.id) {
-             e.pinned = false;
-          } else {
-             e.pinned = true;
-          }
-      });
+        if (!isGroupBoxClick) {
+            this.groupToSeatBox();
+        }
+
+        this.selectedSeatId = seat.id;
+        this.layoutSeats.forEach((e: Seat) => {
+            if (seat.id === e.id) {
+                e.pinned = false;
+            } else {
+                e.pinned = true;
+            }
+        });
     }
 
     boxMouseOver(target: HTMLElement, seatType: number): void {
@@ -384,54 +413,62 @@ export default class SeatMaintenanceLayout extends Vue {
     }
 
     updateLayout(): void {
-      this.groupToSeatBox()
-      this.setEditSeats(this.layoutSeats);
-      this.setEditSeatGroups(this.layoutSeatGroups);
-      this.$store.dispatch("layout/updateLayout", this.layout);
+        this.groupToSeatBox();
+        this.setEditSeats(this.layoutSeats);
+        this.setEditSeatGroups(this.layoutSeatGroups);
+        this.$store.dispatch("layout/updateLayout", this.layout);
 
-      this.init();
+        this.init();
     }
 
     cancel(): void {
-      this.groupToSeatBox()
-      this.layoutSeats = this.seats.slice();
-      this.layoutSeatGroups = this.seatGroups.slice();
-      this.createdSeats = []
+        this.groupToSeatBox();
+        this.layoutSeats = this.seats.slice();
+        this.layoutSeatGroups = this.seatGroups.slice();
+        this.createdSeats = [];
+        this.selectedSeatId = null;
     }
 
     deleteSeats(): void {
-      const selectedSeat = this.layoutSeats.filter(e => this.selectedSeatId !== e.id)
-      this.groupToSeatBox()
+        const selectedSeat = this.layoutSeats.filter(
+            (e) => this.selectedSeatId !== e.id
+        );
+        this.groupToSeatBox();
 
-      if(selectedSeat[0].isChange && selectedSeat[0].seatGroupId !== undefined){
-        this.layoutSeatGroups = this.layoutSeatGroups.filter(e => e.seatGroupId !== selectedSeat[0].seatGroupId)
-      }else{
+        if (
+            selectedSeat[0].isChange &&
+            selectedSeat[0].seatGroupId !== undefined
+        ) {
+            this.layoutSeatGroups = this.layoutSeatGroups.filter(
+                (e) => e.seatGroupId !== selectedSeat[0].seatGroupId
+            );
+        } else {
+        }
 
-      }
-      
-      this.layoutSeats = this.layoutSeats.filter(e => this.selectedSeatId !== e.id)
-
+        this.layoutSeats = this.layoutSeats.filter(
+            (e) => this.selectedSeatId !== e.id
+        );
     }
 
     init() {
         this.layoutSeatsUpdateFlg = false;
         this.selectedSeatId = null;
-        this.createdSeats = []
+        this.createdSeats = [];
     }
     //Container Setting Data
     cellSize = {
         w: 1,
-        h: 1
+        h: 1,
     };
-    maxColumnCount: number = 550;
-    maxRowCount: number = 200;
-    bubbleUp: boolean = false;
-    margin: number = 2;
-    boxCount: number = 4;
+    maxColumnCount = 550;
+    maxRowCount = 200;
+    bubbleUp = false;
+    margin = 2;
+    boxCount = 4;
     //layout
     layoutSeats: LayoutState["seats"] = [];
     layoutSeatGroups: LayoutState["seatGroups"] = [];
-    layoutSeatsUpdateFlg: boolean = false;
+    layoutSeatsUpdateFlg = false;
     updateSeats: LayoutState["seats"] = [];
     createdSeats: LayoutState["seats"] = [];
     selectedSeatId: number | null = null;

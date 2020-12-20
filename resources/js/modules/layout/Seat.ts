@@ -30,7 +30,8 @@ class Seat {
     }) {
         this.id = data.id;
         this.name = data.name;
-        this.seatGroupId = !data.seat_group_id ? null : data.seat_group_id;
+        this.seatGroupId =
+            typeof data.seat_group_id === "number" ? data.seat_group_id : null;
         this.count = data.count;
         this.type = data.type;
         this.hidden = false;
@@ -39,12 +40,12 @@ class Seat {
             x: data.x,
             y: data.y,
             w: data.w,
-            h: data.h
+            h: data.h,
         };
-        if(typeof true === "boolean"){
-          this.isChange = data.isChange;
-        }else{
-          this.isChange = false;
+        if (typeof true === "boolean") {
+            this.isChange = data.isChange;
+        } else {
+            this.isChange = false;
         }
     }
 }
