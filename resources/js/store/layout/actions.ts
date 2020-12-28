@@ -78,6 +78,11 @@ const actions: ActionTree<LayoutState, RootState> = {
             "setHalls",
             response.data.map((e: any) => e.halls)
         );
+        const obj: any = {};
+        response.data.forEach((e: any) => {
+            obj[e.hall_id] = e.layout_id;
+        });
+        commit("setActiveLayoutIds", obj);
     },
     fetchActiveLayoutIds: async ({ commit, rootState }, layout: Layout) => {
         rootState.common.loading = true;

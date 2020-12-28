@@ -46,7 +46,7 @@ class HallLayoutController extends Controller
   {
     $activeLayouts = ActiveLayout::with(['halls', 'layouts'])
       ->where('start_time', '<=', Carbon::now())
-      ->where('end_time', '>=', Carbon::now())->get();
+      ->where('end_time', '>=', Carbon::now())->orderBy('hall_id')->get();
 
     return $activeLayouts;
   }
