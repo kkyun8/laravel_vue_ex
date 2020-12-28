@@ -1,6 +1,6 @@
 export interface RootState {
     version: string;
-    common: Common
+    common: Common;
 }
 
 export interface CommonState {
@@ -29,6 +29,10 @@ export interface LayoutState {
     editSeatGroups: Layout["editSeatGroups"];
     editSeatsMinId: Layout["editSeatsMinId"];
     editSeatGroupsMinId: Layout["editSeatGroupsMinId"];
+    activeLayoutId: Layout["activeLayoutId"];
+    activeStartTime: Layout["activeStartTime"];
+    activeEndTime: Layout["activeEndTime"];
+    activeLayoutIds: Layout["activeLayoutIds"];
 }
 export interface Layout {
     code: string;
@@ -40,8 +44,12 @@ export interface Layout {
     layoutId: number;
     editSeats: any[];
     editSeatGroups: any[];
-    editSeatsMinId: number,
-    editSeatGroupsMinId: number,
+    editSeatsMinId: number;
+    editSeatGroupsMinId: number;
+    activeLayoutId: number;
+    activeStartTime: string;
+    activeEndTime: string;
+    activeLayoutIds: { [key: number]: any };
 }
 
 export interface GroupsState {
@@ -60,6 +68,6 @@ export interface Groups {
     groups: any[];
     groupId: number;
     reserveSeats: number[];
-    layoutReserveSeats: { [key: number]: any } ;
+    layoutReserveSeats: { [key: number]: any };
     layoutId: number;
 }

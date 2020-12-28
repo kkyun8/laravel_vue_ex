@@ -1,7 +1,7 @@
 import { Seat } from "../../modules/layout/Seat";
 import { SeatGroup } from "../../modules/layout/SeatGroup";
 import { MutationTree } from "vuex";
-//@ts-ignore
+// @ts-ignore
 import { LayoutState, Layout, CommonState, Common } from "@/store/types";
 
 const mutations: MutationTree<LayoutState> = {
@@ -42,11 +42,26 @@ const mutations: MutationTree<LayoutState> = {
         state.editSeatGroups = editSeatGroups.slice();
     },
     setEditSeatsMinId: (state, editSeatsMinId: Layout["editSeatsMinId"]) => {
-      state.editSeatsMinId = editSeatsMinId;
+        state.editSeatsMinId = editSeatsMinId;
     },
-    setEditSeatGroupsMinId: (state, editSeatGroupsMinId: Layout["editSeatGroupsMinId"]) => {
-      state.editSeatGroupsMinId = editSeatGroupsMinId;
-    }
+    setEditSeatGroupsMinId: (
+        state,
+        editSeatGroupsMinId: Layout["editSeatGroupsMinId"]
+    ) => {
+        state.editSeatGroupsMinId = editSeatGroupsMinId;
+    },
+    setActiveLayoutId: (state, activeLayoutId: Layout["activeLayoutId"]) => {
+        state.activeLayoutId = activeLayoutId;
+    },
+    setActiveStartTime: (state, activeStartTime: Layout["activeStartTime"]) => {
+        state.activeStartTime = activeStartTime;
+    },
+    setActiveEndTime: (state, activeEndTime: Layout["activeEndTime"]) => {
+        state.activeEndTime = activeEndTime;
+    },
+    setActiveLayoutIds: (state, activeLayoutIds: Layout["activeLayoutIds"]) => {
+        state.activeLayoutIds = activeLayoutIds;
+    },
 };
 
 export default mutations;

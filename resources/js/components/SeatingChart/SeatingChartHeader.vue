@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div
-            class="card p-3 mb-2"
-            style="background: linear-gradient(87deg, rgb(87 13 142), rgb(55 165 139)) !important;"
-        >
+        <div class="card p-3 mb-2" :style="headerStyle">
             <h3 class="text-white">Select Hall</h3>
             <b-form-row>
                 <b-form-group
@@ -43,8 +40,8 @@ import { Vue } from "vue-property-decorator";
 import { State, Action, Getter, Mutation } from "vuex-class";
 import Component from "vue-class-component";
 import { LayoutState, Layout, GroupsState, Groups } from "../../store/types";
-const namespace: string = "layout";
-const groups: string = "groups";
+const namespace = "layout";
+const groups = "groups";
 //@ts-ignore
 import { Container, Box } from "@dattn/dnd-grid";
 import "@dattn/dnd-grid/dist/dnd-grid.css";
@@ -63,12 +60,16 @@ export default class SeatingChartHeader extends Vue {
     @Mutation("setDate", { namespace: "groups" }) setDate: any;
     @Mutation("setLayoutId", { namespace: "groups" }) setGroupLayoutId: any;
 
+    get activeLayoutIds(): LayoutState["activeLayoutIds"] {
+        return this.layout.activeLayoutIds;
+    }
+
     get hallId(): LayoutState["hallId"] {
         const hall = this.layout.halls.filter(
-            e => e.id === this.layout.hallId
+            (e) => e.id === this.layout.hallId
         )[0];
         if (hall) {
-            this.layoutId = hall.layout_id;
+            this.layoutId = this.activeLayoutIds[hall.id];
         }
 
         return this.layout.hallId;
@@ -109,12 +110,15 @@ export default class SeatingChartHeader extends Vue {
                 text:
                     this.layout.halls[h].hall_code +
                     " " +
-                    this.layout.halls[h].hall_name
+                    this.layout.halls[h].hall_name,
             };
             hallOptions.push(hallObject);
         }
         return hallOptions;
     }
+
+    headerStyle =
+        "background: linear-gradient(87deg,rgb(87 13 142),rgb(55 165 139)) !important;";
 
     created() {
         // vue

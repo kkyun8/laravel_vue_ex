@@ -1,4 +1,3 @@
-
 class SeatGroup {
     public id: number | null;
     public seat_group_name: string;
@@ -35,11 +34,13 @@ class SeatGroup {
             x: data.x,
             y: data.y,
             w: data.w,
-            h: data.h
+            h: data.h,
         };
         this.seats = [];
         if (data.seats) {
-          JSON.parse(data.seats).forEach((s:any) => {this.seats.push(s)});
+            JSON.parse(data.seats).forEach((s: any) => {
+                this.seats.push(s);
+            });
         }
     }
 }

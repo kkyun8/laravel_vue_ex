@@ -1,8 +1,11 @@
 <template>
     <div>
         <SeatMaintenanceHeader />
-        <SeatMaintenanceDetail @add_seats="addSeats" @add_seat_groups="addSeatGroups"/>
-        <SeatMaintenanceLayout :seats_data="seatsData" ref="layout" />
+        <SeatMaintenanceDetail
+            @add_seats="addSeats"
+            @add_seat_groups="addSeatGroups"
+        />
+        <SeatMaintenanceLayout ref="layout" :seats_data="seatsData" />
     </div>
 </template>
 
@@ -17,8 +20,8 @@ import SeatMaintenanceLayout from "@/components/seatMaintenance/SeatMaintenanceL
     components: {
         SeatMaintenanceHeader,
         SeatMaintenanceDetail,
-        SeatMaintenanceLayout
-    }
+        SeatMaintenanceLayout,
+    },
 })
 export default class SeatMaintenanceIndex extends Vue {
     get refs(): any {
